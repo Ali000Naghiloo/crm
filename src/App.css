@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root,
+  :root[data-theme="light"] {
+    --header-height: 80px;
+    --pages-height: calc(100dvh - var(--header-height));
+    --pages-width: calc(100vw - var(--sidebar-width));
+    --sidebar-width: 20%;
+    --accent-color: #3498db;
+    --text-color: #111;
+    --secondary-text-color: #fff;
+    --bg-color: #fff;
+    --secondary-bg-color: #fff;
+  }
+
+  :root[data-theme="dark"] {
+    --accent-color: #2ecc71;
+    --text-color: #fff;
+    --secondary-text-color: #111;
+    --bg-color: #1e1e2c;
+    --bg-color-secondary: rgb(41, 41, 41);
+  }
+}
+
+@layer utilities {
+  .rtl {
+    direction: rtl !important;
+  }
+
+  .ltr {
+    direction: ltr !important;
+  }
+
+  .iranSansFaNum {
+    font-family: iranSansFaNum;
+  }
+
+  /* width */
+  .scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  /* Track */
+  .scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  /* Handle */
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  /* Handle on hover */
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .no-scroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
