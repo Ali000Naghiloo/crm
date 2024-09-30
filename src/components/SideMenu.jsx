@@ -28,35 +28,49 @@ export default function SideMenu() {
     {
       key: "/",
       icon: (
-        <TbLayoutDashboardFilled size={"1.5em"} className="!text-textColor" />
+        <TbLayoutDashboardFilled
+          size={"1.5em"}
+          className="!text-textColor text-base"
+        />
       ),
-      label: <div className="text-textColor flex items-center">داشبورد</div>,
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          داشبورد
+        </div>
+      ),
     },
     {
       key: "/customers",
-      icon: <BsFillBagCheckFill size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">اشخاص</div>,
+      icon: (
+        <BsFillBagCheckFill
+          size={"1.5em"}
+          className="!text-textColor text-base"
+        />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">اشخاص</div>
+      ),
       children: [
         {
           key: "/customers",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "اشخاص" },
-                  { label: "لیست اشخاص" },
+                  { label: "فهرست اشخاص" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست اشخاص
+              فهرست
             </div>
           ),
         },
         {
           key: "/customers/roles",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
@@ -65,15 +79,15 @@ export default function SideMenu() {
                   { label: "نقش های اشخاص" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              نقش ها
+              نقش
             </div>
           ),
         },
         {
           key: "/customers/groups",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
@@ -82,9 +96,9 @@ export default function SideMenu() {
                   { label: "نقش های اشخاص" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              گروه ها
+              گروه
             </div>
           ),
         },
@@ -92,38 +106,44 @@ export default function SideMenu() {
     },
     {
       key: "/prices",
-      icon: <MdPriceChange size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">قیمت ها</div>,
+      icon: (
+        <MdPriceChange size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          قیمت ها
+        </div>
+      ),
       children: [
         {
           key: "/prices",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "قیمت ها" },
-                  { label: "لیست قیمت ها" },
+                  { label: "فهرست قیمت ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست قیمت ها
+              فهرست
             </div>
           ),
         },
         {
           key: "/prices/groups",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "قیمت ها" },
-                  { label: "لیست گروه قیمت گذاری" },
+                  { label: "فهرست گروه قیمت گذاری" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
               گروه قیمت گذاری
             </div>
@@ -133,23 +153,29 @@ export default function SideMenu() {
     },
     {
       key: "/commissions",
-      icon: <MdPriceChange size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">پورسانت ها</div>,
+      icon: (
+        <MdPriceChange size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          پورسانت ها
+        </div>
+      ),
       children: [
         {
           key: "/commissions",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "پورسانت ها" },
-                  { label: "لیست پورسانت ها" },
+                  { label: "فهرست پورسانت ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست پورسانت
+              فهرست
             </div>
           ),
         },
@@ -157,57 +183,63 @@ export default function SideMenu() {
     },
     {
       key: "/products",
-      icon: <AiFillProduct size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">محصولات</div>,
+      icon: (
+        <AiFillProduct size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          کالا و خدمات
+        </div>
+      ),
       children: [
         {
           key: "/products",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
-                  { label: "محصولات" },
-                  { label: "لیست محصولات" },
+                  { label: "کالا و خدمات" },
+                  { label: "فهرست کالا و خدمات" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست محصولات
+              فهرست
             </div>
           ),
         },
         {
           key: "/products/categories",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
-                  { label: "محصولات" },
-                  { label: "لیست دسته بندی ها" },
+                  { label: "کالا و خدمات" },
+                  { label: "فهرست دسته بندی ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              دسته بندی ها
+              دسته بندی
             </div>
           ),
         },
         {
           key: "/products/creators",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
-                  { label: "محصولات" },
-                  { label: "لیست سازندگان محصول" },
+                  { label: "کالا و خدمات" },
+                  { label: "فهرست سازندگان محصول" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              سازندگان محصول
+              تامین کنندگان کالا و خدمات
             </div>
           ),
         },
@@ -215,31 +247,35 @@ export default function SideMenu() {
     },
     {
       key: "/conditions",
-      icon: <FaListCheck size={"1.5em"} className="!text-textColor" />,
+      icon: (
+        <FaListCheck size={"1.5em"} className="!text-textColor text-base" />
+      ),
       label: (
-        <div className="text-textColor flex items-center">اضافات و کسورات</div>
+        <div className="text-textColor text-base flex items-center">
+          اضافات و کسورات
+        </div>
       ),
       children: [
         {
           key: "/conditions",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "اضافات کسورات" },
-                  { label: "لیست اضافه کسری ها" },
+                  { label: "فهرست اضافه کسری ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست
+              فهرست
             </div>
           ),
         },
         {
           key: "/conditions/limits",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
@@ -248,7 +284,7 @@ export default function SideMenu() {
                   { label: "تعیین شرط برای اضافه کسری" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
               تعیین شرط
             </div>
@@ -258,74 +294,161 @@ export default function SideMenu() {
     },
     {
       key: "/factors",
-      icon: <MdFactCheck size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">فاکتور ها</div>,
+      icon: (
+        <MdFactCheck size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          فاکتور ها
+        </div>
+      ),
       children: [
-        // {
-        //   key: "/factors/initial",
-        //   icon: <GoDot size={"1em"} className="!text-textColor" />,
-        //   label: (
-        //     <div
-        //       onClick={() =>
-        //         handleAddToPageNames([
-        //           { label: "فاکتور ها" },
-        //           { label: "لیست فاکتور های درخواست اولیه" },
-        //         ])
-        //       }
-        //       className="text-textColor flex items-center"
-        //     >
-        //       درخواست اولیه
-        //     </div>
-        //   ),
-        // },
         {
-          key: "/factors/preFactors",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          key: "/factors/reports",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "فاکتور ها" },
-                  { label: "لیست پیش فاکتور ها" },
+                  { label: "گزارش گیری" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
+            >
+              گزارش گیری
+            </div>
+          ),
+        },
+        {
+          key: "/factors/preFactors",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "فاکتور ها" },
+                  { label: "فهرست پیش فاکتور ها" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
             >
               پیش فاکتور
             </div>
           ),
         },
         {
-          key: "/factors",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          key: "/factors/sell-factors",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "فاکتور ها" },
-                  { label: "لیست فاکتور ها" },
+                  { label: "فهرست فاکتور ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              فاکتور
+              فاکتور فروش
             </div>
           ),
         },
         {
-          key: "/factors/rejected",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          key: "/factors/sell-rejected",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "فاکتور ها" },
-                  { label: "لیست فاکتور های مرجوعی" },
+                  { label: "فهرست فاکتور های برگشت از فروش" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              مرجوعی
+              فاکتور برگشت از فروش
+            </div>
+          ),
+        },
+        {
+          key: "/factors/but-factors",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "فاکتور ها" },
+                  { label: "فهرست فاکتور های برگشت از فروش" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              فاکتور خرید
+            </div>
+          ),
+        },
+        {
+          key: "/factors/buy-rejected",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "فاکتور ها" },
+                  { label: "فهرست فاکتور های برگشت از فروش" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              فاکتور برگشت از خرید
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      key: "/requests",
+      icon: (
+        <MdFactCheck size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          درخواست ها
+        </div>
+      ),
+      children: [
+        {
+          key: "/requests/initial-request",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "درخواست ها" },
+                  { label: "فهرست درخواست اولیه" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              درخواست اولیه
+            </div>
+          ),
+        },
+        {
+          key: "/requests/request",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "درخواست ها" },
+                  { label: "فهرست درخواست ها" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              درخواست
             </div>
           ),
         },
@@ -333,23 +456,29 @@ export default function SideMenu() {
     },
     {
       key: "/warehouses",
-      icon: <FaWarehouse size={"1.5em"} className="!text-textColor" />,
-      label: <div className="text-textColor flex items-center">انبار ها</div>,
+      icon: (
+        <FaWarehouse size={"1.5em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          انبار ها
+        </div>
+      ),
       children: [
         {
           key: "/warehouses",
-          icon: <GoDot size={"1em"} className="!text-textColor" />,
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
               onClick={() =>
                 handleAddToPageNames([
                   { label: "انبار ها" },
-                  { label: "لیست انبار ها" },
+                  { label: "فهرست انبار ها" },
                 ])
               }
-              className="text-textColor flex items-center"
+              className="text-textColor text-base flex items-center"
             >
-              لیست انبار ها
+              فهرست انبار ها
             </div>
           ),
         },
@@ -374,7 +503,7 @@ export default function SideMenu() {
       <>
         <Menu
           mode="inline"
-          className="w-full max-w-[100%] text-lg mt-5 !bg-backgroundColor !text-textColor "
+          className="w-full max-w-[100%] mt-5 !bg-backgroundColor !text-textColor text-base"
           style={{ border: "none" }}
           inlineCollapsed={!isOpen}
           items={menuItems}
@@ -415,7 +544,7 @@ export default function SideMenu() {
 
   const NotifPermissionStatus = () => {
     return (
-      <div className="w-full flex justify-between text-lg mt-24">
+      <div className="w-full flex justify-between mt-24 mb-10">
         <span>دسترسی ارسال اعلانات </span>
         <Checkbox
           checked={notifPermission}
@@ -443,7 +572,7 @@ export default function SideMenu() {
         <div
           className={`${
             openMenu ? "min-w-sideBarWidth" : "min-w-[70px]"
-          } sticky flex flex-col bg-backgroundColor text-textColor top-[80px] max-h-pagesHeight px-5 overflow-y-auto transition-all shadow-md min-h-pagesHeight z-10`}
+          } sticky flex flex-col bg-backgroundColor text-textColor text-base top-[80px] max-h-pagesHeight px-5 overflow-y-auto transition-all shadow-md min-h-pagesHeight z-10`}
         >
           <MenuItems isOpen={openMenu} />
 
@@ -457,7 +586,10 @@ export default function SideMenu() {
         <div className="">
           <Drawer
             closeIcon={
-              <CgClose className="text-textColor mr-auto" size={"2em"} />
+              <CgClose
+                className="text-textColor text-base mr-auto"
+                size={"2em"}
+              />
             }
             title={
               <div className="w-full text-2xl flex items-center ltr">
@@ -466,7 +598,7 @@ export default function SideMenu() {
             }
             open={!openMenu}
             onClose={() => dispatch(setSideMenuIsOpen(!openMenu))}
-            className="!bg-backgroundColor !text-textColor"
+            className="!bg-backgroundColor !text-textColor text-base"
           >
             <MenuItems isOpen={!openMenu} />
 

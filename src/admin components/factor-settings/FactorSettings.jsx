@@ -1,38 +1,35 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, Tag } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
-// import CreateFactor from "./create factor/CreateFactor";
-// import PriceModal from "./price data/PriceModal";
+// import CreateCondition from "./create factor/CreateCondition";
+// import FactorSettingsModal from "./condition data/ConditionData";
 import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import PageRoutes from "../../common/PageRoutes";
-import { useNavigate } from "react-router-dom";
 
-// pageType {
-//   0 : "فاکتور",
-//   1 : "پیش فاکتور",
-//   2 : "فاکتور برگشت از فروش",
-// }
-
-export default function Factors({ pageType }) {
+export default function FactorSettings() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [pageList, setPageList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [showModal, setShowModal] = useState({
+  const [dataModal, setDataModal] = useState({
     open: false,
     data: null,
+    id: null,
+  });
+  const [createModal, setCreateModal] = useState({
+    open: false,
     id: null,
   });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   // imports
-  const CreateFactor = lazy(() => import("./create factor/CreateFactor"));
+  //   const CreateCondition = lazy(() => import("./CreateCondition"));
+  const FactorSettingsModal = lazy(() => import("./FactorSettingData"));
 
   const columns = [
     {
@@ -42,73 +39,49 @@ export default function Factors({ pageType }) {
       key: "index",
     },
     {
-      title: "شماره فاکتور",
-      dataIndex: "factorNumber",
-      sorter: (a, b) => a.factorNumber - b.factorNumber,
-      key: "factorNumber",
-    },
-    {
-      title: "شخص",
-      dataIndex: "customer",
-      key: "customer",
-    },
-    {
-      title: "نوع",
+      title: "نوع فاکتور",
       dataIndex: "factorType",
       render: (value) => <>{allEnum?.FactorType[value]}</>,
       key: "factorType",
     },
     {
-      title: "مسئولین فاکتور",
-      dataIndex: "factorResponsibles",
+      title: "مسئول فاکتور مشخص شود؟",
+      dataIndex: "isFactorResponsibleEnabled",
       render: (value) => (
-        <>
-          {value && value?.length !== 0
-            ? value?.map((v, index) => <div key={index}>{"مسئول فاکتور"}</div>)
-            : "-"}
-        </>
+        <div className="text-center">{value ? "بله" : "خیر"}</div>
       ),
-      key: "factorResponsibles",
+      key: "isFactorResponsibleEnabled",
     },
     {
-      title: "قیمت کل فاکتور",
-      dataIndex: "totalFactorPrice",
-      key: "totalFactorPrice",
+      title: <>مسئول محصولات فاکتور مشخص شود؟</>,
+      dataIndex: "isFactorItemResponsibleEnabled",
+      render: (value) => (
+        <div className="text-center">{value ? "بله" : "خیر"}</div>
+      ),
+      key: "isFactorItemResponsibleEnabled",
     },
     {
       title: "عملیات",
       render: (data) => (
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <Button
             onClick={() =>
-              setShowModal({ data: data, open: true, id: data?.factorId })
+              setDataModal({
+                data: data,
+                open: true,
+              })
             }
             size="middle"
             type="primary"
           >
-            مشاهده
-          </Button>
-          <Button
-            onClick={() => {
-              navigate("/factors/create", {
-                state: {
-                  type: pageType,
-                  data: data,
-                  id: data?.factorId,
-                },
-              });
-            }}
-            size="middle"
-            type="primary"
-          >
-            ویرایش
+            تنظیم
           </Button>
           <Popconfirm
-            cancelText="خیر"
-            okText="بله"
-            title="آیا از حذف این فاکتور اطمینان دارید؟"
+            cancelText="لغو"
+            okText="حذف"
+            title="آیا از حذف این تنظیمات اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.priceId)}
+            onConfirm={() => handleDelete(data?.factorSettingId)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -124,8 +97,8 @@ export default function Factors({ pageType }) {
     setLoading(true);
 
     await httpService
-      .get("/Factor/Delete", {
-        params: { priceId: id },
+      .get("/AdditionsAndDeductions/DeleteAdditionsAndDeduction", {
+        params: { additionsAndDeductionId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)
@@ -146,14 +119,12 @@ export default function Factors({ pageType }) {
     setLoading(true);
 
     await httpService
-      .get("/Factor/GetAllFactors")
+      .get("/FactorResponsibleSetting/GetAllFactorSetting")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
-          res.data.factorViewModelList.map((data, index) => {
-            if (data?.factorType === pageType) {
-              datas.push({ ...data, index: index + 1, key: index });
-            }
+          res.data.factorResponsibleSettingViewModelList.map((data, index) => {
+            datas.push({ ...data, index: index + 1, key: index });
           });
           setPageList(datas);
         }
@@ -163,35 +134,23 @@ export default function Factors({ pageType }) {
     setLoading(false);
   };
 
-  const renderPageTitle = () => {
-    // if (pageType === 0) {
-    //   return "درخواست اولیه";
-    // }
-    if (pageType === 2) {
-      return "فهرست پیش فاکتور";
-    }
-    if (pageType === 3) {
-      return "فهرست فاکتور فروش";
-    }
-    if (pageType === 4) {
-      return "فهرست فاکتور های برگشت از فروش";
-    }
-  };
-
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "فاکتور ها" }, { label: "لیست فاکتور ها" }])
+      setPageRoutes([
+        { label: "فاکتور ها" },
+        { label: "تنظیمات ایتم های انواع فاکتور" },
+      ])
     );
 
     handleGetList();
   }, []);
 
   return (
-    <Suspense fallback={<></>}>
+    <Suspense>
       <div className="w-full min-h-pagesHeight p-2 md:p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
-          <h1>{renderPageTitle()}</h1>
+          <h1>تنظیمات فاکتور ها</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={handleGetList}>
@@ -214,24 +173,17 @@ export default function Factors({ pageType }) {
             className="w-full"
             type="primary"
             size="large"
-            onClick={() =>
-              navigate("/factors/create", {
-                state: {
-                  type: pageType,
-                  customerId: null,
-                  factorId: null,
-                  data: null,
-                },
-              })
-            }
+            onClick={() => setCreateModal({ open: true })}
           >
-            ساخت فاکتور جدید
+            ثبت تنظیمات جدید
           </Button>
         </div>
 
         {/* content */}
         <div className="max-w-[100%] py-5 overflow-x-auto">
           <Table
+            bordered
+            size="small"
             className="max-w-full"
             loading={loading}
             columns={columns}
@@ -259,19 +211,28 @@ export default function Factors({ pageType }) {
         </div>
       </div>
 
-      {/* <CreateFactor
-        open={showModal.open}
+      <FactorSettingsModal
+        open={dataModal.open}
         setOpen={(e) => {
-          setShowModal({
-            ...showModal,
+          setDataModal({
+            ...dataModal,
+            open: e?.target?.value,
+          });
+        }}
+        data={dataModal.data}
+        getNewList={handleGetList}
+      />
+
+      {/* <CreateCondition
+        open={createModal.open}
+        setOpen={(e) => {
+          setCreateModal({
+            ...createModal,
             open: e?.target?.value,
           });
         }}
         getNewList={handleGetList}
-        data={showModal.data}
-        factorId={showModal.id}
         list={pageList}
-        type={pageType}
       /> */}
     </Suspense>
   );

@@ -1,70 +1,60 @@
-import { Button, Checkbox, Form, Input, Modal, Popconfirm, Select } from "antd";
+import { useEffect, useState } from "react";
+import { Button, Dropdown, Form, Steps } from "antd";
 import { useFormik } from "formik";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import { useSelector } from "react-redux";
 import * as yup from "yup";
 import useHttp from "../../../hooks/useHttps";
-import MyDatePicker from "../../../common/MyDatePicker";
 import { toast } from "react-toastify";
-import { BsPlusLg } from "react-icons/bs";
-import { useTable } from "react-table";
-import { MdDelete } from "react-icons/md";
-import formatHelper from "../../../helper/formatHelper";
+import { useLocation, useNavigate } from "react-router-dom";
+import FinalStep from "./FinalStep";
+import { FaAngleDown, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import SelectItems from "./SelectItems";
+import Calculations from "./Calculations";
+import { SiCodefactor } from "react-icons/si";
+import { BiCalculator } from "react-icons/bi";
+import { BsCheckCircleFill } from "react-icons/bs";
 
-export default function CreateFactorModal({
-  open,
-  setOpen,
-  getNewList,
-  type,
-  customerId,
-  factorId,
-  data,
-}) {
+export default function CreateFactor() {
   const { httpService } = useHttp();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  // select list items
-  const [productList, setProductList] = useState(null);
-  const [productCatList, setProductCatList] = useState(null);
-  const [customerList, setCustomerList] = useState(null);
-  const [unitList, setUnitList] = useState(null);
-  const [employeeList, setEmployeeList] = useState(null);
+  const [factorTitle, setFactorTitle] = useState("");
+  const [currentStep, setCurrentStep] = useState(0);
 
-  // footer items
-  const [allFactorPrice, setAllFactorPrice] = useState(0);
-  const [paymentMethod, setPeymantMethod] = useState(0);
-  const [allConditions, setAllConditions] = useState(null);
-  const [formDisabled, setFormDisabled] = useState(true);
+  // steps
+  const [nextStepDisabled, setNextStepDisabled] = useState(false);
+  const [pervStepDisabled, setPrevStepDisabled] = useState(false);
 
-  const [count, setCount] = useState(1);
+  // page data
+  const [pageData, setPageData] = useState(null);
+
+  const { state } = useLocation();
 
   const allEnum = useSelector((state) => state.allEnum.allEnum);
   const userData = useSelector((state) => state.userData.userData);
+
+  const steps = [
+    {
+      title: "انتخاب کالا و خدمات",
+      description: "",
+      icon: <SiCodefactor />,
+    },
+    {
+      title: "محاسبات فاکتور",
+      description: "محاسبات اضافات کسورات, مبلغ و نحوه پرداخت  فاکتور",
+      icon: <BiCalculator />,
+    },
+    {
+      title: "ثبت نهایی",
+      description: "فاکتور شما به حسابداری ارسال میگردد",
+      icon: <BsCheckCircleFill />,
+    },
+  ];
 
   const validationSchema = yup.object().shape({
     customerId: yup.number().required("این فیلد را پر کنید"),
     factorDate: yup.string().required("این فیلد را پر کنید"),
   });
-
-  const defaultData = {
-    itemRow: 0,
-    productId: null,
-    productCategoryId: null,
-    unitId: null,
-    quantity: 0,
-    productUnitPrice: 0,
-    discount: 0,
-    inventory: 0,
-    description: "",
-    totalPrice: 0,
-    factorItemResponsibleId: "",
-  };
 
   const validation = useFormik({
     initialValues: {
@@ -98,53 +88,6 @@ export default function CreateFactorModal({
     },
   });
 
-  const handleChangeFactorType = async (type) => {
-    setLoading(true);
-    const formData = {
-      factorId: factorId,
-      factorType: type,
-    };
-
-    if (type === 2) {
-      await httpService
-        .post("/Factor/ChangeRequestToPreFactor", formData)
-        .then((res) => {
-          if (res.status === 200 && res.data?.code) {
-            toast.success("با موفقیت انتقال یافت");
-            handleClose();
-            getNewList();
-          }
-        })
-        .catch(() => {});
-    }
-    if (type === 3) {
-      await httpService
-        .post("/Factor/ChangePreFactorToFactor", formData)
-        .then((res) => {
-          if (res.status === 200 && res.data?.code) {
-            toast.success("با موفقیت انتقال یافت");
-            handleClose();
-            getNewList();
-          }
-        })
-        .catch(() => {});
-    }
-    if (type === 4) {
-      await httpService
-        .post("/Factor/ChangeFactorToReturnFactor", formData)
-        .then((res) => {
-          if (res.status === 200 && res.data?.code) {
-            toast.success("با موفقیت انتقال یافت");
-            handleClose();
-            getNewList();
-          }
-        })
-        .catch(() => {});
-    }
-
-    setLoading(false);
-  };
-
   const handleGetFactorData = async (id) => {
     setLoading(true);
 
@@ -175,164 +118,27 @@ export default function CreateFactorModal({
     setLoading(false);
   };
 
-  const handleDelete = (key) => {
-    const newData = validation.values.factorItemCreateViewModels.filter(
-      (item) => item.key !== key
-    );
-    validation.setFieldValue("factorItemCreateViewModels", newData);
-    setCount(count - 1);
-  };
-
-  const handleAdd = () => {
-    const newData = { ...defaultData, itemRow: count + 1, key: count };
-    setCount(count + 1);
-    validation.setFieldValue("factorItemCreateViewModels", [
-      ...validation.values.factorItemCreateViewModels,
-      newData,
-    ]);
-    setCount(count + 1);
-  };
-
-  const handleRenderFactorOptions = (type) => {
-    if (type === 2) {
-      return (
-        <Popconfirm
-          title="آیا از انتقال این پیش فاکتور به فاکتور اطمینان دارید؟"
-          onConfirm={() => handleChangeFactorType(3)}
-        >
-          <Button type="primary">تبدیل به فاکتور</Button>
-        </Popconfirm>
-      );
-    }
-    if (type === 3) {
-      return (
-        <Popconfirm
-          title="آیا از انتقال این فاکتور به مرجوعی اطمینان دارید؟"
-          onConfirm={() => handleChangeFactorType(4)}
-        >
-          <Button type="primary" danger>
-            تبدیل به مرجوعی
-          </Button>
-        </Popconfirm>
-      );
-    }
-    if (type === 4) {
-      return (
-        <Popconfirm
-          title="آیا از انتقال این مرجوعی به فاکتور اطمینان دارید؟"
-          onConfirm={() => handleChangeFactorType(3)}
-        >
-          <Button type="primary" danger>
-            تبدیل به فاکتور
-          </Button>
-        </Popconfirm>
-      );
-    }
-  };
-
-  const defaultColumns = [
-    {
-      title: "شماره ردیف",
-      dataIndex: "itemRow",
-      inputType: "number",
-    },
-    {
-      title: "محصول",
-      dataIndex: "productId",
-      inputType: "select",
-      render: (value) => <Select options={productList} value={value} />,
-      editable: true,
-    },
-    {
-      title: "",
-      dataIndex: "productCategorytId",
-      inputType: "select",
-      render: (value) => <Select options={productList} value={value} />,
-      editable: null,
-    },
-    {
-      title: "واحد",
-      dataIndex: "unitId",
-      render: (value) => <Select options={unitList} value={value} />,
-      editable: true,
-    },
-    {
-      title: "تعداد",
-      dataIndex: "quantity",
-      editable: true,
-    },
-    {
-      title: "موجودی کل",
-      dataIndex: "inventory",
-      editable: true,
-    },
-    {
-      title: "قیمت واحد محصول",
-      dataIndex: "productUnitPrice",
-      editable: true,
-    },
-    {
-      title: "تخفیف",
-      dataIndex: "discount",
-      editable: true,
-    },
-    {
-      title: "فی کل",
-      dataIndex: "totalPrice",
-      editable: true,
-    },
-    {
-      title: "توضیحات",
-      dataIndex: "description",
-      editable: true,
-    },
-    {
-      title: "عملیات",
-      dataIndex: "actions",
-      render: (_, record) => (
-        <Button
-          title="آیا از حذف کردن مطمئن هستید ؟"
-          onClick={() => handleDelete(record.key)}
-        >
-          <a>حذف</a>
-        </Button>
-      ),
-    },
-  ];
-
-  const columns = defaultColumns.map((item, index) => {
-    return {
-      title: item.title,
-      accessor: item.dataIndex,
-      isVisible: item.editable,
-      key: index,
+  const handleChangeFactorStatus = async (type) => {
+    const formData = {
+      factorId: pageData?.factorId,
+      factorStatus: type,
     };
-  });
-
-  const handleClose = () => {
-    if (!loading) {
-      setOpen(false);
-      validation.resetForm();
-      setAllFactorPrice(0);
-      setAllConditions(null);
-    }
-  };
-
-  const handleGetCustomerCode = async () => {
-    setLoading(true);
 
     await httpService
-      .get("/Factor/FactorCod")
+      .get("/Factor/ChangeFactorStatus", { params: formData })
       .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          validation.setFieldValue("factorNumber", res.data?.factorNumber);
+        if ((res.status === 200) & (res.data?.code == 1)) {
+          toast.success("وضعیت فاکتور با موفقیت تغییر کرد");
         }
       })
-      .catch(() => {
-        return null;
-      });
+      .catch(() => {});
+  };
 
-    setLoading(false);
+  const handleRedirect = () => {
+    if (!loading) {
+      validation.resetForm();
+      navigate(-1);
+    }
   };
 
   const handleCreateFactor = async (values) => {
@@ -357,38 +163,35 @@ export default function CreateFactorModal({
           : null,
     };
 
-    if (type === 2) {
+    if (pageData?.type === 2) {
       await httpService
         .post("/Factor/CreatePreFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleClose();
-            getNewList();
+            handleRedirect();
           }
         })
         .catch(() => {});
     }
-    if (type === 3) {
+    if (pageData?.type === 3) {
       await httpService
         .post("/Factor/CreateFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleClose();
-            getNewList();
+            handleRedirect();
           }
         })
         .catch(() => {});
     }
-    if (type === 4) {
+    if (pageData?.type === 4) {
       await httpService
         .post("/Factor/CreateReturnFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleClose();
-            getNewList();
+            handleRedirect();
           }
         })
         .catch(() => {});
@@ -397,632 +200,189 @@ export default function CreateFactorModal({
     setLoading(false);
   };
 
-  const handleGetConditions = async () => {
-    setLoading(true);
-    const formData = {
-      customerId: validation.values.customerId,
-      factorType: type,
-      factorReceiptAndPaymentConditions: paymentMethod,
-      totalFactorQuantity: validation.values.totalFactorQuantity,
-      totalFactorPrice: parseInt(allFactorPrice),
-    };
-
-    await httpService
-      .post("/Factor/GetFactorAdditionsAndDeductions", formData)
-      .then((res) => {
-        if (res.status === 200 && res.data?.code == 1) {
-          setAllConditions(res.data?.itemAdditionsAndDeductionsList);
-          setFormDisabled(false);
-        }
-      })
-      .catch(() => {});
-
-    setLoading(false);
-  };
-
-  // get select list items
-  const handleGetProductList = async () => {
-    let datas = [];
-
-    await httpService
-      .get("/Product/GetAllProducts")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.productViewModelList?.map((pr) => {
-            datas.push({
-              value: pr?.productId,
-              label: pr?.productName,
-              data: pr,
-            });
-          });
-        }
-      })
-      .catch(() => {});
-
-    setProductList(datas);
-  };
-  const handleGetProductCatList = async () => {
-    let datas = [];
-
-    await httpService
-      .get("/ProductCategory/GetAllCategories")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.categoryViewModelList?.map((pr) => {
-            datas.push({
-              value: pr?.productCategoryId,
-              label: pr?.categoryName,
-            });
-          });
-        }
-      })
-      .catch(() => {});
-
-    setProductCatList(datas);
-  };
-  const handleGetCustomerList = async () => {
-    let datas = [];
-
-    await httpService
-      .get("/Customer/GetAllCustomers")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.customerList?.map((pr) => {
-            datas.push({
-              value: pr?.customerId,
-              label: pr?.customerName,
-            });
-          });
-        }
-      })
-      .catch(() => {});
-
-    setCustomerList(datas);
-  };
-  const handleGetUnitList = async () => {
-    let datas = [];
-
-    await httpService
-      .get("/Unit/Units")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.unitViewModelList?.map((pr) => {
-            datas.push({
-              value: pr?.unitId,
-              label: pr?.unitName,
-            });
-          });
-        }
-      })
-      .catch(() => {});
-
-    setUnitList(datas);
-  };
-  const handleGetEmployeesList = async () => {
-    let datas = [];
-
-    await httpService
-      .get("/Account/GetAllUsers")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.data?.map((pr) => {
-            datas.push({
-              value: pr?.id,
-              label: pr?.fullName,
-            });
-          });
-        }
-      })
-      .catch(() => {});
-
-    setEmployeeList(datas);
+  const handleChangeStep = (next) => {
+    if (next) {
+      if (
+        validation.values.factorItemCreateViewModels &&
+        Object.keys(validation.errors).length === 0
+      ) {
+        setCurrentStep(currentStep + 1);
+        setPrevStepDisabled(false);
+      } else {
+        console.log(validation.errors);
+        toast.warn("لطفا برای فاکتور خود محصول انتخاب کنید");
+      }
+    } else {
+      setCurrentStep(currentStep - 1);
+      setNextStepDisabled(false);
+    }
   };
 
   const handleModalTitle = () => {
-    if (type == 0) {
-      setModalTitle("ثبت درخواست اولیه جدید");
+    // if (pageData?.type == 0) {
+    //   setFactorTitle("ثبت درخواست اولیه جدید");
+    // }
+    if (pageData?.type == 2) {
+      setFactorTitle("ثبت پیش فاکتور جدید");
     }
-    if (type == 2) {
-      setModalTitle("ثبت پیش فاکتور جدید");
+    if (pageData?.type == 3) {
+      setFactorTitle("ثبت فاکتور جدید");
     }
-    if (type == 3) {
-      setModalTitle("ثبت فاکتور جدید");
-    }
-    if (type == 4) {
-      setModalTitle("ثبت فاکتور برگشت از فروش جدید");
-    }
-  };
-
-  const updateMyData = (rowIndex, columnId, value) => {
-    validation.setFieldValue(
-      `factorItemCreateViewModels[${rowIndex}][${columnId}]`,
-      value
-    );
-  };
-
-  // components
-  const EditableCell = ({
-    value: initialValue,
-    row: { index },
-    column: { id },
-    updateMyData,
-    editable,
-  }) => {
-    const [value, setValue] = useState(initialValue);
-    const inputRef = useRef(null);
-
-    const onChange = (e) => {
-      setValue(e.target.value);
-    };
-
-    const handleProductChange = async (event) => {
-      const priceFormData = {
-        customerId: customerId,
-        productId: event.data?.productId,
-        productCategoryId: event.data?.productCategoryId,
-        unitId: event.data["productUnitPrices"][0]?.unitId,
-        factorType: type,
-      };
-      const conditionFormData = {
-        customerId: customerId,
-        productId: event.data?.productId,
-        productCategoryId: event.data?.productCategoryId,
-        unitId: event.data["productUnitPrices"][0]?.unitId,
-        factorType: type,
-        quantity: event.data["productUnitPrices"][0]?.stockQuantity,
-        totalPrice:
-          validation.values.factorItemCreateViewModels[index]["totalPrice"],
-      };
-      setFormDisabled(true);
-
-      updateMyData(index, "productId", event.data?.productId);
-      updateMyData(index, "unitId", event.data["productUnitPrices"][0]?.unitId);
-      updateMyData(index, "productCategoryId", event.data?.productCategoryId);
-      updateMyData(index, "quantity", 1);
-      updateMyData(index, "inventory", event.data?.stockQuantity);
-      await httpService
-        .post("/Factor/GetFactorItemProductUnitPrice", priceFormData)
-        .then((res) => {
-          if (res.status === 200 && res.data?.code === 1) {
-            updateMyData(index, "productUnitPrice", res.data?.finalPrice);
-          }
-        })
-        .catch(() => {});
-      // await httpService
-      //   .post("/Factor/GetFactorItemAdditionsAndDeductions", conditionFormData)
-      //   .then((res) => {
-      //     if (res.status === 200 && res.data?.code === 1) {
-      //       // updateMyData(index, "productUnitPrice", res.data?.finalPrice);
-      //     }
-      //   })
-      //   .catch(() => {});
-    };
-
-    const handleQuantityChange = (e) => {
-      const value = e.target.value;
-
-      updateMyData(index, id, value);
-      updateMyData(
-        index,
-        "totalPrice",
-        value *
-          validation.values.factorItemCreateViewModels[index][
-            "productUnitPrice"
-          ]
-      );
-      validation.setFieldValue(
-        "totalFactorPrice",
-        validation.values.totalFactorPrice + value
-      );
-      setFormDisabled(true);
-    };
-
-    const onBlur = () => {
-      updateMyData(index, id, value);
-    };
-
-    useEffect(() => {
-      setValue(initialValue);
-    }, [initialValue]);
-
-    if (
-      editable &&
-      (id === "discount" ||
-        id === "totalPrice" ||
-        id === "productUnitPrice" ||
-        id === "inventory" ||
-        id === "itemRow")
-    ) {
-      return (
-        <Input
-          type="number"
-          min={0}
-          className="w-[100px]"
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
-      );
-    }
-    if (id === "quantity") {
-      return (
-        <Input
-          type="number"
-          min={0}
-          className="w-[100px]"
-          value={value}
-          onChange={handleQuantityChange}
-          onBlur={onBlur}
-        />
-      );
-    }
-    if (editable && id === "description") {
-      return (
-        <Input
-          className="w-[100px]"
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
-      );
-    }
-    if (editable && id === "productId") {
-      return (
-        <div className="flex gap-1">
-          <Select
-            optionFilterProp="label"
-            showSearch
-            onKeyDown={() => {}}
-            className="min-w-[120px]"
-            value={value}
-            options={productList}
-            onBlur={onBlur}
-            onChange={(e, event) => {
-              setValue(e);
-              handleProductChange(event);
-            }}
-          />
-        </div>
-      );
-    }
-    if (editable && id === "unitId") {
-      return (
-        <div className="flex gap-1">
-          <Select
-            optionFilterProp="label"
-            showSearch
-            onKeyDown={() => {}}
-            className="min-w-[120px]"
-            value={value}
-            options={unitList}
-            onChange={(e) => {
-              setValue(e);
-              updateMyData(index, id, e);
-            }}
-          />
-        </div>
-      );
-    }
-    if (editable && id === "actions") {
-      return (
-        <div className="flex gap-1">
-          <Button
-            onClick={() => {
-              if (index > 0) {
-                console.log(index);
-                handleDelete(index);
-              }
-            }}
-            danger
-            disabled={index == 0}
-          >
-            حذف
-          </Button>
-          <Button type="primary" onClick={handleAdd}>
-            <BsPlusLg />
-          </Button>
-        </div>
-      );
+    if (pageData?.type == 4) {
+      setFactorTitle("ثبت فاکتور برگشت از فروش جدید");
     }
   };
 
-  const Table = ({ columns, data, updateMyData }) => {
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-      useTable({
-        columns,
-        data,
-        defaultColumn: { Cell: EditableCell },
-        updateMyData,
-      });
-
-    const handleKeyDown = useCallback(
-      (e, rowIndex, columnId) => {
-        const { key } = e;
-        const totalRows = rows.length;
-        const totalCols = columns.length;
-
-        if (key === "ArrowDown" && rowIndex < totalRows - 1) {
-          e.preventDefault();
-          document.getElementById(`cell-${rowIndex + 1}-${columnId}`).focus();
-        } else if (key === "ArrowUp" && rowIndex > 0) {
-          e.preventDefault();
-          document.getElementById(`cell-${rowIndex - 1}-${columnId}`).focus();
-        } else if (key === "ArrowRight" && columnId < totalCols + 1) {
-          e.preventDefault();
-          document.getElementById(`cell-${rowIndex}-${columnId - 1}`).focus();
-        } else if (key === "ArrowLeft" && columnId >= 0) {
-          e.preventDefault();
-          document.getElementById(`cell-${rowIndex}-${columnId + 1}`).focus();
-        }
-      },
-      [rows, columns]
-    );
-
-    return (
-      <table {...getTableProps()} className="max-w-[100%] overflow-x-auto">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) =>
-                column?.title ? (
-                  <th {...column.getHeaderProps()}>{column.render("title")}</th>
-                ) : (
-                  <th></th>
-                )
-              )}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell, j) => (
-                  <td
-                    {...cell.getCellProps()}
-                    id={`cell-${i}-${j}`}
-                    tabIndex={0}
-                    onKeyDown={(e) => handleKeyDown(e, i, j)}
-                  >
-                    {cell.render("Cell", { editable: true })}
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  };
-
+  // count factor price
   useEffect(() => {
-    handleGetCustomerCode();
+    console.log(validation.values.factorItemCreateViewModels);
+  }, [validation.values.factorItemCreateViewModels]);
 
-    handleGetProductList();
-    handleGetProductCatList();
-    handleGetCustomerList();
-    handleGetUnitList();
-    handleGetEmployeesList();
-  }, []);
-
+  // set factor-responsible and customer
   useEffect(() => {
     if (userData) {
       validation.setFieldValue("factorResponsibleId", userData?.id);
     }
-    if (customerId) {
-      validation.setFieldValue("customerId", customerId);
+    if (pageData?.customerId) {
+      validation.setFieldValue("customerId", pageData.customerId);
     }
-  }, [userData, customerId]);
+  }, [userData, pageData?.customerId]);
 
+  // set modal title by having data
   useEffect(() => {
     handleModalTitle();
-  }, [type]);
+  }, [pageData]);
 
   useEffect(() => {
-    if (factorId) {
-      setModalTitle(`ویرایش فاکتور : ${data?.factorNumber}`);
-      handleGetFactorData(factorId);
+    if (pageData?.factorId) {
+      setFactorTitle(`ویرایش فاکتور : ${pageData?.data?.factorNumber}`);
+      handleGetFactorData(pageData?.factorId);
     }
-  }, [factorId]);
+  }, [pageData]);
 
-  // count factor price
+  // set page data
   useEffect(() => {
-    let prices = 0;
+    if (state) {
+      setPageData(state);
+    }
+  }, [state]);
 
-    validation.values.factorItemCreateViewModels.map((value) => {
-      prices += value.totalPrice;
-    });
-
-    setAllFactorPrice(formatHelper.numberSeperator(prices));
-  }, [validation.values.factorItemCreateViewModels]);
+  useEffect(() => {
+    if (currentStep < 1) {
+      setPrevStepDisabled(true);
+    }
+    if (currentStep == steps.length - 1) {
+      setNextStepDisabled(true);
+    }
+  }, [currentStep]);
 
   return (
     <>
-      <Modal
-        open={open}
-        onCancel={handleClose}
-        title={modalTitle}
-        className="!w-fit max-w-[1200px]"
-        footer={
-          <div className="flex justify-center gap-3 pt-5">
-            {data && handleRenderFactorOptions(type)}
-            <Button onClick={handleClose} type="primary" danger>
-              لغو
-            </Button>
-            <Button
-              onClick={validation.submitForm}
-              type="primary"
-              loading={loading}
-              disabled={loading || formDisabled}
-            >
-              ثبت
-            </Button>
-          </div>
-        }
-      >
+      <div className="w-full flex p-1 md:p-3">
         <Form
           onFinish={validation.handleSubmit}
-          className="w-full flex flex-wrap gap-4"
+          className="w-full flex flex-col gap-10"
         >
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>تاریخ ثبت :</span>
-            <MyDatePicker
-              value={validation.values.factorDate}
-              setValue={(e) => {
-                validation.setFieldValue("factorDate", e);
-              }}
-              className={"w-[300px]"}
-              status={
-                validation.touched.factorDate &&
-                validation.errors.factorDate &&
-                "error"
-              }
-            />
-          </div>
+          <div className="w-full flex justify-between items-center font-bold px-4 my-10 h-fit">
+            <h1 className="text-lg md:text-4xl">{factorTitle}</h1>
 
-          {!customerId && (
-            <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-              <span>شخص :</span>
-              <Select
-                optionFilterProp="label"
-                options={customerList}
-                value={validation.values.customerId}
-                onChange={(e) => {
-                  console.log(e);
-                  validation.setFieldValue("customerId", e);
-                }}
-                className="w-full"
-                placeholder="انتخاب کنید..."
-              />
-              {validation.touched.customerId &&
-                validation.errors.customerId && (
-                  <span className="text-red-300 text-xs">
-                    {validation.errors.customerId}
-                  </span>
-                )}
-            </div>
-          )}
-
-          <div className="w-full flex flex-col gap-2 py-5">
-            <div className="w-ful flex justify-between">
-              <span className="text-2xl font-bold">محصولات این فاکتور</span>
-
-              <Popconfirm
-                title="از پاک کردن تمامی موارد فاکتور مطمئن هستید؟"
-                onConfirm={() =>
-                  validation.setFieldValue("factorItemCreateViewModels", [
-                    defaultData,
-                  ])
-                }
-              >
-                <Button danger type="primary">
-                  <MdDelete />
-                </Button>
-              </Popconfirm>
-            </div>
-
-            {/* product list in factor */}
-            <div className="w-full overflow-x-scroll">
-              {/* <Table
-                bordered
-                components={components}
-                scroll={{ x: "100%" }}
-                rowClassName={() => "editable-row"}
-                dataSource={validation.values.factorItemCreateViewModels}
-                columns={columns}
-                pagination={{}}
-              /> */}
-
-              <Table
-                columns={columns}
-                data={validation.values.factorItemCreateViewModels}
-                updateMyData={updateMyData}
-              />
-            </div>
-          </div>
-
-          <div className="w-full flex flex-col justify-start items-start pt-10">
-            {/* price count */}
-            <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
-              <span className="font-bold">مبلغ کل فاکتور : </span>{" "}
-              <div className="w-full text-center">
-                <span>{allFactorPrice}</span>
-              </div>
-            </div>
-
-            {/* conditions */}
-            <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
-              <span className="font-bold">اضافات کسورات : </span>
-              <div className="w-full flex flex-col justify-center items-center">
-                <Button
-                  className="mb-5"
-                  type="primary"
-                  onClick={handleGetConditions}
-                  loading={loading}
-                  disabled={loading}
-                >
-                  محاسبه اضافات کسورات
-                </Button>
-
-                <div className="w-full flex flex-col items-center justify-center">
-                  {allConditions && allConditions?.length !== 0 ? (
-                    allConditions?.map((value, index) => (
-                      <div className="flex gap-1 text-md p-1" key={index}>
-                        <p className="font-bold">{value?.title} : </p>
-                        <span>{value?.amount}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <span className="text-sm text-gray-300">
-                      اضافات کسورات محاسبه نشده است...
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* payment method */}
-            <div className="w-full flex flex-col gap-2 p-3 text-lg border-b-[1px] border-b-gray-300">
-              <span className="font-bold">روش پرداخت : </span>
-              <div className="w-full flex justify-center items-center">
-                <Select
-                  className="min-w-[200px]"
-                  options={allEnum?.FactorReceiptAndPaymentConditions?.map(
-                    (i, index) => {
-                      return { label: i, value: index };
-                    }
-                  )}
-                  value={paymentMethod}
-                  onChange={(e) => {
-                    setPeymantMethod(e);
+            <div className="flex items-center">
+              {pageData?.data && (
+                <Dropdown
+                  menu={{
+                    items: allEnum?.FactorStatus?.map((v, index) => {
+                      return {
+                        key: index,
+                        label: (
+                          <div
+                            className="w-full h-full"
+                            onClick={() => handleChangeFactorStatus(index)}
+                          >
+                            {v}
+                          </div>
+                        ),
+                      };
+                    }),
                   }}
-                />
-              </div>
+                >
+                  <Button
+                    size="small"
+                    danger
+                    type="primary"
+                    className="cursor-pointer"
+                  >
+                    تغییر وضعیت فاکتور <FaAngleDown />
+                  </Button>
+                </Dropdown>
+              )}
+              <Button
+                size="large"
+                type="link"
+                className="mr-2"
+                onClick={handleRedirect}
+              >
+                بازگشت
+                <FaAngleLeft />
+              </Button>
             </div>
+          </div>
 
-            {/* description */}
-            <div className="flex gap-1 flex-col items-start w-full mx-auto p-3">
-              <span className="font-bold text-lg">توضیحات :</span>
-              <Input.TextArea
-                rows={5}
-                value={validation.values.factorDescription}
-                name="factorDescription"
-                onChange={validation.handleChange}
-                className="w-[100%]"
-                placeholder="لطفا اینجا وارد کنید..."
-                onKeyUp={(e) => console.log(e)}
+          <Steps className="w-full" current={currentStep} items={steps} />
+
+          {/* steps */}
+          <div className="w-full border-2 py-5 rounded-md">
+            {currentStep == 0 && (
+              <SelectItems
+                validation={validation}
+                factorType={pageData?.type}
+                customerId={pageData?.customerId}
+                setStep={setCurrentStep}
               />
-              {validation.touched.factorDescription &&
-                validation.errors.factorDescription && (
-                  <span className="text-red-300 text-xs">
-                    {validation.errors.factorDescription}
-                  </span>
-                )}
-            </div>
+            )}
+
+            {currentStep == 1 && (
+              <Calculations
+                validation={validation}
+                factorItems={validation.values.factorItemCreateViewModels}
+                setStep={setCurrentStep}
+              />
+            )}
+
+            {currentStep == 2 && (
+              <FinalStep
+                validation={validation}
+                factorType={pageData?.type}
+                loading={loading}
+                edit={pageData?.data ? true : false}
+                handleRedirect={handleRedirect}
+                setStep={setCurrentStep}
+              />
+            )}
+          </div>
+
+          {/* change step */}
+          <div className="w-full flex justify-center gap-1 items-center py-10">
+            <Button
+              type="primary"
+              onClick={() => {
+                handleChangeStep(false);
+              }}
+              disabled={pervStepDisabled}
+            >
+              <FaAngleRight /> مرحله قبلی
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                handleChangeStep(true);
+              }}
+              disabled={nextStepDisabled}
+            >
+              مرحله بعدی <FaAngleLeft />
+            </Button>
           </div>
         </Form>
-      </Modal>
+      </div>
     </>
   );
 }

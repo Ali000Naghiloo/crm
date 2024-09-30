@@ -7,6 +7,7 @@ import Header from "./common/Header";
 // admin
 import AdminSideMenu from "./admin components/AdminSideMenu";
 import AdminDashboard from "./admin components/dashboard/Dashboard";
+import FactorSettingsPage from "./pages/admin/factor setting/FactorSettingsPage";
 // user
 import SideMenu from "./components/SideMenu";
 import DashboardPage from "./pages/user/DashboardPage";
@@ -27,6 +28,7 @@ import PreFactorsPage from "./pages/user/factors/PreFactorsPage";
 import InitialRequestPage from "./pages/user/factors/InitialRequestPage";
 import ConditionsPage from "./pages/user/conditions/ConditionsPage";
 import ConditionLimits from "./pages/user/conditions/ConditionLimits";
+import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -59,11 +61,23 @@ export default function AllRoutes() {
             <Route path="/prices/groups" element={<PriceGroups />} />
             {/* commissions */}
             <Route path="/commissions" element={<CommissionsPage />} />
+            {/* requests */}
+            <Route path="/requests/request" element={<InitialRequestPage />} />
+            <Route path="/requests/initial" element={<InitialRequestPage />} />
             {/* factors */}
-            <Route path="/factors" element={<FactorsPage />} />
-            <Route path="/factors/initial" element={<InitialRequestPage />} />
             <Route path="/factors/preFactors" element={<PreFactorsPage />} />
-            <Route path="/factors/rejected" element={<RejectedFactorsPage />} />
+            <Route path="/factors/sell-factors" element={<FactorsPage />} />
+            <Route
+              path="/factors/sell-rejected"
+              element={<RejectedFactorsPage />}
+            />
+            <Route path="/buy-factors" element={<FactorsPage />} />
+            <Route
+              path="/factors/buy-rejected"
+              element={<RejectedFactorsPage />}
+            />
+            <Route path="/factors/create" element={<CreateFactorPage />} />
+            <Route path="/factors/edit" element={<CreateFactorPage />} />
             {/* conditions */}
             <Route path="/conditions" element={<ConditionsPage />} />
             <Route path="/conditions/limits" element={<ConditionLimits />} />
@@ -86,6 +100,8 @@ export default function AllRoutes() {
             <Route path="/" element={<AdminDashboard />} />
             <Route path="/dashboard" element={<AdminDashboard />} />
             <Route path="/employees" element={<EmployeesPage />} />
+            {/* factor settings */}
+            <Route path="/factor-settings" element={<FactorSettingsPage />} />
           </Routes>
         </div>
       </div>

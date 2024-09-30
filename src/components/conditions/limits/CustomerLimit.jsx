@@ -41,7 +41,9 @@ export default function CustomerLimits({ values, setField }) {
             className="w-[50%]"
             mode="multiple"
             maxTagCount={1}
-            onChange={(e) => handleCellChange(`factorCustomer.customers`, e)}
+            onChange={(e) =>
+              handleCellChange(`factorCustomer.customerRoles`, e)
+            }
             optionFilterProp="label"
           />
         );

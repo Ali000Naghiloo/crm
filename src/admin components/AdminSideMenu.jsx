@@ -55,7 +55,7 @@ export default function SideMenu() {
       ),
     },
     {
-      key: "/factorSetting",
+      key: "/factor-settings",
       icon: <MdFactCheck size={"1.5em"} className="!text-textColor" />,
       label: (
         <div

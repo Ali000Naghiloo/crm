@@ -254,7 +254,7 @@ export default function MethodModal({
             </div>
 
             <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-              <span>قیمت :</span>
+              <span>{allEnum?.PriceType[validation.values.priceType]} :</span>
               <Input
                 type="number"
                 min={0}
