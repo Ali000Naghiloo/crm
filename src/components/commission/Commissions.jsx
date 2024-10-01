@@ -122,7 +122,7 @@ export default function Commissions() {
 
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "پورسانت ها" }, { label: "لیست پورسانت ها" }])
+      setPageRoutes([{ label: "پورسانت ها" }, { label: "فهرست پورسانت ها" }])
     );
 
     handleGetList();

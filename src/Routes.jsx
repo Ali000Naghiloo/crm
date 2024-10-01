@@ -29,6 +29,7 @@ import InitialRequestPage from "./pages/user/factors/InitialRequestPage";
 import ConditionsPage from "./pages/user/conditions/ConditionsPage";
 import ConditionLimits from "./pages/user/conditions/ConditionLimits";
 import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
+import FactorReportsPage from "./pages/user/factors/FactorReportsPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -65,6 +66,7 @@ export default function AllRoutes() {
             <Route path="/requests/request" element={<InitialRequestPage />} />
             <Route path="/requests/initial" element={<InitialRequestPage />} />
             {/* factors */}
+            <Route path="/factors/reports" element={<FactorReportsPage />} />
             <Route path="/factors/preFactors" element={<PreFactorsPage />} />
             <Route path="/factors/sell-factors" element={<FactorsPage />} />
             <Route

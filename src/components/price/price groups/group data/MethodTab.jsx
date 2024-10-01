@@ -141,7 +141,7 @@ export default function MethodTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4 md:min-w-[600px]">
         <div className="w-full flex justify-between py-5 font-bold">
-          <h1 className="text-lg">لیست روش های قیمت گذاری این گروه</h1>
+          <h1 className="text-lg">فهرست روش های قیمت گذاری این گروه</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={getNewList}>
@@ -185,7 +185,7 @@ export default function MethodTab({ data }) {
             expandable={{
               expandedRowRender: (record) => (
                 <div className="w-full flex flex-col gap-3">
-                  <span>لیست شروط قیمت گذاری : </span>
+                  <span>فهرست شروط قیمت گذاری : </span>
                 </div>
               ),
             }}

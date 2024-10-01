@@ -129,7 +129,7 @@ export default function ConnectorTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>لیست رابط های شخص</h2>
+          <h2>فهرست رابط های شخص</h2>
         </div>
 
         <div className="w-full">

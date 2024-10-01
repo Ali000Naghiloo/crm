@@ -150,7 +150,10 @@ export default function Categories() {
 
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "محصولات" }, { label: "لیست دسته بندی محصولات" }])
+      setPageRoutes([
+        { label: "محصولات" },
+        { label: "فهرست دسته بندی محصولات" },
+      ])
     );
 
     handleGetList();

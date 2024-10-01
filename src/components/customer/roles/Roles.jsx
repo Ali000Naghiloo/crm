@@ -169,7 +169,7 @@ export default function Roles() {
       setPageRoutes([
         { label: "CRM" },
         { label: "اشخاص" },
-        { label: "لیست نقش اشخاص" },
+        { label: "فهرست نقش اشخاص" },
       ])
     );
 

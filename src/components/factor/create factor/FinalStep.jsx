@@ -1,5 +1,5 @@
-import { Button, Popconfirm } from "antd";
-import React from "react";
+import { Button, Popconfirm, Result, Spin } from "antd";
+import { useEffect } from "react";
 import useHttp from "../../../hooks/useHttps";
 import { toast } from "react-toastify";
 
@@ -10,6 +10,7 @@ export default function FinalStep({
   loading,
   setLoading,
   handleRedirect,
+  result,
 }) {
   const { httpService } = useHttp();
 
@@ -94,18 +95,41 @@ export default function FinalStep({
     setLoading(false);
   };
 
+  const Loader = () => {
+    return (
+      <div className="w-full h-[300px] flex justify-center items-center bg-gray-300 rounded-lg">
+        <Spin size="large" className="w-[100px]" />
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    validation.submitForm();
+  }, []);
+
   return (
     <>
       <div className="flex justify-center items-center gap-3 pt-5 overflow-x-auto">
         {/* {edit && handleRenderFactorOptions(factorType)} */}
-        <Button
-          onClick={validation.submitForm}
-          type="primary"
-          loading={loading}
-          disabled={loading}
-        >
-          ثبت
-        </Button>
+        {!loading && result ? (
+          <Result
+            status={result?.status}
+            title={result?.title}
+            subTitle={result?.subtitle}
+            extra={[
+              <Button type="primary" onClick={handleRedirect} key={"continue"}>
+                تایید و برگشت
+              </Button>,
+              result?.status == "error" ? (
+                <Button onClick={validation.submitForm} key={"retry"}>
+                  تلاش دوباره
+                </Button>
+              ) : null,
+            ]}
+          />
+        ) : (
+          <Loader />
+        )}
       </div>
     </>
   );

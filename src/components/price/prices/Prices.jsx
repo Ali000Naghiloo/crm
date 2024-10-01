@@ -133,7 +133,7 @@ export default function Prices() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "قیمت ها" }, { label: "لیست قیمت ها" }]));
+    dispatch(setPageRoutes([{ label: "قیمت ها" }, { label: "فهرست قیمت ها" }]));
 
     handleGetList();
   }, []);

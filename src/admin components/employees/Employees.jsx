@@ -126,7 +126,7 @@ export default function Employees() {
 
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "کارمندان" }, { label: "لیست کارمندان" }])
+      setPageRoutes([{ label: "کارمندان" }, { label: "فهرست کارمندان" }])
     );
 
     handleGetCustomers();

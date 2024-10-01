@@ -162,7 +162,7 @@ export default function NoteTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>لیست فاکتور های شخص</h2>
+          <h2>فهرست فاکتور های شخص</h2>
         </div>
 
         <div className="w-full flex gap-3 flex-wrap">

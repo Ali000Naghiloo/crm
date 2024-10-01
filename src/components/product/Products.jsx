@@ -164,7 +164,7 @@ export default function Products() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "محصولات" }, { label: "لیست محصولات" }]));
+    dispatch(setPageRoutes([{ label: "محصولات" }, { label: "فهرست محصولات" }]));
 
     handleGetList();
   }, []);

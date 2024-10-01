@@ -157,7 +157,7 @@ export default function PhoneTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>لیست شماره تلفن های شخص</h2>
+          <h2>فهرست شماره تلفن های شخص</h2>
         </div>
 
         <div className="w-full">

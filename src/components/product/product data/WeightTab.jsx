@@ -121,7 +121,7 @@ export default function WeightTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex justify-between py-5 font-bold">
-          <h1 className="text-lg">لیست وزن های این محصول</h1>
+          <h1 className="text-lg">فهرست وزن های این محصول</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={getNewList}>

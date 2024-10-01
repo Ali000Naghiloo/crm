@@ -155,7 +155,7 @@ export default function Warehouses() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "انبار" }, { label: "لیست انبار ها" }]));
+    dispatch(setPageRoutes([{ label: "انبار" }, { label: "فهرست انبار ها" }]));
 
     handleGetList();
   }, []);

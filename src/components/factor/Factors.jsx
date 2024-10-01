@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, Tag } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 // import CreateFactor from "./create factor/CreateFactor";
@@ -9,6 +9,7 @@ import { HiRefresh } from "react-icons/hi";
 import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import PageRoutes from "../../common/PageRoutes";
 import { useNavigate } from "react-router-dom";
+import formatHelper from "../../helper/formatHelper";
 
 // pageType {
 //   0 : "فاکتور",
@@ -64,7 +65,11 @@ export default function Factors({ pageType }) {
       render: (value) => (
         <>
           {value && value?.length !== 0
-            ? value?.map((v, index) => <div key={index}>{"مسئول فاکتور"}</div>)
+            ? value?.map((v, index) => (
+                <Tag color="cyan-inverse" key={index}>
+                  {v?.user}
+                </Tag>
+              ))
             : "-"}
         </>
       ),
@@ -73,19 +78,14 @@ export default function Factors({ pageType }) {
     {
       title: "قیمت کل فاکتور",
       dataIndex: "totalFactorPrice",
+      render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
       key: "totalFactorPrice",
     },
     {
       title: "عملیات",
       render: (data) => (
         <div className="flex gap-2">
-          <Button
-            onClick={() =>
-              setShowModal({ data: data, open: true, id: data?.factorId })
-            }
-            size="middle"
-            type="primary"
-          >
+          <Button onClick={() => {}} size="middle" type="primary">
             مشاهده
           </Button>
           <Button
@@ -108,7 +108,7 @@ export default function Factors({ pageType }) {
             okText="بله"
             title="آیا از حذف این فاکتور اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.priceId)}
+            onConfirm={() => handleDelete(data?.factorId)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -124,8 +124,8 @@ export default function Factors({ pageType }) {
     setLoading(true);
 
     await httpService
-      .get("/Factor/Delete", {
-        params: { priceId: id },
+      .get("/Factor/DeleteFactor", {
+        params: { factorId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)
@@ -180,7 +180,7 @@ export default function Factors({ pageType }) {
 
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "فاکتور ها" }, { label: "لیست فاکتور ها" }])
+      setPageRoutes([{ label: "فاکتور ها" }, { label: "فهرست فاکتور ها" }])
     );
 
     handleGetList();

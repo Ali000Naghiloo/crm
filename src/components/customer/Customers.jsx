@@ -170,7 +170,7 @@ export default function Customers() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "لیست اشخاص" }]));
+    dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "فهرست اشخاص" }]));
 
     handleGetCustomers();
   }, []);

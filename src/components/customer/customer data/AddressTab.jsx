@@ -140,7 +140,7 @@ export default function AddressTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>لیست آدرس های شخص</h2>
+          <h2>فهرست آدرس های شخص</h2>
         </div>
 
         <div className="w-full">

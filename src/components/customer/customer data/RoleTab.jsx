@@ -197,11 +197,11 @@ export default function RoleTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>لیست نقش های شخص</h2>
+          <h2>فهرست نقش های شخص</h2>
         </div>
 
         <div className="w-full">
-          <span>لیست نقش های در دسترس (برای اضافه کردن کلیک کنید)</span>
+          <span>فهرست نقش های در دسترس (برای اضافه کردن کلیک کنید)</span>
           <Select
             optionFilterProp="label"
             allowClear

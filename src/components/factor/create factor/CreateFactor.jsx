@@ -14,12 +14,16 @@ import { SiCodefactor } from "react-icons/si";
 import { BiCalculator } from "react-icons/bi";
 import { BsCheckCircleFill } from "react-icons/bs";
 
+// { state } = useLocation
+// state = {id , data, type}
+
 export default function CreateFactor() {
   const { httpService } = useHttp();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [factorTitle, setFactorTitle] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
+  const [result, setResult] = useState(null);
 
   // steps
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
@@ -79,12 +83,17 @@ export default function CreateFactor() {
           totalPrice: 0,
         },
       ],
+      factorAdditionsAndDeductionsMappings: [],
     },
 
     validationSchema,
 
     onSubmit: (values) => {
-      handleCreateFactor(values);
+      if (pageData?.id) {
+        handleEditFactor(values);
+      } else {
+        handleCreateFactor(values);
+      }
     },
   });
 
@@ -110,6 +119,15 @@ export default function CreateFactor() {
           validation.setFieldValue(
             "factorItemCreateViewModels",
             res.data?.factorDetailViewModel?.factorItems
+          );
+          validation.setFieldValue(
+            "totalFactorPrice",
+            res.data?.factorDetailViewModel?.totalFactorPrice
+          );
+          validation.setFieldValue(
+            "factorAdditionsAndDeductionsMappings",
+            res.data?.factorDetailViewModel
+              ?.factorAdditionsAndDeductionsMappings
           );
         }
       })
@@ -141,26 +159,28 @@ export default function CreateFactor() {
     }
   };
 
+  // create factor
   const handleCreateFactor = async (values) => {
     setLoading(true);
     const formData = {
-      factorNumber: values?.factorNumber,
-      factorDate: values?.factorDate,
-      customerId: values?.customerId,
-      totalFactorQuantity: values?.totalFactorQuantity,
-      totalFactorDiscount: values?.totalFactorDiscount,
-      totalFactorPrice: values?.totalFactorPrice,
-      factorDescription: values?.factorDescription,
-      factorResponsibleId: values?.factorResponsibleId,
-      factorItemCreateViewModels:
-        values?.factorItemCreateViewModels &&
-        values?.factorItemCreateViewModels?.length !== 0
-          ? values?.factorItemCreateViewModels?.map((item) => {
-              return {
-                ...item,
-              };
-            })
-          : null,
+      // factorNumber: values?.factorNumber,
+      // factorDate: values?.factorDate,
+      // customerId: values?.customerId,
+      // totalFactorQuantity: values?.totalFactorQuantity,
+      // totalFactorDiscount: values?.totalFactorDiscount,
+      // totalFactorPrice: values?.totalFactorPrice,
+      // factorDescription: values?.factorDescription,
+      // factorResponsibleId: values?.factorResponsibleId,
+      // factorItemCreateViewModels:
+      //   values?.factorItemCreateViewModels &&
+      //   values?.factorItemCreateViewModels?.length !== 0
+      //     ? values?.factorItemCreateViewModels?.map((item) => {
+      //         return {
+      //           ...item,
+      //         };
+      //       })
+      //     : null,
+      ...values,
     };
 
     if (pageData?.type === 2) {
@@ -169,10 +189,26 @@ export default function CreateFactor() {
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleRedirect();
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ثبت شد",
+              subtitle: "",
+            });
+          } else {
+            setResult({
+              status: "error",
+              title: "در ثبت فاکتور شما خطا بوجود آمد",
+              subtitle: "",
+            });
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ثبت فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
     }
     if (pageData?.type === 3) {
       await httpService
@@ -180,10 +216,20 @@ export default function CreateFactor() {
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleRedirect();
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ثبت شد",
+              subtitle: "",
+            });
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ثبت فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
     }
     if (pageData?.type === 4) {
       await httpService
@@ -191,10 +237,101 @@ export default function CreateFactor() {
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت ساخته شد");
-            handleRedirect();
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ثبت شد",
+              subtitle: "",
+            });
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ثبت فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
+    }
+
+    setLoading(false);
+  };
+
+  // edit factor
+  const handleEditFactor = async (values) => {
+    setLoading(true);
+    const formData = {
+      ...values,
+      factorId: pageData?.id,
+    };
+
+    if (pageData?.type === 2) {
+      await httpService
+        .post("/Factor/EditPreFactor", formData)
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            toast.success("با موفقیت ویرایش شد");
+            setResult({
+              status: "success",
+              title: "پیش فاکتور شما با موفقیت ویرایش شد",
+              subtitle: "",
+            });
+          } else {
+            setResult({
+              status: "error",
+              title: "در ویرایش پیش فاکتور شما خطا بوجود آمد",
+              subtitle: "",
+            });
+          }
+        })
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ویرایش پیش فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
+    }
+    if (pageData?.type === 3) {
+      await httpService
+        .post("/Factor/EditFactor", formData)
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            toast.success("با موفقیت ویرایش شد");
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ویرایش شد",
+              subtitle: "",
+            });
+          }
+        })
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ویرایش فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
+    }
+    if (pageData?.type === 4) {
+      await httpService
+        .post("/Factor/EditReturnFactor", formData)
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            toast.success("با موفقیت ویرایش شد");
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ویرایش شد",
+              subtitle: "",
+            });
+          }
+        })
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ویرایش فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
     }
 
     setLoading(false);
@@ -226,7 +363,7 @@ export default function CreateFactor() {
       setFactorTitle("ثبت پیش فاکتور جدید");
     }
     if (pageData?.type == 3) {
-      setFactorTitle("ثبت فاکتور جدید");
+      setFactorTitle("ثبت فاکتور فروش جدید");
     }
     if (pageData?.type == 4) {
       setFactorTitle("ثبت فاکتور برگشت از فروش جدید");
@@ -235,8 +372,15 @@ export default function CreateFactor() {
 
   // count factor price
   useEffect(() => {
-    console.log(validation.values.factorItemCreateViewModels);
-  }, [validation.values.factorItemCreateViewModels]);
+    // console.log(validation.values);
+    if (validation.values.factorItemCreateViewModels.length !== 0) {
+      let prices = 0;
+      validation.values.factorItemCreateViewModels.map((value) => {
+        prices += value.totalPrice;
+      });
+      validation.setFieldValue("totalFactorPrice", prices);
+    }
+  }, [validation.values]);
 
   // set factor-responsible and customer
   useEffect(() => {
@@ -248,15 +392,12 @@ export default function CreateFactor() {
     }
   }, [userData, pageData?.customerId]);
 
-  // set modal title by having data
   useEffect(() => {
-    handleModalTitle();
-  }, [pageData]);
-
-  useEffect(() => {
-    if (pageData?.factorId) {
+    if (pageData?.id) {
       setFactorTitle(`ویرایش فاکتور : ${pageData?.data?.factorNumber}`);
-      handleGetFactorData(pageData?.factorId);
+      handleGetFactorData(pageData?.id);
+    } else {
+      handleModalTitle();
     }
   }, [pageData]);
 
@@ -264,6 +405,8 @@ export default function CreateFactor() {
   useEffect(() => {
     if (state) {
       setPageData(state);
+    } else {
+      handleRedirect();
     }
   }, [state]);
 
@@ -335,7 +478,6 @@ export default function CreateFactor() {
               <SelectItems
                 validation={validation}
                 factorType={pageData?.type}
-                customerId={pageData?.customerId}
                 setStep={setCurrentStep}
               />
             )}
@@ -356,6 +498,7 @@ export default function CreateFactor() {
                 edit={pageData?.data ? true : false}
                 handleRedirect={handleRedirect}
                 setStep={setCurrentStep}
+                result={result}
               />
             )}
           </div>

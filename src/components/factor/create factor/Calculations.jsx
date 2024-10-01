@@ -14,10 +14,11 @@ export default function Calculations({ validation, factorItems }) {
   });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
-  const handleGetConditions = async () => {
+  const handleCalculations = async () => {
     setLoading(true);
     const conditionFormData = validation.values;
 
+    // set all details
     await httpService
       .post("/Factor/GetFactorAdditionsAndDeductions", conditionFormData)
       .then((res) => {
@@ -26,7 +27,13 @@ export default function Calculations({ validation, factorItems }) {
             ...calculations,
             allConditions:
               res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList,
+            allFactorPrice: validation.values.totalFactorPrice,
           });
+
+          validation.setFieldValue(
+            "factorAdditionsAndDeductionsMappings",
+            res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList
+          );
         }
       })
       .catch(() => {});
@@ -34,25 +41,10 @@ export default function Calculations({ validation, factorItems }) {
     setLoading(false);
   };
 
-  const handleSetFactorAllPrice = () => {
-    let prices = 0;
-    validation.values.factorItemCreateViewModels.map((value) => {
-      prices += value.totalPrice;
-    });
-    validation.setFieldValue("totalFactorPrice", prices);
-
-    setCalculations({
-      ...calculations,
-      allFactorPrice: formatHelper.numberSeperator(prices),
-    });
-  };
-
   useEffect(() => {
     if (factorItems) {
-      // count factor price
-      handleSetFactorAllPrice();
-      // count factor conditions
-      handleGetConditions();
+      handleCalculations();
+      console.log(validation.values);
     }
   }, [factorItems]);
 
@@ -63,7 +55,11 @@ export default function Calculations({ validation, factorItems }) {
         <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
           <span className="font-bold">مبلغ کل فاکتور : </span>{" "}
           <div className="w-full text-center">
-            <span>{calculations.allFactorPrice}</span>
+            <span>
+              {calculations.allFactorPrice
+                ? formatHelper.numberSeperator(calculations.allFactorPrice)
+                : 0}
+            </span>
           </div>
         </div>
 
@@ -79,7 +75,11 @@ export default function Calculations({ validation, factorItems }) {
                     <p className="font-bold">
                       {value?.factorAdditionsAndDeductions?.title} :{" "}
                     </p>
-                    <span>{value?.amount}</span>
+                    <span>
+                      {value?.amount
+                        ? formatHelper.numberSeperator(value?.amount)
+                        : null}
+                    </span>
                   </div>
                 ))
               ) : (

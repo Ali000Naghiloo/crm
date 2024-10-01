@@ -184,7 +184,9 @@ export default function Groups() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "لیست گروه اشخاص" }]));
+    dispatch(
+      setPageRoutes([{ label: "اشخاص" }, { label: "فهرست گروه اشخاص" }])
+    );
 
     handleGetList();
   }, []);

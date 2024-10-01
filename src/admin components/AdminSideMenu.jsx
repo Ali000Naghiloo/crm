@@ -45,7 +45,7 @@ export default function SideMenu() {
           onClick={() =>
             handleAddToPageNames([
               { label: "کارمندان" },
-              { label: "لیست کارمندان" },
+              { label: "فهرست کارمندان" },
             ])
           }
           className="text-textColor flex items-center"

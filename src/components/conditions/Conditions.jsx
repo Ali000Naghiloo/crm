@@ -193,7 +193,7 @@ export default function Conditions() {
     dispatch(
       setPageRoutes([
         { label: "اضافات کسورات" },
-        { label: "لیست اضافه کسری ها" },
+        { label: "فهرست اضافه کسری ها" },
       ])
     );
 

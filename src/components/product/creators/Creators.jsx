@@ -118,7 +118,7 @@ export default function Creators() {
 
   useEffect(() => {
     dispatch(
-      setPageRoutes([{ label: "محصولات" }, { label: "لیست سازندگان محصول" }])
+      setPageRoutes([{ label: "محصولات" }, { label: "فهرست سازندگان محصول" }])
     );
 
     handleGetList();

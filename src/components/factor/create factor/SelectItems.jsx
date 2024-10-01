@@ -6,7 +6,7 @@ import useHttp from "../../../hooks/useHttps";
 import { BsPlusLg } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
-export default function SelectItems({ validation, factorType, customerId }) {
+export default function SelectItems({ validation, factorType }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
 
@@ -525,7 +525,7 @@ export default function SelectItems({ validation, factorType, customerId }) {
         />
       </div>
 
-      {!customerId && (
+      {!validation?.customerId && (
         <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
           <span>شخص :</span>
           <Select
@@ -547,7 +547,7 @@ export default function SelectItems({ validation, factorType, customerId }) {
       )}
 
       <div className="w-full max-w-[100%] flex flex-col gap-2 py-5">
-        <div className="w-ful flex justify-between">
+        <div className="w-ful flex justify-between px-8 mt-8">
           <span className="text-2xl font-bold">محصولات این فاکتور</span>
 
           <Popconfirm

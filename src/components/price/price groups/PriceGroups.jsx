@@ -127,7 +127,7 @@ export default function Groups() {
     dispatch(
       setPageRoutes([
         { label: "قیمت ها" },
-        { label: "لیست گروه های قیمت گذاری" },
+        { label: "فهرست گروه های قیمت گذاری" },
       ])
     );
 
