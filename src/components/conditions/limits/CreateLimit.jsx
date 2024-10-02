@@ -53,7 +53,7 @@ export default function CreateLimit() {
       factorAmount: {
         lowestAmount: 0,
         highestAmount: 0,
-        allFactorsExceptTheSpecifiedItems: true,
+        allFactorsExceptTheSpecifiedItems: null,
         factorReceiptAndPaymentConditions: 0,
         description: "",
       },

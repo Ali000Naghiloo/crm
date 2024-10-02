@@ -10,6 +10,7 @@ import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import PageRoutes from "../../common/PageRoutes";
 import { useNavigate } from "react-router-dom";
 import formatHelper from "../../helper/formatHelper";
+// import ViewFactor from "./view factor/ViewFactor";
 
 // pageType {
 //   0 : "فاکتور",
@@ -25,15 +26,14 @@ export default function Factors({ pageType }) {
   const [pageList, setPageList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [showModal, setShowModal] = useState({
+  const [showFactor, setShowFactor] = useState({
     open: false,
-    data: null,
     id: null,
   });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   // imports
-  const CreateFactor = lazy(() => import("./create factor/CreateFactor"));
+  const ViewFactor = lazy(() => import("./view factor/ViewFactor"));
 
   const columns = [
     {
@@ -85,7 +85,13 @@ export default function Factors({ pageType }) {
       title: "عملیات",
       render: (data) => (
         <div className="flex gap-2">
-          <Button onClick={() => {}} size="middle" type="primary">
+          <Button
+            onClick={() => {
+              setShowFactor({ id: data?.factorId, open: true });
+            }}
+            size="middle"
+            type="primary"
+          >
             مشاهده
           </Button>
           <Button
@@ -259,20 +265,13 @@ export default function Factors({ pageType }) {
         </div>
       </div>
 
-      {/* <CreateFactor
-        open={showModal.open}
+      <ViewFactor
+        open={showFactor.open}
         setOpen={(e) => {
-          setShowModal({
-            ...showModal,
-            open: e?.target?.value,
-          });
+          setShowFactor({ open: e });
         }}
-        getNewList={handleGetList}
-        data={showModal.data}
-        factorId={showModal.id}
-        list={pageList}
-        type={pageType}
-      /> */}
+        factorId={showFactor.id}
+      />
     </Suspense>
   );
 }
