@@ -2,8 +2,8 @@ import { Button, Checkbox, Input, Select, Table } from "antd";
 import { useEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { useSelector } from "react-redux";
-import MyDatePicker from "../../../common/MyDatePicker";
-import formatHelper from "../../../helper/formatHelper";
+import MyDatePicker from "../../../../common/MyDatePicker";
+import formatHelper from "../../../../helper/formatHelper";
 
 const weekDays = [0, 1, 2, 3, 4, 5, 6];
 
@@ -106,7 +106,7 @@ export default function TimeLocationLimits({ values, setField }) {
         return (
           <div>
             <Select
-              options={allEnum?.ImpactOnFactorAmount?.map((ty, index) => {
+              options={allEnum?.Season?.map((ty, index) => {
                 return { label: ty, value: index };
               })}
               value={value}
@@ -145,9 +145,7 @@ export default function TimeLocationLimits({ values, setField }) {
             checked={value}
             onChange={(e) => {
               handleCellChange(
-                `timePeriodsAndLocation[${
-                  record?.index - 1
-                }].calculationOfTheFixedAmountBasedOnTheNumberOfGoods`,
+                `timePeriodsAndLocation.allTimePeriodsShouldBeTakenExceptDesignatedPeriod`,
                 e.target.checked
               );
             }}
@@ -165,9 +163,7 @@ export default function TimeLocationLimits({ values, setField }) {
             checked={value}
             onChange={(e) => {
               handleCellChange(
-                `timePeriodsAndLocation[${
-                  record?.index - 1
-                }].allAreasExceptWhereSpecified`,
+                `timePeriodsAndLocation.allAreasExceptWhereSpecified`,
                 e.target.checked
               );
             }}

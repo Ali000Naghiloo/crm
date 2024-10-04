@@ -1,7 +1,7 @@
 import { Button, Checkbox, Input, Select } from "antd";
 import { useSelector } from "react-redux";
 
-export default function CustomLimits({ values, setField }) {
+export default function LimitData({ values, setField }) {
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const defaultRow = {

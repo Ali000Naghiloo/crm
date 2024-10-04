@@ -73,12 +73,12 @@ export default function Calculations({ validation, factorItems }) {
                 calculations.allConditions?.map((value, index) => (
                   <div className="flex gap-1 text-md p-1" key={index}>
                     <p className="font-bold">
-                      {value?.factorAdditionsAndDeductions?.title} :{" "}
+                      {value?.factorAdditionsAndDeductions} :{" "}
                     </p>
                     <span>
                       {value?.amount
                         ? formatHelper.numberSeperator(value?.amount)
-                        : null}
+                        : 0}
                     </span>
                   </div>
                 ))

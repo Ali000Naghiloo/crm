@@ -158,7 +158,7 @@ export default function Factors({ pageType }) {
           let datas = [];
           res.data.factorViewModelList.map((data, index) => {
             if (data?.factorType === pageType) {
-              datas.push({ ...data, index: index + 1, key: index });
+              datas.push({ ...data, index: index + 1, key: data?.id });
             }
           });
           setPageList(datas);
@@ -231,7 +231,7 @@ export default function Factors({ pageType }) {
               })
             }
           >
-            ساخت فاکتور جدید
+            {pageType ? allEnum?.FactorType[pageType] : null} جدید
           </Button>
         </div>
 

@@ -1,5 +1,6 @@
 import { Button, Modal, Tabs } from "antd";
 import DataTab from "./DataTab";
+import LimitTab from "./LimitTab";
 import useHttp from "../../../hooks/useHttps";
 import { useEffect, useState } from "react";
 
@@ -39,6 +40,9 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
         />
       );
     }
+    if (tabName === "limits") {
+      return <LimitTab data={data} />;
+    }
   };
 
   const customerTabs = [
@@ -46,6 +50,11 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
       key: "data",
       label: "اطلاعات",
       children: handleRenderTabContent("data", data),
+    },
+    {
+      key: "limits",
+      label: "شروط",
+      children: handleRenderTabContent("limits", data),
     },
   ];
 
@@ -58,7 +67,6 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
       <>
         <Modal
           loading={loading}
-          className=""
           open={open}
           onCancel={handleClose}
           title={data && `اضافه کسری : "${data?.title}"`}
@@ -67,6 +75,7 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
               بستن
             </Button>
           }
+          className={"w-full lg:!min-w-[900px]"}
         >
           <Tabs
             // defaultActiveKey="phone"

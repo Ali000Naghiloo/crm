@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar, Button, Dropdown } from "antd";
 import { RiMenuFoldLine, RiMenuUnfoldLine } from "react-icons/ri";
 import { setSideMenuIsOpen } from "../store/reducers/sideMenu";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.svg";
 import { ThemeButton } from "../assets/icons/ThemButton";
 import useHttp, { imageUrl } from "../hooks/useHttps";
 import { toast } from "react-toastify";
@@ -141,15 +141,15 @@ export default function Header() {
 
             {/* current tab name */}
             <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col items-center gap-2">
-              <h1 className="font-bold text-xl">CRM وبکام</h1>
+              <h1 className="font-bold text-xl">CRM گرانتیل</h1>
               <span>داشبورد</span>
             </div>
 
             {/* logo  */}
-            <div className="flex items-center gap-2 h-[70px] md:gap-10">
+            <div className="flex justify-end items-center gap-2 h-full">
               <ThemeButton />
 
-              <img className="w-[40px] h-[80%]" src={logo} alt="logo" />
+              <img className="w-[90px] h-full" src={logo} alt="logo" />
             </div>
           </div>
         </div>

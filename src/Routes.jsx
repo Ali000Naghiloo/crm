@@ -27,9 +27,8 @@ import RejectedFactorsPage from "./pages/user/factors/RejectedFactorsPage";
 import PreFactorsPage from "./pages/user/factors/PreFactorsPage";
 import InitialRequestPage from "./pages/user/factors/InitialRequestPage";
 import ConditionsPage from "./pages/user/conditions/ConditionsPage";
-import ConditionLimits from "./pages/user/conditions/ConditionLimits";
 import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
-import FactorReportsPage from "./pages/user/factors/FactorReportsPage";
+import ReportFactorsPage from "./pages/user/reports/ReportFactorsPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -66,7 +65,6 @@ export default function AllRoutes() {
             <Route path="/requests/request" element={<InitialRequestPage />} />
             <Route path="/requests/initial" element={<InitialRequestPage />} />
             {/* factors */}
-            <Route path="/factors/reports" element={<FactorReportsPage />} />
             <Route path="/factors/preFactors" element={<PreFactorsPage />} />
             <Route path="/factors/sell-factors" element={<FactorsPage />} />
             <Route
@@ -82,7 +80,9 @@ export default function AllRoutes() {
             <Route path="/factors/edit" element={<CreateFactorPage />} />
             {/* conditions */}
             <Route path="/conditions" element={<ConditionsPage />} />
-            <Route path="/conditions/limits" element={<ConditionLimits />} />
+            {/* reports */}
+            <Route path="/reports/factors" element={<ReportFactorsPage />} />
+            {/* requests */}
             {/* warehouses */}
             <Route path="/warehouses" element={<WarehousesPage />} />
           </Routes>

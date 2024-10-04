@@ -1,6 +1,6 @@
 import { Button, Form, Image, Input } from "antd";
 import background from "../../assets/images/login-image.png";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/logo.svg";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -156,7 +156,7 @@ export default function Login() {
 
               {/* tags */}
               <div className="w-full flex justify-between text-xs">
-                <span>شرکت وبکام</span>
+                <span>شرکت گرانتیل</span>
                 <div className="flex gap-1">
                   <span>نسخه : </span>
                   <span>1.0.0</span>

@@ -13,6 +13,7 @@ import { GoDot } from "react-icons/go";
 import { AiFillProduct } from "react-icons/ai";
 import { FaWarehouse } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
+import { HiDocumentReport } from "react-icons/hi";
 
 export default function SideMenu() {
   const { pathname } = useLocation();
@@ -304,23 +305,6 @@ export default function SideMenu() {
       ),
       children: [
         {
-          key: "/factors/reports",
-          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
-          label: (
-            <div
-              onClick={() =>
-                handleAddToPageNames([
-                  { label: "فاکتور ها" },
-                  { label: "گزارش گیری" },
-                ])
-              }
-              className="text-textColor text-base flex items-center"
-            >
-              گزارش گیری
-            </div>
-          ),
-        },
-        {
           key: "/factors/preFactors",
           icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
@@ -449,6 +433,39 @@ export default function SideMenu() {
               className="text-textColor text-base flex items-center"
             >
               درخواست
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      key: "/reports",
+      icon: (
+        <HiDocumentReport
+          size={"1.5em"}
+          className="!text-textColor text-base"
+        />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          گزارشات
+        </div>
+      ),
+      children: [
+        {
+          key: "/reports/factors",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "گزارش ها" },
+                  { label: "گزارشات فاکتور ها" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              گزارش فاکتور ها
             </div>
           ),
         },

@@ -2,7 +2,7 @@ import { Button, Checkbox, Input, Select, Table } from "antd";
 import { useEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { useSelector } from "react-redux";
-import useHttp from "../../../hooks/useHttps";
+import useHttp from "../../../../hooks/useHttps";
 
 export default function ProductLimits({ values, setField }) {
   const { httpService } = useHttp();

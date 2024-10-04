@@ -1,6 +1,6 @@
 import { useEffect, useState, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useHttp from "../../../hooks/useHttps";
+import useHttp from "../../hooks/useHttps";
 import {
   Button,
   Collapse,
@@ -13,12 +13,12 @@ import {
 } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
-import { setPageRoutes } from "../../../store/reducers/pageRoutes";
-import PageRoutes from "../../../common/PageRoutes";
+import { setPageRoutes } from "../../store/reducers/pageRoutes";
+import PageRoutes from "../../common/PageRoutes";
 import { useNavigate } from "react-router-dom";
-import formatHelper from "../../../helper/formatHelper";
+import formatHelper from "../../helper/formatHelper";
 import { useFormik } from "formik";
-import MyDatePicker from "../../../common/MyDatePicker";
+import MyDatePicker from "../../common/MyDatePicker";
 
 // pageType {
 // }

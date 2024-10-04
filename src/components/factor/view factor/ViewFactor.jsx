@@ -1,7 +1,7 @@
 import { Button, Input, Modal, Spin, Table } from "antd";
 import { useEffect, useRef, useState } from "react";
 import useHttp from "../../../hooks/useHttps";
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.svg";
 import moment from "jalali-moment";
 import formatHelper from "../../../helper/formatHelper";
 import { useReactToPrint } from "react-to-print";
@@ -19,10 +19,10 @@ export default function ViewFactor({ open, setOpen, factorId }) {
 
   const columns = [
     { title: "ردیف", dataIndex: "itemRow", key: "itemRow" },
-    { title: "محصول", dataIndex: "product", key: "product" },
-    { title: "تعداد", dataIndex: "quantity", key: "quantity" },
+    { title: "کالا و خدمات", dataIndex: "product", key: "product" },
+    { title: "تعداد/مقدار", dataIndex: "quantity", key: "quantity" },
     {
-      title: "قیمت واحد",
+      title: "مبلغ واحد",
       dataIndex: "productUnitPrice",
       key: "productUnitPrice",
       render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
@@ -33,11 +33,21 @@ export default function ViewFactor({ open, setOpen, factorId }) {
       key: "discount",
     },
     {
-      title: "فی کل",
+      title: "مبلغ کل",
       dataIndex: "totalPrice",
       key: "totalPrice",
       render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
     },
+  ];
+
+  const conditionsColumns = [
+    { title: "ردیف", dataIndex: "itemRow", key: "itemRow" },
+    {
+      title: "عنوان اضافه کسری",
+      dataIndex: "factorAdditionsAndDeductions",
+      key: "factorAdditionsAndDeductions",
+    },
+    { title: "مقدار", dataIndex: "amount", key: "amount" },
   ];
 
   const handleClose = () => {
@@ -113,8 +123,8 @@ export default function ViewFactor({ open, setOpen, factorId }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-3 absolute top-0 left-[50%] translate-x-[-50%]">
-                  <div className="w-[60px]">
+                <div className="flex flex-col items-center gap-3 absolute top-10px left-[50%] translate-x-[-50%]">
+                  <div className="w-[120px] bg-accent rounded-lg">
                     <img
                       src={logo}
                       alt="logo"
@@ -122,7 +132,7 @@ export default function ViewFactor({ open, setOpen, factorId }) {
                     />
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold">وبکام</h1>
+                    <h1 className="text-2xl font-bold">گرانتیل</h1>
                   </div>
                 </div>
 
@@ -172,19 +182,43 @@ export default function ViewFactor({ open, setOpen, factorId }) {
               <div className="w-full flex flex-col">
                 {/* factor price */}
                 <div className="w-full flex justify-center items-center">
-                  <span className="text-gray-500">قیمت کل فاکتور : </span>
+                  <span className="text-gray-500">مبلغ کل فاکتور : </span>
                   <span className="text-lg font-bold">
                     {formatHelper.numberSeperator(factorData?.totalFactorPrice)}
                   </span>
                 </div>
 
                 {/* factor conditions */}
-                <div></div>
+                <div className="w-full my-10 flex flex-col items-center">
+                  <span className="text-2xl font-bold">جدول اضافات کسورات</span>
+                  <Table
+                    pagination={{ position: ["none"] }}
+                    className="w-full"
+                    size="small"
+                    dataSource={
+                      factorData?.factorAdditionsAndDeductionsMappings
+                    }
+                    columns={conditionsColumns}
+                  />
+                </div>
 
                 {/* factor description */}
                 <div className="w-full">
                   <span>توضیحات : </span>
-                  <Input.TextArea value={""} rows={6} />
+                  <Input.TextArea value={""} rows={3} />
+                </div>
+
+                {/* sign place */}
+                <div className="w-full flex justify-between">
+                  <div className="p-20 flex justify-center items-center">
+                    <span className="text-gray-500">محل امضای مسئول</span>
+                  </div>
+
+                  <div className="p-20 flex justify-center items-center">
+                    <span className="text-gray-500">
+                      محل امضای دریافت کننده
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

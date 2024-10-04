@@ -1,7 +1,7 @@
 import { Button, Checkbox, Input, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useHttp from "../../../hooks/useHttps";
+import useHttp from "../../../../hooks/useHttps";
 
 export default function CustomerLimits({ values, setField }) {
   const { httpService } = useHttp();
