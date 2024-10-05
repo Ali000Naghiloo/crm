@@ -50,14 +50,18 @@ export default function LimitTab({ data }) {
   const handleDelete = async (id) => {
     setLoading(true);
     const formData = {
-      additionsAndDeductionsAllConditionsId: id,
+      additionsAndDeductionAllConditionsId: id,
     };
 
     await httpService(
       "/AdditionsAndDeductionsAllCondition/DeleteAdditionsAndDeductionAllConditions",
       { params: formData }
     )
-      .then((res) => {})
+      .then((res) => {
+        if (res.status === 200) {
+          handleGetLimitList();
+        }
+      })
       .catch(() => {});
 
     setLoading(false);
