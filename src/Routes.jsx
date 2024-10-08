@@ -90,10 +90,10 @@ export default function AllRoutes() {
             {/* warehouses */}
             <Route path="/warehouses" element={<WarehousesPage />} />
             {/* taskmanager */}
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/my-tasks" element={<MyTasksPage />} />
-            <Route path="/create-note" element={<CreateNotePage />} />
+            <Route path="/taskmanager/chat" element={<ChatPage />} />
+            <Route path="/taskmanager/projects" element={<ProjectsPage />} />
+            <Route path="/taskmanager/my-tasks" element={<MyTasksPage />} />
+            <Route path="/taskmanager/create-note" element={<CreateNotePage />} />
           </Routes>
         </div>
       </div>

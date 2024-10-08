@@ -499,7 +499,7 @@ export default function SideMenu() {
       ),
       children: [
         {
-          key: "/chat",
+          key: "/taskmanager/chat",
           icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
@@ -516,7 +516,7 @@ export default function SideMenu() {
           ),
         },
         {
-          key: "/projects",
+          key: "/taskmanager/projects",
           icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
@@ -533,7 +533,7 @@ export default function SideMenu() {
           ),
         },
         {
-          key: "/my-tasks",
+          key: "/taskmanager/my-tasks",
           icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
@@ -550,7 +550,7 @@ export default function SideMenu() {
           ),
         },
         {
-          key: "/create-note",
+          key: "/taskmanager/create-note",
           icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
           label: (
             <div
