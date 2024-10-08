@@ -29,6 +29,10 @@ import InitialRequestPage from "./pages/user/factors/InitialRequestPage";
 import ConditionsPage from "./pages/user/conditions/ConditionsPage";
 import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
 import ReportFactorsPage from "./pages/user/reports/ReportFactorsPage";
+import ChatPage from "./pages/user/taskmanager/ChatPage";
+import ProjectsPage from "./pages/user/taskmanager/ProjectsPage";
+import MyTasksPage from "./pages/user/taskmanager/MyTasksPage";
+import CreateNotePage from "./pages/user/taskmanager/CreateNotePage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -85,6 +89,11 @@ export default function AllRoutes() {
             {/* requests */}
             {/* warehouses */}
             <Route path="/warehouses" element={<WarehousesPage />} />
+            {/* taskmanager */}
+            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/my-tasks" element={<MyTasksPage />} />
+            <Route path="/create-note" element={<CreateNotePage />} />
           </Routes>
         </div>
       </div>
