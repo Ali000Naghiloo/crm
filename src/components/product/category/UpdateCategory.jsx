@@ -4,6 +4,7 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Select,
   Table,
   TreeSelect,
@@ -69,6 +70,23 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
     setLoading(false);
   };
 
+  const handleDelete = async () => {
+    setLoading(true);
+
+    await httpService
+      .get("/ProductCategory/DeleteCategory", {
+        params: { categoryId: data?.productCategoryId },
+      })
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1)
+          toast.success("با موفقیت حذف شد");
+      })
+      .catch(() => {});
+
+    getNewList();
+    setLoading(false);
+  };
+
   useEffect(() => {
     setCategoryList(list);
   }, [list]);
@@ -105,18 +123,29 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
         onClose={handleClose}
         title={`ویرایش گروه : ${data ? data?.categoryName : ""}`}
         footer={
-          <div className="w-full flex gap-3 justify-end pt-5">
-            <Button type="primary" danger onClick={handleClose}>
-              لغو
-            </Button>
-            <Button
-              onClick={validation.submitForm}
-              type="primary"
-              disabled={loading}
-              loading={loading}
+          <div className="w-full flex gap-3 justify-between pt-5">
+            <Popconfirm
+              onConfirm={handleDelete}
+              title="ایا از حذف این نقش مطمئن هستید؟"
             >
-              ویرایش گروه
-            </Button>
+              <Button type="primary" danger disabled={loading}>
+                حذف
+              </Button>
+            </Popconfirm>
+
+            <div className="flex gap-2">
+              <Button type="primary" danger onClick={handleClose}>
+                لغو
+              </Button>
+              <Button
+                onClick={validation.submitForm}
+                type="primary"
+                disabled={loading}
+                loading={loading}
+              >
+                ویرایش گروه
+              </Button>
+            </div>
           </div>
         }
       >

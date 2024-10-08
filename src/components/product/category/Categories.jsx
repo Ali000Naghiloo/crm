@@ -87,7 +87,6 @@ export default function Categories() {
             okText="حذف"
             title="آیا از حذف این دسته بندی اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.productCategoryId)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -98,23 +97,6 @@ export default function Categories() {
       key: "actions",
     },
   ];
-
-  const handleDelete = async (id) => {
-    setLoading(true);
-
-    await httpService
-      .get("/ProductCategory/DeleteCategory", {
-        params: { categoryId: id },
-      })
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1)
-          toast.success("با موفقیت حذف شد");
-      })
-      .catch(() => {});
-
-    handleGetList();
-    setLoading(false);
-  };
 
   const handleGetList = async () => {
     setLoading(true);

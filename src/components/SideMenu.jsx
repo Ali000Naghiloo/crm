@@ -393,12 +393,12 @@ export default function SideMenu() {
               onClick={() =>
                 handleAddToPageNames([
                   { label: "درخواست ها" },
-                  { label: "فهرست درخواست اولیه" },
+                  { label: "فهرست درخواست کالا" },
                 ])
               }
               className="text-textColor text-base flex items-center"
             >
-              درخواست اولیه
+              درخواست کالا
             </div>
           ),
         },
@@ -410,12 +410,12 @@ export default function SideMenu() {
               onClick={() =>
                 handleAddToPageNames([
                   { label: "درخواست ها" },
-                  { label: "فهرست درخواست ها" },
+                  { label: "فهرست درخواست های همکاری" },
                 ])
               }
               className="text-textColor text-base flex items-center"
             >
-              درخواست
+              درخواست همکاری
             </div>
           ),
         },
