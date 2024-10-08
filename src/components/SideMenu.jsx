@@ -14,6 +14,9 @@ import { AiFillProduct } from "react-icons/ai";
 import { FaWarehouse } from "react-icons/fa";
 import { FaListCheck } from "react-icons/fa6";
 import { HiDocumentReport } from "react-icons/hi";
+import { BsChatLeftTextFill } from "react-icons/bs";
+import { MdManageSearch } from "react-icons/md";
+import { GoProjectSymlink } from "react-icons/go";
 
 export default function SideMenu() {
   const { pathname } = useLocation();
@@ -479,6 +482,87 @@ export default function SideMenu() {
               className="text-textColor text-base flex items-center"
             >
               فهرست انبار ها
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      key: "/taskmanager",
+      icon: (
+        <MdManageSearch size={"1.7em"} className="!text-textColor text-base" />
+      ),
+      label: (
+        <div className="text-textColor text-base flex items-center">
+          مدیریت پروژه
+        </div>
+      ),
+      children: [
+        {
+          key: "/chat",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "مدیریت پروژه" },
+                  { label: "گفتگو" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              گفتگو
+            </div>
+          ),
+        },
+        {
+          key: "/projects",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "مدیریت پروژه" },
+                  { label: "پروژه ها" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              پروژه ها
+            </div>
+          ),
+        },
+        {
+          key: "/my-tasks",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "مدیریت پروژه" },
+                  { label: "وظیفه ها" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              وظیفه ها
+            </div>
+          ),
+        },
+        {
+          key: "/create-note",
+          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
+          label: (
+            <div
+              onClick={() =>
+                handleAddToPageNames([
+                  { label: "مدیریت پروژه" },
+                  { label: "یادداشت های من" },
+                ])
+              }
+              className="text-textColor text-base flex items-center"
+            >
+              یادداشت های من
             </div>
           ),
         },
