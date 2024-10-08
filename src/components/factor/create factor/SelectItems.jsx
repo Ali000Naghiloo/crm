@@ -48,7 +48,7 @@ export default function SelectItems({ validation, factorType }) {
     inventory: 0,
     description: "",
     totalPrice: 0,
-    factorItemResponsibleId: "",
+    factorItemResponsibleId: null,
   };
 
   const defaultColumns = [

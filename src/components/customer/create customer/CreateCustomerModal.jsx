@@ -22,7 +22,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     // description: yup.string().required("این فیلد را پر کنید"),
     isActive: null,
     // representerName: yup.string().required("این فیلد را پر کنید"),
-    nationalID: yup.string().required("این فیلد را پر کنید"),
+    nationalID: yup.number("لطفا از اعداد استفاده کنید"),
   });
 
   const validation = useFormik({
@@ -370,7 +370,6 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>شناسه ملی :</span>
             <Input
-              type="number"
               value={validation.values.nationalID}
               name="nationalID"
               onChange={validation.handleChange}

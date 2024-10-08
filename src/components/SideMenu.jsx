@@ -274,23 +274,6 @@ export default function SideMenu() {
             </div>
           ),
         },
-        {
-          key: "/conditions/limits",
-          icon: <GoDot size={"1em"} className="!text-textColor text-base" />,
-          label: (
-            <div
-              onClick={() =>
-                handleAddToPageNames([
-                  { label: "اضافات و کسورات" },
-                  { label: "تعیین شرط برای اضافه کسری" },
-                ])
-              }
-              className="text-textColor text-base flex items-center"
-            >
-              تعیین شرط
-            </div>
-          ),
-        },
       ],
     },
     {

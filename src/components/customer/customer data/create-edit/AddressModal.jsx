@@ -27,7 +27,7 @@ export default function AddressModal({
     country: yup.string().required("این فیلد را پر کنید"),
     province: yup.string().required("این فیلد را پر کنید"),
     city: yup.string().required("این فیلد را پر کنید"),
-    address: yup.string().required("این فیلد را پر کنید"),
+    // address: yup.string().required("این فیلد را پر کنید"),
     postalCode: yup.string().required("این فیلد را پر کنید"),
     lat: 0,
     lng: 0,
