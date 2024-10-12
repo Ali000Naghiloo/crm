@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import LogoutModal from "./LogoutModal";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { setAllEnum } from "../store/reducers/enumReducer";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function Header() {
   const { httpService } = useHttp();
@@ -120,7 +121,14 @@ export default function Header() {
               >
                 <div className="flex items-center gap-2">
                   {userData?.imagePath && userData?.imagePath === imageUrl ? (
-                    <Avatar className="w-10 h-10 rounded-full" />
+                    <Avatar
+                      icon={
+                        <FaUserCircle
+                          style={{ width: "100%", height: "100%" }}
+                        />
+                      }
+                      className="w-10 h-10 rounded-full"
+                    />
                   ) : (
                     <img
                       src={userData?.imagePath}

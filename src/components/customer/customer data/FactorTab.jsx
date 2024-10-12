@@ -4,30 +4,21 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
-import NoteModal from "./create-edit/NoteModal";
 import { useSelector } from "react-redux";
 import { convertISOToDate } from "../../../hooks/functions";
 import formatHelper from "../../../helper/formatHelper";
 import CreateFactorModal from "../../factor/create factor/CreateFactor";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { useNavigate } from "react-router-dom";
 
 export default function NoteTab({ data }) {
   const size = useWindowSize();
+  const navigate = useNavigate();
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [pageList, setPageList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [createModal, setCreateModal] = useState({
-    open: false,
-    data: null,
-    factorType: null,
-  });
-  const [showModal, setShowModal] = useState({
-    open: false,
-    mode: "",
-    data: null,
-  });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const columns = [
@@ -85,10 +76,9 @@ export default function NoteTab({ data }) {
         <div className="flex gap-2">
           <Button
             onClick={() =>
-              setShowModal({
+              navigate("/factors/create", {
                 data: data,
-                open: true,
-                mode: "edit",
+                factorId: data?.factorId,
               })
             }
             size="middle"
@@ -168,38 +158,27 @@ export default function NoteTab({ data }) {
         <div className="w-full flex gap-3 flex-wrap">
           <Button
             onClick={() => {
-              setCreateModal({
-                open: true,
-                data: data,
-                factorType: 0,
+              navigate("/factors/create", {
+                state: {
+                  data: data,
+                  type: 0,
+                },
               });
             }}
             className="min-w-[300px] mx-auto"
             size="middle"
             type="primary"
           >
-            ثبت درخواست اولیه
-          </Button>
+            ثبت درخواست کالا
+          </Button>{" "}
           <Button
             onClick={() => {
-              setCreateModal({
-                open: true,
-                data: data,
-                factorType: 3,
-              });
-            }}
-            className="min-w-[300px] mx-auto"
-            size="middle"
-            type="primary"
-          >
-            ثبت فاکتور
-          </Button>
-          <Button
-            onClick={() => {
-              setCreateModal({
-                open: true,
-                data: data,
-                factorType: 2,
+              navigate("/factors/create", {
+                state: {
+                  data: data,
+                  type: 2,
+                  customerId: data?.customerId,
+                },
               });
             }}
             className="min-w-[300px] mx-auto"
@@ -210,10 +189,28 @@ export default function NoteTab({ data }) {
           </Button>
           <Button
             onClick={() => {
-              setCreateModal({
-                open: true,
-                data: data,
-                factorType: 4,
+              navigate("/factors/create", {
+                state: {
+                  data: data,
+                  type: 3,
+                  customerId: data?.customerId,
+                },
+              });
+            }}
+            className="min-w-[300px] mx-auto"
+            size="middle"
+            type="primary"
+          >
+            ثبت فاکتور فروش
+          </Button>
+          <Button
+            onClick={() => {
+              navigate("/factors/create", {
+                state: {
+                  data: data,
+                  type: 4,
+                  customerId: data?.customerId,
+                },
               });
             }}
             className="min-w-[300px] mx-auto"
@@ -241,27 +238,6 @@ export default function NoteTab({ data }) {
           />
         </div>
       </div>
-
-      <NoteModal
-        open={showModal.open}
-        setOpen={(e) => {
-          setShowModal({ open: e });
-        }}
-        mode={showModal.mode}
-        data={showModal.data}
-        customerId={data?.customerId}
-        getNewList={getNewList}
-      />
-
-      <CreateFactorModal
-        open={createModal.open}
-        getNewList={getNewList}
-        setOpen={(e) => {
-          setCreateModal({ open: e });
-        }}
-        customerId={data?.customerId}
-        type={createModal.factorType}
-      />
     </>
   );
 }

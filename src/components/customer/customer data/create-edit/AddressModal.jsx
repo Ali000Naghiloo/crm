@@ -23,15 +23,15 @@ export default function AddressModal({
 
   const validationSchema = yup.object().shape({
     priority: yup.number().required("این فیلد را پر کنید"),
-    addressName: yup.string().required("این فیلد را پر کنید"),
+    // addressName: yup.string().required("این فیلد را پر کنید"),
     country: yup.string().required("این فیلد را پر کنید"),
     province: yup.string().required("این فیلد را پر کنید"),
     city: yup.string().required("این فیلد را پر کنید"),
     // address: yup.string().required("این فیلد را پر کنید"),
-    postalCode: yup.string().required("این فیلد را پر کنید"),
+    // postalCode: yup.string().required("این فیلد را پر کنید"),
     lat: 0,
     lng: 0,
-    description: yup.string().required("این فیلد را پر کنید"),
+    // description: yup.string().required("این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
