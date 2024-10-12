@@ -153,7 +153,7 @@ export default function Warehouses() {
 
     setLoading(false);
   };
-
+  
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "انبار" }, { label: "فهرست انبار ها" }]));
 
