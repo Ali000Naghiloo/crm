@@ -53,7 +53,7 @@ export default function FactorSettings() {
       key: "isFactorResponsibleEnabled",
     },
     {
-      title: <>مسئول کالا و خدماتات فاکتور مشخص شود؟</>,
+      title: <>مسئول کالا و خدمات ها فاکتور مشخص شود؟</>,
       dataIndex: "isFactorItemResponsibleEnabled",
       render: (value) => (
         <div className="text-center">{value ? "بله" : "خیر"}</div>

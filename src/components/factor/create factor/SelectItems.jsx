@@ -548,7 +548,7 @@ export default function SelectItems({ validation, factorType }) {
 
       <div className="w-full max-w-[100%] flex flex-col gap-2 py-5">
         <div className="w-ful flex justify-between px-8 mt-8">
-          <span className="text-2xl font-bold">کالا و خدماتات این فاکتور</span>
+          <span className="text-2xl font-bold">کالا و خدمات ها این فاکتور</span>
 
           <Popconfirm
             title="از پاک کردن تمامی موارد فاکتور مطمئن هستید؟"

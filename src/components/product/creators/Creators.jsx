@@ -119,7 +119,7 @@ export default function Creators() {
   useEffect(() => {
     dispatch(
       setPageRoutes([
-        { label: "کالا و خدماتات" },
+        { label: "کالا و خدمات ها" },
         { label: "فهرست تامین کنندگان کالا و خدمات" },
       ])
     );

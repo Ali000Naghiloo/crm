@@ -166,8 +166,8 @@ export default function Products() {
   useEffect(() => {
     dispatch(
       setPageRoutes([
-        { label: "کالا و خدماتات" },
-        { label: "فهرست کالا و خدماتات" },
+        { label: "کالا و خدمات ها" },
+        { label: "فهرست کالا و خدمات ها" },
       ])
     );
 

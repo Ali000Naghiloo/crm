@@ -216,7 +216,7 @@ export default function DataTab({
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>قیمت کالا و خدماتات :</span>
+            <span>قیمت کالا و خدمات ها :</span>
             <Select
               options={prices}
               loading={prices ? false : true}

@@ -25,7 +25,7 @@ export default function ProductLimits({ values, setField }) {
 
   const columns = [
     {
-      title: "کالا و خدماتات",
+      title: "کالا و خدمات ها",
       dataIndex: "products",
       key: "products",
       render: (value, record) => {
