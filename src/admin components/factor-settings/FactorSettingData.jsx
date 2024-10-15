@@ -137,7 +137,7 @@ export default function FactorSettingData({ data, open, setOpen, getNewList }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>مسئول محصولات فاکتور مشخص شود؟</span>
+            <span>مسئول کالا و خدماتات فاکتور مشخص شود؟</span>
             <Checkbox
               value={validation.values.isFactorItemResponsibleEnabled}
               name="isFactorItemResponsibleEnabled"

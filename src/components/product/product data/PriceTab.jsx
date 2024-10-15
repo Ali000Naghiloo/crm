@@ -148,7 +148,7 @@ export default function ConnectorTab({ data }) {
     <>
       <div className="w-full flex flex-col gap-4">
         <div className="text-lg">
-          <h2>فهرست قیمت های محصول</h2>
+          <h2>فهرست قیمت های کالا و خدمات</h2>
         </div>
 
         <div className="w-full">
@@ -164,7 +164,7 @@ export default function ConnectorTab({ data }) {
             size="middle"
             type="primary"
           >
-            ثبت قیمت جدید برای این محصول
+            ثبت قیمت جدید برای این کالا و خدمات
           </Button>
         </div>
 

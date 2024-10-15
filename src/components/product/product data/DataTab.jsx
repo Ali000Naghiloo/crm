@@ -94,7 +94,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
       .post("/Product/EditProduct", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("محصول با موفقیت ویرایش شد");
+          toast.success("کالا و خدمات با موفقیت ویرایش شد");
           handleClose();
         }
       })
@@ -216,7 +216,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           className="w-full flex flex-wrap gap-4"
         >
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>نام محصول</span>
+            <span>نام کالا و خدمات</span>
             <Input
               value={validation.values.productName}
               onChange={(e) => {
@@ -234,7 +234,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>نوع محصول</span>
+            <span>نوع کالا و خدمات</span>
             <Select
               options={allEnum?.NatureOfProduct?.map((type, index) => {
                 return { label: type, value: index };
@@ -340,7 +340,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>سازندگان کالا :</span>
+            <span>تامین کنندگان کالا :</span>
             <Select
               mode="multiple"
               allowClear
@@ -504,7 +504,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex items-center gap-1 w-full mx-auto">
-            <span className="text-nowrap">محصول خدماتی است؟</span>
+            <span className="text-nowrap">کالا و خدمات خدماتی است؟</span>
             <Checkbox
               checked={validation.values.serviceProduct}
               name="serviceProduct"

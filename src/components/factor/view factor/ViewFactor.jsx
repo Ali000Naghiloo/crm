@@ -173,7 +173,7 @@ export default function ViewFactor({ open, setOpen, factorId }) {
                   </div>
                 ) : (
                   <div className="w-full flex justify-center items-center">
-                    <span>در این فاکتور هیچ محصولی قید نشده است!</span>
+                    <span>در این فاکتور هیچ کالا و خدماتی قید نشده است!</span>
                   </div>
                 )}
               </div>

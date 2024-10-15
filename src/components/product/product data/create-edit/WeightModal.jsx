@@ -76,7 +76,7 @@ export default function WeightModal({
       <Modal
         open={open}
         onCancel={handleClose}
-        title={<>تعریف وزن برای محصول</>}
+        title={<>تعریف وزن برای کالا و خدمات</>}
         footer={
           <div>
             <Button type="primary" danger onClick={handleClose}>

@@ -58,7 +58,7 @@ export default function SelectItems({ validation, factorType }) {
       inputType: "number",
     },
     {
-      title: "محصول",
+      title: "کالا و خدمات",
       dataIndex: "productId",
       inputType: "select",
       render: (value) => <Select options={productList} value={value} />,
@@ -88,7 +88,7 @@ export default function SelectItems({ validation, factorType }) {
       editable: true,
     },
     {
-      title: "قیمت واحد محصول",
+      title: "قیمت واحد کالا و خدمات",
       dataIndex: "productUnitPrice",
       editable: true,
     },
@@ -548,7 +548,7 @@ export default function SelectItems({ validation, factorType }) {
 
       <div className="w-full max-w-[100%] flex flex-col gap-2 py-5">
         <div className="w-ful flex justify-between px-8 mt-8">
-          <span className="text-2xl font-bold">محصولات این فاکتور</span>
+          <span className="text-2xl font-bold">کالا و خدماتات این فاکتور</span>
 
           <Popconfirm
             title="از پاک کردن تمامی موارد فاکتور مطمئن هستید؟"

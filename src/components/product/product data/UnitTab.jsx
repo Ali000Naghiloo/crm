@@ -138,7 +138,7 @@ export default function UnitTab({ data }) {
 
       <div className="w-full flex flex-col gap-1">
         <div className="w-full flex justify-between font-bold">
-          <h1 className="text-lg">فهرست واحد های این محصول</h1>
+          <h1 className="text-lg">فهرست واحد های این کالا و خدمات</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={getNewList}>

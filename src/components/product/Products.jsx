@@ -74,7 +74,7 @@ export default function Products() {
       key: "manufactureDate",
     },
     {
-      title: "کد محصول",
+      title: "کد کالا و خدمات",
       dataIndex: "productCode",
       key: "productCode",
     },
@@ -108,7 +108,7 @@ export default function Products() {
           <Popconfirm
             cancelText="لغو"
             okText="حذف"
-            title="آیا از حذف این محصول اطمینان دارید؟"
+            title="آیا از حذف این کالا و خدمات اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.productId)}
           >
@@ -164,7 +164,12 @@ export default function Products() {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "محصولات" }, { label: "فهرست محصولات" }]));
+    dispatch(
+      setPageRoutes([
+        { label: "کالا و خدماتات" },
+        { label: "فهرست کالا و خدماتات" },
+      ])
+    );
 
     handleGetList();
   }, []);
@@ -174,7 +179,7 @@ export default function Products() {
       <div className="w-full min-h-pagesHeight p-2 md:p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
-          <h1>محصول ها</h1>
+          <h1>کالا و خدمات</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={handleGetList}>
@@ -199,7 +204,7 @@ export default function Products() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت محصول جدید
+            ساخت کالا و خدمات جدید
           </Button>
         </div>
 

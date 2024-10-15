@@ -133,8 +133,8 @@ export default function Categories() {
   useEffect(() => {
     dispatch(
       setPageRoutes([
-        { label: "محصولات" },
-        { label: "فهرست دسته بندی محصولات" },
+        { label: "کالا و خدماتات" },
+        { label: "فهرست دسته بندی کالا و خدماتات" },
       ])
     );
 

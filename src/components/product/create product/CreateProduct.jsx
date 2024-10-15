@@ -95,7 +95,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           ? values?.productManufacturerProducts.map((cr) => {
               return { productId: 0, manufacturerId: cr };
             })
-          : null,
+          : [],
       pricingMethodGroupId: values?.pricingMethodGroupId,
       description: values?.description,
     };
@@ -104,7 +104,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       .post("/Product/CreateProduct", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("محصول با موفقیت ساخته شد");
+          toast.success("کالا و خدمات با موفقیت ساخته شد");
           handleClose();
         }
       })
@@ -186,7 +186,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       <Modal
         open={open}
         onCancel={handleClose}
-        title="ساخت محصول جدید"
+        title="ساخت کالا و خدمات جدید"
         className="!w-fit max-w-[1000px]"
         footer={
           <div className="flex justify-end gap-3 pt-5">
@@ -199,7 +199,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               loading={loading}
               disabled={loading}
             >
-              ثبت محصول جدید
+              ثبت کالا و خدمات جدید
             </Button>
           </div>
         }
@@ -209,7 +209,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           className="w-full flex flex-wrap gap-4"
         >
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>نام محصول</span>
+            <span>نام کالا و خدمات</span>
             <Input
               value={validation.values.productName}
               onChange={(e) => {
@@ -227,7 +227,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>نوع محصول</span>
+            <span>نوع کالا و خدمات</span>
             <Select
               options={allEnum?.NatureOfProduct?.map((type, index) => {
                 return { label: type, value: index };
@@ -352,7 +352,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>سازندگان کالا :</span>
+            <span>تامین کنندگان کالا :</span>
             <Select
               mode="multiple"
               allowClear
@@ -499,7 +499,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           </div>
 
           <div className="flex items-center gap-1 w-full mx-auto">
-            <span className="text-nowrap">محصول خدماتی است؟</span>
+            <span className="text-nowrap">کالا و خدمات خدماتی است؟</span>
             <Checkbox
               checked={validation.values.serviceProduct}
               name="serviceProduct"

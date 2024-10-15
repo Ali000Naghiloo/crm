@@ -13,6 +13,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(false);
   const { httpService } = useHttp();
   const [usersList, setUsersList] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   // const handleGetUsers = () => {};
 
@@ -22,9 +23,9 @@ const Chat = () => {
 
   return (
     <>
-      <div className="w-full min-h-pagesHeight p-5">
+      <div className="w-full min-h-pagesHeight max-h-pagesHeight">
         {/* page title */}
-        <div className="w-full flex justify-between text-4xl py-5 font-bold">
+        <div className="w-full h-[10%] flex justify-between items-center text-4xl p-3 font-bold">
           <h1>گفتگو</h1>
 
           {/* <div className="flex items-center justify-center pl-5">
@@ -32,32 +33,20 @@ const Chat = () => {
               <HiRefresh size={"2em"} />
             </Button>
           </div> */}
-        </div>
 
-        {/* routes */}
-        <div>
-          <PageRoutes />
-        </div>
-
-        {/* options */}
-        <div className="flex flex-col gap-5 py-5">
-          {/* <Button className="w-full" type="primary" size="large">
-            خروجی جدول
-          </Button> */}
-          <Button
-            className="w-full"
-            type="primary"
-            size="large"
-            // onClick={() => setCreateCustomerModal({ open: true })}
-          >
-            گفتگو جدید
-          </Button>
+          {/* routes */}
+          <div className="max-w-[20%]">
+            <PageRoutes />
+          </div>
         </div>
 
         {/* content */}
-        <div className=" flex items-start"> 
-        <UsersList />
-        <UserChat/>
+        <div className="w-full h-[90%] flex items-start overflow-auto">
+          <UsersList
+            setSelectedChat={setSelectedChat}
+            selectedChat={selectedChat}
+          />
+          <UserChat selectedChat={selectedChat} />
         </div>
       </div>
     </>

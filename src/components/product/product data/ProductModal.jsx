@@ -67,7 +67,7 @@ export default function ProductModal({ open, setOpen, id, getNewList }) {
   const productTabs = [
     {
       key: "data",
-      label: "اطلاعات محصول",
+      label: "اطلاعات کالا و خدمات",
       children: handleRenderTabContent("data", data),
     },
     {
@@ -114,7 +114,7 @@ export default function ProductModal({ open, setOpen, id, getNewList }) {
           className="md:!w-fit md:min-w-[700px] max-w-[1000px]"
           open={open}
           onCancel={handleClose}
-          title={data && `محصول : "${data?.productName}"`}
+          title={data && `کالا و خدمات : "${data?.productName}"`}
           footer={
             <Button onClick={handleClose} type="primary">
               بستن

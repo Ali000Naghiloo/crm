@@ -30,9 +30,11 @@ import ConditionsPage from "./pages/user/conditions/ConditionsPage";
 import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
 import ReportFactorsPage from "./pages/user/reports/ReportFactorsPage";
 import ChatPage from "./pages/user/taskmanager/ChatPage";
-import ProjectsPage from "./pages/user/taskmanager/ProjectsPage";
 import MyTasksPage from "./pages/user/taskmanager/MyTasksPage";
 import CreateNotePage from "./pages/user/taskmanager/CreateNotePage";
+import ProjectsPage from "./pages/user/taskmanager/projects/ProjectsPage";
+import BoardsPage from "./pages/user/taskmanager/projects/BoardsPage";
+import BoardPage from "./pages/user/taskmanager/projects/BoardPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -43,7 +45,9 @@ export default function AllRoutes() {
         <Header />
 
         <div className="w-full flex">
-          <SideMenu />
+          <div className="min-w-sideBarWidth">
+            <SideMenu />
+          </div>
 
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -92,8 +96,19 @@ export default function AllRoutes() {
             {/* taskmanager */}
             <Route path="/taskmanager/chat" element={<ChatPage />} />
             <Route path="/taskmanager/projects" element={<ProjectsPage />} />
+            <Route
+              path="/taskmanager/projects/boards"
+              element={<BoardsPage />}
+            />
+            <Route
+              path="/taskmanager/projects/boards/board"
+              element={<BoardPage />}
+            />
             <Route path="/taskmanager/my-tasks" element={<MyTasksPage />} />
-            <Route path="/taskmanager/create-note" element={<CreateNotePage />} />
+            <Route
+              path="/taskmanager/create-note"
+              element={<CreateNotePage />}
+            />
           </Routes>
         </div>
       </div>

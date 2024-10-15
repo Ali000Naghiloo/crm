@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from "react";
-import useHttp from "../httpConfig/useHttp";
+import useHttp from "../../httpConfig/useHttp";
 import { useDispatch } from "react-redux";
-import { setPageRoutes } from "../../../store/reducers/pageRoutes";
-import PageRoutes from "../../../common/PageRoutes";
+import { setPageRoutes } from "../../../../store/reducers/pageRoutes";
+import PageRoutes from "../../../../common/PageRoutes";
 import { Avatar, Button, Input, Progress, Skeleton } from "antd";
 import { HiRefresh } from "react-icons/hi";
-import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { FaAngleLeft, FaPlus } from "react-icons/fa";
+import { useWindowSize } from "@uidotdev/usehooks";
 const loadings = ["", "", "", "", "", "", "", ""];
 
 const Projects = () => {
   const { httpService } = useHttp();
   const dispatch = useDispatch();
+  const size = useWindowSize();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState(null);
+  const [boards, setBoards] = useState(null);
   const [showModal, setShowModal] = useState({ open: false, projectId: null });
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get("projectId");
 
   const handleGetList = async () => {
     setLoading(true);
+    const formData = {
+      projectId: projectId,
+    };
 
     await httpService
-      .get("/ProjectController/Projects")
+      .get("/BoardController/Boards", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
-          setProjects(res.data?.data);
+          setBoards(res.data?.data);
         }
       })
       .catch(() => {});
@@ -33,7 +40,13 @@ const Projects = () => {
   };
 
   useEffect(() => {
-    dispatch(setPageRoutes([{ label: "مدیریت پروژه" }, { label: "پروژه ها" }]));
+    dispatch(
+      setPageRoutes([
+        { label: "مدیریت برد" },
+        { label: "پروژه ها" },
+        { label: "برد ها" },
+      ])
+    );
 
     handleGetList();
   }, []);
@@ -43,9 +56,9 @@ const Projects = () => {
       <div className="w-full min-h-pagesHeight overflow-auto p-5">
         {/* page title */}
         <div className="w-full flex justify-between py-5">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col lg:flex-row items-center gap-4">
             <div className="flex flex-col gap-1">
-              <h1 className="text-4xl font-bold">پروژه ها</h1>
+              <h1 className="text-4xl font-bold">برد ها</h1>
               <PageRoutes />
             </div>
 
@@ -55,60 +68,75 @@ const Projects = () => {
                 type="default"
                 className="text-[#1f5c88] border-[#1f5c88] border-2 rounded-xl"
               >
-                <FaPlus /> ساخت پروژه جدید
+                <FaPlus /> ساخت برد جدید
               </Button>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Input placeholder="فیلتر عنوان پروژه..." className="h-[50%]" />
+          <div className="flex flex-col-reverse lg:flex-row items-center gap-2">
+            <Input
+              placeholder="فیلتر عنوان برد..."
+              className="h-[30%]"
+              size="small"
+            />
 
-            <Button className="" type="text" onClick={handleGetList}>
-              <HiRefresh size={"2em"} />
-            </Button>
+            <div className="flex justify-center items-center gap-2">
+              <Button className="" type="text" onClick={handleGetList}>
+                <HiRefresh size={"2em"} />
+              </Button>
+
+              <Button
+                onClick={() => navigate(-1)}
+                type="text"
+                className="text-2xl p-0"
+              >
+                <span className="">بازگشت</span>
+                <FaAngleLeft />
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* list */}
         <div className="w-full flex flex-wrap gap-10 mt-5">
           {!loading ? (
-            projects && projects?.length !== 0 ? (
+            boards && boards?.length !== 0 ? (
               <>
-                {projects.map((pr, index) => (
+                {boards.map((br, index) => (
                   <Link
-                    to={`/taskmanager/projects/boards?projectId=${pr?.id}`}
+                    to={`/taskmanager/projects/boards/board?boardId=${br?.id}`}
                     key={index}
-                    className="w-[220px] min-h-[220px] shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%] hover:bg-gray-100"
+                    className="w-[220px] min-h-[220px] h-[350px] mx-auto lg:mx-0 shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%] hover:bg-gray-100"
                   >
                     <div className="w-full flex flex-col items-center p-4 gap-4">
                       <div className="flex flex-col items-center gap-2">
                         <Avatar
                           className={`w-[60px] h-[60px] ${
-                            pr?.color ? `bg-[${pr.color}]` : "bg-gray-500"
+                            br?.color ? `bg-[${br.color}]` : "bg-gray-500"
                           }`}
                           icon={
                             <div className="text-xl flex justify-center items-center">
                               <span>
-                                {pr?.name?.split(" ")[0]
-                                  ? pr?.name?.split(" ")[0][0]
+                                {br?.name?.split(" ")[0]
+                                  ? br?.name?.split(" ")[0][0]
                                   : ""}
                               </span>
                               <span>
-                                {pr?.name?.split(" ")[1]
-                                  ? pr?.name?.split(" ")[1][0]
+                                {br?.name?.split(" ")[1]
+                                  ? br?.name?.split(" ")[1][0]
                                   : ""}
                               </span>
                             </div>
                           }
                         />
-                        <p className="text-xl font-bold">{pr.name}</p>
+                        <p className="text-xl font-bold">{br.name}</p>
                       </div>
 
                       <div className="w-full h-fit flex flex-col text-sm">
-                        <span>وضعیت کل پروژه :</span>
+                        <span>وضعیت کل برد :</span>
                         <Progress
                           className="!text-sm !h-[11px]"
-                          percent={pr.projectProgressBar}
+                          percent={br.projectProgressBar}
                           percentPosition={{ align: "center", type: "inner" }}
                         />
                       </div>
@@ -117,7 +145,7 @@ const Projects = () => {
                         <span>وظایف من :</span>
                         <Progress
                           className="!text-sm !h-[11px]"
-                          percent={pr.projectProgressBar}
+                          percent={br.projectProgressBar}
                           percentPosition={{ align: "center", type: "inner" }}
                         />
                       </div>
@@ -143,10 +171,10 @@ const Projects = () => {
                   onClick={() => {
                     setShowModal({ open: true });
                   }}
-                  className="w-[220px] h-[full] border border-dashed border-gray-500 bg-white !text-blue-500 text-xl gap-4 rounded-lg flex flex-col justify-center items-center cursor-pointer"
+                  className="w-[220px] h-[350px] border border-dashed mx-auto lg:mx-0 border-gray-500 bg-white !text-blue-500 text-xl gap-4 rounded-lg flex flex-col justify-center items-center cursor-pointer"
                 >
                   <FaPlus size={"2em"} />
-                  <span>پروژه جدید</span>
+                  <span>برد جدید</span>
                 </div>
               </>
             ) : null

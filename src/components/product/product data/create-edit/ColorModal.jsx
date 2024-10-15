@@ -103,7 +103,7 @@ export default function SizeModal({
       <Modal
         open={open}
         onCancel={handleClose}
-        title={<>تعریف رنگ برای محصول</>}
+        title={<>تعریف رنگ برای کالا و خدمات</>}
         footer={
           <div>
             <Button type="primary" danger onClick={handleClose}>

@@ -101,7 +101,7 @@ export default function CustomerModal({ open, setOpen, id, getNewList }) {
     },
     {
       key: "product",
-      label: "محصول  (ها)",
+      label: "کالا و خدمات  (ها)",
       children: handleRenderTabContent("product", data),
     },
     {

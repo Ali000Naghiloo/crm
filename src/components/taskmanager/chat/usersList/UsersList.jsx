@@ -3,7 +3,7 @@ import { Avatar, List, Skeleton, message } from "antd";
 import useHttp from "../../../../hooks/useHttps";
 import { TiUser } from "react-icons/ti";
 
-const UsersList = () => {
+const UsersList = ({ selectedChat, setSelectedChat }) => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState([]);
   const { httpService } = useHttp();
@@ -70,23 +70,39 @@ const UsersList = () => {
         border: "1px solid rgba(140, 140, 140, 0.35)",
       }}
       //   onScroll={handleScroll}
+      className="max-h-[100%] h-full overflow-auto"
     >
       <List
         dataSource={userData}
         renderItem={(item) => (
           <List.Item
-            className="!px-2 hover:cursor-pointer hover:bg-[#00000015] transition-all duration-200 ease-in"
+            className={`!px-2 hover:cursor-pointer transition-all duration-200 ease-in ${
+              selectedChat?.id === item.id
+                ? "bg-gray-300"
+                : "hover:bg-[#00000015]"
+            }`}
             key={item.key}
+            onClick={() => {
+              setSelectedChat(item);
+            }}
           >
             <List.Item.Meta
+              className="max-w-full"
               avatar={<Avatar src={item.imagePath} icon={<TiUser />} />}
               title={item.fullName}
-              description={item.email}
+              // description={item.email}
             />
           </List.Item>
         )}
       >
-        {loading && <Skeleton avatar paragraph={{ rows: 1 }} active />}
+        {loading && (
+          <div className="flex flex-col">
+            <Skeleton avatar paragraph={{ rows: 1 }} active />
+            <Skeleton avatar paragraph={{ rows: 1 }} active />
+            <Skeleton avatar paragraph={{ rows: 1 }} active />
+            <Skeleton avatar paragraph={{ rows: 1 }} active />
+          </div>
+        )}
       </List>
     </div>
   );

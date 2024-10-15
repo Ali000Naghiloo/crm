@@ -196,7 +196,7 @@ export default function CreateLimit({ conditionId, limitId }) {
     },
     {
       key: "product",
-      label: "محصول",
+      label: "کالا و خدمات",
       children: handleRenderTabContent("product"),
     },
   ];

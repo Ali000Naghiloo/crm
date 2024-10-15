@@ -238,7 +238,7 @@ export default function SideMenu() {
               onClick={() =>
                 handleAddToPageNames([
                   { label: "کالا و خدمات" },
-                  { label: "فهرست سازندگان محصول" },
+                  { label: "فهرست تامین کنندگان کالا و خدمات" },
                 ])
               }
               className="text-textColor text-base flex items-center"

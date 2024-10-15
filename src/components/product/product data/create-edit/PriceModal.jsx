@@ -154,7 +154,7 @@ export default function PriceModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت قیمت برای محصول</>
+            <>ساخت قیمت برای کالا و خدمات</>
           ) : (
             <>{`ویرایش قیمت "${data?.connectorName}"`}</>
           )
@@ -192,7 +192,7 @@ export default function PriceModal({
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>واحد از محصول :</span>
+            <span>واحد از کالا و خدمات :</span>
             <Select
               options={unitList}
               value={validation.values.unitId}

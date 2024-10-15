@@ -340,7 +340,7 @@ export default function ConditionModal({
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>محصولات :</span>
+            <span>کالا و خدماتات :</span>
             <Select
               mode="multiple"
               maxTagCount={3}
@@ -360,7 +360,7 @@ export default function ConditionModal({
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>دسته بندی محصولات :</span>
+            <span>دسته بندی کالا و خدماتات :</span>
             <Select
               mode="multiple"
               maxTagCount={3}

@@ -347,7 +347,7 @@ export default function CreateFactor() {
         setPrevStepDisabled(false);
       } else {
         console.log(validation.errors);
-        toast.warn("لطفا برای فاکتور خود محصول انتخاب کنید");
+        toast.warn("لطفا برای فاکتور خود کالا و خدمات انتخاب کنید");
       }
     } else {
       setCurrentStep(currentStep - 1);
