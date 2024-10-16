@@ -1,14 +1,18 @@
-import { Dropdown, Tabs } from "antd";
+import { Button, Dropdown, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { FaTasks } from "react-icons/fa";
+import { FaAngleLeft, FaTasks } from "react-icons/fa";
 import { IoMdChatboxes, IoMdMore, IoMdSettings } from "react-icons/io";
 import { PiColumnsPlusLeftFill, PiPushPinFill } from "react-icons/pi";
 import useHttp from "../../../httpConfig/useHttp";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Group from "./groups/Group";
+import Tasks from "./tasks/Tasks";
+import Workflows from "./workflows/Workflows";
 
 export default function Board() {
   const { httpService } = useHttp();
   const [serachParams] = useSearchParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState();
   const [boardData, setBoardData] = useState(null);
@@ -37,13 +41,18 @@ export default function Board() {
 
   const handleRenderContent = (type) => {
     if (type === "group") {
-      return <div className="w-full h-full">گروه برد</div>;
+      return <Group boardId={boardId} />;
     }
     if (type === "tasks") {
-      return <div className="w-full h-full">وظایف برد</div>;
+      return <Tasks boardId={boardId} />;
     }
     if (type === "workflows") {
-      return <div className="w-full">ستون ها برد</div>;
+      return (
+        <Workflows
+          boardId={boardId}
+          workflows={boardData?.boardWorkFlowsViewModel}
+        />
+      );
     } else {
       return <></>;
     }
@@ -105,7 +114,7 @@ export default function Board() {
                   : boardData?.name[0]}
               </span>
               <span>
-                {boardData?.name?.split(" ")
+                {boardData?.name?.split(" ") && boardData?.name?.split(" ")[1]
                   ? boardData?.name?.split(" ")[1][0]
                   : boardData?.name[0]}
               </span>
@@ -116,13 +125,22 @@ export default function Board() {
             </div>
           </div>
 
-          <div>
+          <div className="flex items-center gap-2">
             <Dropdown
               menu={{ items: boardOptions }}
               className="h-full flex items-center justify-center"
             >
               <IoMdMore size={"2em"} />
             </Dropdown>
+
+            <Button
+              onClick={() => navigate(-1)}
+              type="text"
+              className="text-2xl p-0"
+            >
+              <span className="">بازگشت</span>
+              <FaAngleLeft />
+            </Button>
           </div>
         </div>
 

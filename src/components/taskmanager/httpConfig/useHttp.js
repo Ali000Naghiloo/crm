@@ -34,7 +34,7 @@ const useHttp = () => {
       } else if (response?.status === 403) {
         toast.error("شما به این بخش دسترسی ندارید");
       } else if (response?.status === 404) {
-        toast.error("درخواست مورد نظر شما پیدا نشد");
+        // toast.error("درخواست مورد نظر شما پیدا نشد");
       } else if (response?.status === 500) {
         toast.error("مشکلی از سمت سرور پیش آمده لطفا بعدا تلاش کنید");
       } else if (response?.data?.msg) {

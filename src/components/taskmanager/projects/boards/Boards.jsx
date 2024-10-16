@@ -76,7 +76,7 @@ const Projects = () => {
           <div className="flex flex-col-reverse lg:flex-row items-center gap-2">
             <Input
               placeholder="فیلتر عنوان برد..."
-              className="h-[30%]"
+              className="h-[30%] lg:h-[50%]"
               size="small"
             />
 
