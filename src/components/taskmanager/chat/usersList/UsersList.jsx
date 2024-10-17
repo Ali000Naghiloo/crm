@@ -63,7 +63,6 @@ const UsersList = ({ selectedChat, setSelectedChat }) => {
     <div
       id="scrollableDiv"
       style={{
-        height: 780,
         width: 350,
         overflow: "auto",
         padding: "0",

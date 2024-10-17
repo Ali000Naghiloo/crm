@@ -29,7 +29,7 @@ export default function Workflows({ boardId, workflows }) {
   // wf parts
   const workFlowHeader = (wf) => (
     <div
-      className={`w-full min-h-[30px] p-2 rounded-md text-white text-lg text-bold ${
+      className={`w-full min-h-[33px] flex items-center p-2 rounded-md text-white text-lg text-bold sticky top-0 ${
         wf.color ? `bg-[${wf?.color}]` : "bg-accent"
       }`}
     >
@@ -37,19 +37,21 @@ export default function Workflows({ boardId, workflows }) {
     </div>
   );
   const workflowBody = (wf) => {
-    if (taskList) {
-      if (taskList?.length !== 0) {
-        taskList.map((task) => {
-          if (wf?.id == task?.workFlow) {
-            return <div className="w-full">{task?.name}</div>;
-          }
-        });
-      } else {
-        return <></>;
-      }
-    } else {
-      return <Skeleton.Node style={{ width: "100%", height: "100%" }} />;
-    }
+    let filteredTasks =
+      taskList && taskList?.length
+        ? taskList.filter((task) => wf?.id == task?.workFlow)
+        : [];
+
+    return (
+      <>
+        {filteredTasks &&
+          filteredTasks.map((task, index) => (
+            <div key={index} className="w-full max-h-[275px]">
+              {task?.name}
+            </div>
+          ))}
+      </>
+    );
   };
 
   useEffect(() => {
@@ -62,22 +64,31 @@ export default function Workflows({ boardId, workflows }) {
 
   return (
     <>
-      <div className="max-h-pagesHeight overflow-x-auto flex gap-4">
-        {workflowList ? (
+      <div className="h-full overflow-x-auto flex gap-4 pr-5">
+        {workflowList && taskList ? (
           workflowList?.length !== 0 ? (
             workflowList.map((wf) => (
               <div
                 key={wf.id}
-                className="w-[300px] h-full overflow-y-aut flex flex-col gap-2"
+                className="w-[300px] overflow-y-auto flex flex-col gap-2 relative"
               >
                 {workFlowHeader(wf)}
-                {workflowBody(wf)}
+                {taskList && workflowBody(wf)}
               </div>
             ))
           ) : null
         ) : (
           <Skeleton.Node style={{ width: "270px", height: "33px" }} />
         )}
+
+        {/* add new workflow */}
+        <div className="max-h-pagesHeight overflow-x-auto flex gap-4">
+          <div
+            className={`w-[300px] min-h-[30px] h-fit text-center p-2 rounded-md text-white text-lg text-bold cursor-pointer bg-gray-700 hover:bg-gray-500`}
+          >
+            افزودن کانبان جدید +
+          </div>
+        </div>
       </div>
     </>
   );

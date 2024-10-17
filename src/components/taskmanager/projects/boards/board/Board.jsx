@@ -63,7 +63,7 @@ export default function Board() {
       key: "group",
       children: handleRenderContent("group"),
       label: (
-        <div className="flex items-center justify-center gap-2 text-xl">
+        <div className="flex items-center justify-center gap-2 text-xl pr-5">
           <IoMdChatboxes size={"1.4em"} />
           <span>گروه برد</span>
         </div>
@@ -99,9 +99,9 @@ export default function Board() {
 
   return (
     <>
-      <div className="max-h-pagesHeight w-full">
+      <div className="max-h-pagesHeight h-full w-full flex flex-col gap-0 overflow-y-auto">
         {/* board data */}
-        <div className="w-full flex justify-between p-5 border-gray-300 border-2">
+        <div className="w-full h-[20%] flex justify-between p-5 border-gray-300 border-2">
           <div className="flex gap-2">
             <div
               className={`flex justify-center items-center w-[50px] h-[50px] text-white rounded-full ${
@@ -145,8 +145,8 @@ export default function Board() {
         </div>
 
         {/* board tabs  */}
-        <div className="w-full p-5">
-          <Tabs items={boardTabs} className="" />
+        <div className="w-full h-[80%] pt-5">
+          <Tabs items={boardTabs} className="p-0" />
         </div>
       </div>
     </>
