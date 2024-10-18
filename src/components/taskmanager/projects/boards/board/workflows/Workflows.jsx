@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../../../../httpConfig/useHttp";
 import { Skeleton } from "antd";
+import Task from "./Task";
 
 export default function Workflows({ boardId, workflows }) {
   const { httpService } = useHttp();
@@ -10,6 +11,7 @@ export default function Workflows({ boardId, workflows }) {
 
   const handleGetTasks = async () => {
     setLoading(true);
+    let datas = [];
     const formData = {
       boardId: boardId,
     };
@@ -18,11 +20,12 @@ export default function Workflows({ boardId, workflows }) {
       .get("/TaskController/Tasks", { params: formData })
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
-          setTaskList(res.data?.data);
+          datas = res.data?.data;
         }
       })
       .catch(() => {});
 
+    setTaskList(datas);
     setLoading(false);
   };
 
@@ -45,11 +48,7 @@ export default function Workflows({ boardId, workflows }) {
     return (
       <>
         {filteredTasks &&
-          filteredTasks.map((task, index) => (
-            <div key={index} className="w-full max-h-[275px]">
-              {task?.name}
-            </div>
-          ))}
+          filteredTasks.map((task, index) => <Task key={index} data={task} />)}
       </>
     );
   };

@@ -24,7 +24,7 @@ const useHttp = () => {
   httpService.interceptors.response.use(
     (response) => response,
     async ({ error, response }) => {
-      if (response?.status == 401) {
+      if (response?.status === 401) {
         localStorage.removeItem("token");
         window.location.replace("/login");
         toast.error("شما از برنامه خارج شده اید");
