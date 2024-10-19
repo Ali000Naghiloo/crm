@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import MyDatePicker from "../../../common/MyDatePicker";
 
 export default function ProjectModal({ open, setOpen, id, getNewList }) {
   const { httpService } = useHttp();
@@ -24,7 +25,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     initialValues: {
       name: "",
       description: "",
-      dueDateTime: "",
+      dueDateTime: null,
       projectPriority: 0,
       projectStatus: 0,
       projectType: 0,
@@ -38,14 +39,14 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
 
     onSubmit: (values) => {
       if (id) {
-        handleEditProject(values);
+        handleEdit(values);
       } else {
-        handleCreateProject(values);
+        handleCreate(values);
       }
     },
   });
 
-  const handleCreateProject = async (values) => {
+  const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
       ...values,
@@ -69,6 +70,8 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
           toast.success("");
+          getNewList();
+          handleClose();
         }
       })
       .catch(() => {});
@@ -76,7 +79,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     setLoading(false);
   };
 
-  const handleEditProject = async (values) => {
+  const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
       ...values,
@@ -89,7 +92,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
           };
         }
       ),
-      attachmentsCreateViewModel: values?.attachmentsCreateViewModel?.map(
+      attachmentEditViewModels: values?.attachmentsCreateViewModel?.map(
         (att) => {
           return { id: att.id };
         }
@@ -101,6 +104,8 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
           toast.success("");
+          getNewList();
+          handleClose();
         }
       })
       .catch(() => {});
@@ -161,6 +166,14 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      validation.setFieldValue("name", data?.name);
+      validation.setFieldValue("dueDateTime", data?.dueDateTime);
+      validation.setFieldValue("description", data?.description);
+    }
+  }, [data]);
+
   return (
     <>
       <Modal
@@ -171,7 +184,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
         className="lg:min-w-[990px] w-full"
         footer={
           <div className="w-full flex justify-end gap-3">
-            <Button type="primary" danger>
+            <Button type="primary" danger onClick={handleClose}>
               لغو
             </Button>
             <Button type="primary" onClick={validation.submitForm}>
@@ -196,7 +209,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
             )}
           </div>
 
-          {/* users */}
+          {/* type */}
           <div className="flex flex-col gap-1 w-[300px]">
             <span>نوع پروژه </span>
             <Select
@@ -242,12 +255,50 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
               )}
           </div>
 
+          {/* project date */}
+          <div className="flex flex-col gap-1 w-[300px]">
+            <span>تاریخ انجام پروژه (اختیاری) </span>
+            <MyDatePicker
+              value={validation.values.dueDateTime}
+              setValue={(e) => {
+                validation.setFieldValue("dueDateTime", e);
+              }}
+              placeholder={"تاریخ را وارد کنید"}
+              className={"w-[300px]"}
+            />
+            {validation.errors.dueDateTime &&
+              validation.touched.dueDateTime && (
+                <span className="text-error">
+                  {validation.errors.dueDateTime}
+                </span>
+              )}
+          </div>
+
+          {/* project priority */}
+          <div className="flex flex-col gap-1 w-[300px]">
+            <span>اولویت پروژه </span>
+            <Input
+              type="number"
+              className="w-full"
+              value={validation.values.projectPriority}
+              onChange={(e) => {
+                validation.setFieldValue("projectPriority", e);
+              }}
+              placeholder={"اولویت را وارد کنید"}
+            />
+            {validation.errors.projectPriority &&
+              validation.touched.projectPriority && (
+                <span className="text-error">
+                  {validation.errors.projectPriority}
+                </span>
+              )}
+          </div>
+
           {/* description */}
           <div className="flex flex-col gap-1 w-full">
             <span>توضیحات </span>
             <Input.TextArea
               rows={5}
-              placeholder="نام پروژه را وارد کنید"
               className="w-full"
               name="description"
               value={validation.values.description}

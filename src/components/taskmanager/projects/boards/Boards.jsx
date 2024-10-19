@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import useHttp from "../../httpConfig/useHttp";
 import { useDispatch } from "react-redux";
 import { setPageRoutes } from "../../../../store/reducers/pageRoutes";
@@ -8,6 +8,7 @@ import { HiRefresh } from "react-icons/hi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { IoMdSettings } from "react-icons/io";
 const loadings = ["", "", "", "", "", "", "", ""];
 
 const Projects = () => {
@@ -17,9 +18,11 @@ const Projects = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [boards, setBoards] = useState(null);
-  const [showModal, setShowModal] = useState({ open: false, projectId: null });
+  const [showModal, setShowModal] = useState({ open: false, boradId: null });
   const [searchParams] = useSearchParams();
   const projectId = searchParams.get("projectId");
+
+  const BoardModal = lazy(() => import("../../modals/BoardModal"));
 
   const handleGetList = async () => {
     setLoading(true);
@@ -52,7 +55,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <>
+    <Suspense fallback={<></>}>
       <div className="w-full min-h-pagesHeight overflow-auto p-5">
         {/* page title */}
         <div className="w-full flex justify-between py-5">
@@ -103,67 +106,88 @@ const Projects = () => {
             boards && boards?.length !== 0 ? (
               <>
                 {boards.map((br, index) => (
-                  <Link
-                    to={`/taskmanager/projects/boards/board?boardId=${br?.id}`}
+                  <div
                     key={index}
-                    className="w-[220px] min-h-[220px] h-[350px] mx-auto lg:mx-0 shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%] hover:bg-gray-100"
+                    className="w-[220px] min-h-[220px] relative shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%]"
                   >
-                    <div className="w-full flex flex-col items-center p-4 gap-4">
-                      <div className="flex flex-col items-center gap-2">
-                        <Avatar
-                          className={`w-[60px] h-[60px] ${
-                            br?.color ? `bg-[${br.color}]` : "bg-gray-500"
-                          }`}
-                          icon={
-                            <div className="text-xl flex justify-center items-center">
-                              <span>
-                                {br?.name?.split(" ")[0]
-                                  ? br?.name?.split(" ")[0][0]
-                                  : ""}
-                              </span>
-                              <span>
-                                {br?.name?.split(" ")[1]
-                                  ? br?.name?.split(" ")[1][0]
-                                  : ""}
-                              </span>
-                            </div>
-                          }
-                        />
-                        <p className="text-xl font-bold">{br.name}</p>
-                      </div>
-
-                      <div className="w-full h-fit flex flex-col text-sm">
-                        <span>وضعیت کل برد :</span>
-                        <Progress
-                          className="!text-sm !h-[11px]"
-                          percent={br.projectProgressBar}
-                          percentPosition={{ align: "center", type: "inner" }}
-                        />
-                      </div>
-
-                      <div className="w-full h-fit flex flex-col text-sm">
-                        <span>وظایف من :</span>
-                        <Progress
-                          className="!text-sm !h-[11px]"
-                          percent={br.projectProgressBar}
-                          percentPosition={{ align: "center", type: "inner" }}
-                        />
-                      </div>
+                    {/* options */}
+                    <div className="absolute left-[15px] top-[15px]">
+                      <Button
+                        className="p-1"
+                        type="primary"
+                        onClick={() =>
+                          setShowModal({ open: true, boradId: br?.id })
+                        }
+                      >
+                        <IoMdSettings className="w-full h-full" size={"2em"} />
+                      </Button>
                     </div>
 
-                    <div className="w-full h-[2px] border-gray-300 border-[1px] my-[1rem]"></div>
+                    <div
+                      onClick={() =>
+                        navigate(
+                          `/taskmanager/projects/boards/board?boardId=${br?.id}`
+                        )
+                      }
+                      className="!z-0 w-full h-full hover:bg-gray-100"
+                    >
+                      <div className="w-full flex flex-col items-center p-4 gap-4">
+                        <div className="flex flex-col items-center gap-2">
+                          <Avatar
+                            className={`w-[60px] h-[60px] ${
+                              br?.color ? `bg-[${br.color}]` : "bg-gray-500"
+                            }`}
+                            icon={
+                              <div className="text-xl flex justify-center items-center">
+                                <span>
+                                  {br?.name?.split(" ")[0]
+                                    ? br?.name?.split(" ")[0][0]
+                                    : ""}
+                                </span>
+                                <span>
+                                  {br?.name?.split(" ")[1]
+                                    ? br?.name?.split(" ")[1][0]
+                                    : ""}
+                                </span>
+                              </div>
+                            }
+                          />
+                          <p className="text-xl font-bold">{br.name}</p>
+                        </div>
 
-                    <div className="w-full flex flex-col text-sm text-gray-500 p-4">
-                      <div className="flex">
-                        <span>آخرین وظیفه انجام شده: </span>
-                        <span>-</span>
+                        <div className="w-full h-fit flex flex-col text-sm">
+                          <span>وضعیت کل برد :</span>
+                          <Progress
+                            className="!text-sm !h-[11px]"
+                            percent={br.projectProgressBar}
+                            percentPosition={{ align: "center", type: "inner" }}
+                          />
+                        </div>
+
+                        <div className="w-full h-fit flex flex-col text-sm">
+                          <span>وظایف من :</span>
+                          <Progress
+                            className="!text-sm !h-[11px]"
+                            percent={br.projectProgressBar}
+                            percentPosition={{ align: "center", type: "inner" }}
+                          />
+                        </div>
                       </div>
-                      <div className="flex self-end mt-[12px]">
-                        <span>وظایف انجام شده:</span>
-                        <span>0 از 0</span>
+
+                      <div className="w-full h-[2px] border-gray-300 border-[1px] my-[1rem]"></div>
+
+                      <div className="w-full flex flex-col text-sm text-gray-500 p-4">
+                        <div className="flex">
+                          <span>آخرین وظیفه انجام شده: </span>
+                          <span>-</span>
+                        </div>
+                        <div className="flex self-end mt-[12px]">
+                          <span>وظایف انجام شده:</span>
+                          <span>0 از 0</span>
+                        </div>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
 
                 {/* new project */}
@@ -189,7 +213,17 @@ const Projects = () => {
           )}
         </div>
       </div>
-    </>
+
+      <BoardModal
+        open={showModal.open}
+        setOpen={(e) => {
+          setShowModal({ open: e });
+        }}
+        id={showModal.boradId}
+        getNewList={handleGetList}
+        projectId={projectId}
+      />
+    </Suspense>
   );
 };
 
