@@ -156,8 +156,11 @@ export default function Conditions() {
         params: { additionsAndDeductionId: id },
       })
       .then((res) => {
-        if (res.status === 200 && res.data?.code === 1)
+        if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت حذف شد");
+        } else {
+          toast.error(res.data.msg);
+        }
       })
       .catch(() => {});
 

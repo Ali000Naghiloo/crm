@@ -63,7 +63,7 @@ export default function Workflows({ boardId, workflows }) {
 
   return (
     <>
-      <div className="h-full overflow-x-auto flex gap-4 pr-5">
+      <div className="w-full h-full overflow-x-auto flex gap-4 pr-5">
         {workflowList && taskList ? (
           workflowList?.length !== 0 ? (
             workflowList.map((wf) => (

@@ -48,10 +48,12 @@ export default function Board() {
     }
     if (type === "workflows") {
       return (
-        <Workflows
-          boardId={boardId}
-          workflows={boardData?.boardWorkFlowsViewModel}
-        />
+        <div className="w-full h-full">
+          <Workflows
+            boardId={boardId}
+            workflows={boardData?.boardWorkFlowsViewModel}
+          />
+        </div>
       );
     } else {
       return <></>;
@@ -99,9 +101,9 @@ export default function Board() {
 
   return (
     <>
-      <div className="max-h-pagesHeight h-full w-full flex flex-col gap-0 overflow-y-auto">
+      <div className="min-h-pagesHeight w-full flex flex-col gap-0 overflow-y-auto">
         {/* board data */}
-        <div className="w-full h-[20%] flex justify-between p-5 border-gray-300 border-2">
+        <div className="w-full flex justify-between p-5 border-gray-300 border-b-2">
           <div className="flex gap-2">
             <div
               className={`flex justify-center items-center w-[50px] h-[50px] text-white rounded-full ${
@@ -145,8 +147,8 @@ export default function Board() {
         </div>
 
         {/* board tabs  */}
-        <div className="w-full h-[80%] pt-5">
-          <Tabs items={boardTabs} className="p-0" />
+        <div className="w-full h-full bg-[#e6e8ec]">
+          <Tabs items={boardTabs} className="w-full p-0 pt-5 h-full" />
         </div>
       </div>
     </>
