@@ -60,7 +60,7 @@ const Projects = () => {
                 type="default"
                 className="text-[#1f5c88] border-[#1f5c88] border-2 rounded-xl"
               >
-                <FaPlus /> ساخت پروژه جدید
+                <FaPlus /> تعریف پروژه جدید
               </Button>
             </div>
           </div>

@@ -126,7 +126,7 @@ export default function PhoneModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت شماره برای شخص</>
+            <>تعریف شماره برای شخص</>
           ) : (
             <>ویرایش شماره تلفن {data?.phoneNumber}</>
           )

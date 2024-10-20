@@ -13,6 +13,7 @@ import Calculations from "./Calculations";
 import { SiCodefactor } from "react-icons/si";
 import { BiCalculator } from "react-icons/bi";
 import { BsCheckCircleFill } from "react-icons/bs";
+import moment from "jalali-moment";
 
 // { state } = useLocation
 // state = {id , data, type}
@@ -63,7 +64,7 @@ export default function CreateFactor() {
   const validation = useFormik({
     initialValues: {
       factorNumber: 0,
-      factorDate: null,
+      factorDate: moment().utc().locale("fa"),
       customerId: null,
       totalFactorQuantity: 0,
       totalFactorDiscount: 0,
@@ -188,7 +189,7 @@ export default function CreateFactor() {
         .post("/Factor/CreatePreFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
-            toast.success("با موفقیت ساخته شد");
+            toast.success("با موفقیت تعریف شد");
             setResult({
               status: "success",
               title: "فاکتور شما با موفقیت ثبت شد",
@@ -215,7 +216,7 @@ export default function CreateFactor() {
         .post("/Factor/CreateFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
-            toast.success("با موفقیت ساخته شد");
+            toast.success("با موفقیت تعریف شد");
             setResult({
               status: "success",
               title: "فاکتور شما با موفقیت ثبت شد",
@@ -236,7 +237,7 @@ export default function CreateFactor() {
         .post("/Factor/CreateReturnFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
-            toast.success("با موفقیت ساخته شد");
+            toast.success("با موفقیت تعریف شد");
             setResult({
               status: "success",
               title: "فاکتور شما با موفقیت ثبت شد",

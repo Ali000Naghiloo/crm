@@ -289,7 +289,7 @@ export default function ConditionModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت شرط قیمت گذاری</>
+            <>تعریف شرط قیمت گذاری</>
           ) : (
             <>ویرایش شرط : {data?.pricingMethodConditionTitle}</>
           )

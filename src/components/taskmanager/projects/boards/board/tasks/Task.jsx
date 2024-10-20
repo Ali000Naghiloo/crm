@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useHttp from "../../../../httpConfig/useHttp";
 import { toast } from "react-toastify";
 
-export default function Task({ data, getNewList }) {
+export default function Task({ data, getNewList, onClick }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,10 @@ export default function Task({ data, getNewList }) {
 
   return (
     <>
-      <div className="w-full flex justify-between items-center rounded-lg bg-white p-5 cursor-pointer hover:bg-gray-100">
+      <div
+        onClick={onClick}
+        className="w-full flex justify-between items-center rounded-lg p-5 cursor-pointer hover:bg-gray-100 bg-[#e6e8ec]"
+      >
         <div className="flex items-center gap-5">
           <Checkbox
             checked={data?.doneStatus}

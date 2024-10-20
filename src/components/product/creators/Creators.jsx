@@ -56,7 +56,7 @@ export default function Creators() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -157,7 +157,7 @@ export default function Creators() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت سازنده جدید
+            تعریف سازنده جدید
           </Button>
         </div>
 

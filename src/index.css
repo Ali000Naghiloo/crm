@@ -57,3 +57,7 @@ img {
   transform: translate(0, 10%);
   transition: all ease 0.2s;
 }
+
+.ant-tabs-nav {
+  margin: 0 !important;
+}

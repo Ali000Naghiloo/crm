@@ -33,7 +33,7 @@ export default function Header() {
     },
     {
       key: "2",
-      label: <div>مشاهده اطلاعات کاربری</div>,
+      label: <div>اطلاعات تکمیلی اطلاعات کاربری</div>,
       // disabled: true,
     },
     {

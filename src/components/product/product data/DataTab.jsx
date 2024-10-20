@@ -17,10 +17,10 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
 
   const validationSchema = yup.object().shape({
     productName: yup.string().required("این فیلد را پر کنید"),
-    manufactureDate: yup.string().required("این فیلد را پر کنید"),
-    expiryDate: yup.string().required("این فیلد را پر کنید"),
+    // manufactureDate: yup.string().required("این فیلد را پر کنید"),
+    // expiryDate: yup.string().required("این فیلد را پر کنید"),
     productCategoryId: yup.number().required("این فیلد را پر کنید"),
-    pricingMethodGroupId: yup.number().required("این فیلد را پر کنید"),
+    // pricingMethodGroupId: yup.number().required("این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
@@ -85,7 +85,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           ? values?.productManufacturerProducts.map((cr) => {
               return { productId: 0, manufacturerId: cr };
             })
-          : null,
+          : [],
       pricingMethodGroupId: values?.pricingMethodGroupId,
       description: values?.description,
     };
@@ -287,38 +287,42 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             )}
           </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>تاریخ تولید :</span>
-            <MyDatePicker
-              value={validation.values.manufactureDate}
-              setValue={(e) => {
-                validation.setFieldValue("manufactureDate", e);
-                console.log(e);
-              }}
-              className={"w-[300px]"}
-              status={
-                validation.touched.manufactureDate &&
-                validation.errors.manufactureDate &&
-                "error"
-              }
-            />
-          </div>
+          {!validation.values.serviceProduct && (
+            <>
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>تاریخ تولید :</span>
+                <MyDatePicker
+                  value={validation.values.manufactureDate}
+                  setValue={(e) => {
+                    validation.setFieldValue("manufactureDate", e);
+                    console.log(e);
+                  }}
+                  className={"w-[300px]"}
+                  status={
+                    validation.touched.manufactureDate &&
+                    validation.errors.manufactureDate &&
+                    "error"
+                  }
+                />
+              </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>تاریخ انقضا :</span>
-            <MyDatePicker
-              value={validation.values.expiryDate}
-              setValue={(e) => {
-                validation.setFieldValue("expiryDate", e);
-              }}
-              className={"w-[300px]"}
-              status={
-                validation.touched.expiryDate &&
-                validation.errors.expiryDate &&
-                "error"
-              }
-            />
-          </div>
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>تاریخ انقضا :</span>
+                <MyDatePicker
+                  value={validation.values.expiryDate}
+                  setValue={(e) => {
+                    validation.setFieldValue("expiryDate", e);
+                  }}
+                  className={"w-[300px]"}
+                  status={
+                    validation.touched.expiryDate &&
+                    validation.errors.expiryDate &&
+                    "error"
+                  }
+                />
+              </div>
+            </>
+          )}
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>دسته بندی کالا :</span>
@@ -360,7 +364,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               )}
           </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+          {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>گروه قیمت گذاری :</span>
             <Select
               options={pricingMethodGroupList}
@@ -377,28 +381,30 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                   {validation.errors.pricingMethodGroupId}
                 </span>
               )}
-          </div>
+          </div> */}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>سریال کالا :</span>
-            <Input
-              min={0}
-              type="number"
-              value={validation.values.productSerialNumber}
-              name="productSerialNumber"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.productSerialNumber &&
-              validation.errors.productSerialNumber && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.productSerialNumber}
-                </span>
-              )}
-          </div>
+          {/* {validation.values.productIsAllowedToUseSerial && (
+            <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+              <span>سریال کالا :</span>
+              <Input
+                min={0}
+                type="number"
+                value={validation.values.productSerialNumber}
+                name="productSerialNumber"
+                onChange={validation.handleChange}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.productSerialNumber &&
+                validation.errors.productSerialNumber && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.productSerialNumber}
+                  </span>
+                )}
+            </div>
+          )} */}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+          {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>شماره سریال کالا در انبار :</span>
             <Input
               value={validation.values.sku}
@@ -413,43 +419,48 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                 {validation.errors.sku}
               </span>
             )}
-          </div>
+          </div> */}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>موجودی کالا در انبار :</span>
-            <Input
-              type="number"
-              min={0}
-              value={validation.values.stockQuantity}
-              name="stockQuantity"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.stockQuantity &&
-              validation.errors.stockQuantity && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.stockQuantity}
-                </span>
-              )}
-          </div>
+          {!validation.values.serviceProduct &&
+            validation.values.productIsAllowedToUseSerial && (
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>موجودی کالا در انبار :</span>
+                <Input
+                  type="number"
+                  min={0}
+                  value={validation.values.stockQuantity}
+                  name="stockQuantity"
+                  onChange={validation.handleChange}
+                  className="w-[100%]"
+                  placeholder="لطفا اینجا وارد کنید..."
+                />
+                {validation.touched.stockQuantity &&
+                  validation.errors.stockQuantity && (
+                    <span className="text-red-300 text-xs">
+                      {validation.errors.stockQuantity}
+                    </span>
+                  )}
+              </div>
+            )}
 
-          <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>شروط نگهداری :</span>
-            <Input.TextArea
-              value={validation.values.description}
-              name="description"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.description &&
-              validation.errors.description && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.description}
-                </span>
-              )}
-          </div>
+          {!validation.values.serviceProduct && (
+            <div className="flex gap-1 flex-col items-start w-full mx-auto">
+              <span>شروط نگهداری :</span>
+              <Input.TextArea
+                value={validation.values.description}
+                name="description"
+                onChange={validation.handleChange}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.description &&
+                validation.errors.description && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.description}
+                  </span>
+                )}
+            </div>
+          )}
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>توضیحات :</span>

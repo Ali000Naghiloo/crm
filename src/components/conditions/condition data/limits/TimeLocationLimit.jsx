@@ -34,7 +34,7 @@ export default function TimeLocationLimits({ values, setField }) {
             <MyDatePicker
               value={value}
               setValue={(e) =>
-                handleCellChange(`timePeriodsAndLocation.startDate`, e)
+                handleCellChange(`timePeriodAndLocation.startDate`, e)
               }
             />
           </div>
@@ -51,7 +51,7 @@ export default function TimeLocationLimits({ values, setField }) {
             <MyDatePicker
               value={value}
               setValue={(e) =>
-                handleCellChange(`timePeriodsAndLocation.endDate`, e)
+                handleCellChange(`timePeriodAndLocation.endDate`, e)
               }
             />
           </div>
@@ -64,15 +64,16 @@ export default function TimeLocationLimits({ values, setField }) {
       key: "dayOfWeek",
       render: (value, record) => {
         return (
-          <div>
+          <div className="w-[300px]">
             <Select
               options={weekDays.map((day) => {
                 return { label: formatHelper.daysName(day), value: day };
               })}
               value={value}
               onChange={(e) =>
-                handleCellChange(`timePeriodsAndLocation.dayOfWeek`, e)
+                handleCellChange(`timePeriodAndLocation.dayOfWeek`, e)
               }
+              className="w-full"
             />
           </div>
         );
@@ -84,15 +85,16 @@ export default function TimeLocationLimits({ values, setField }) {
       key: "month",
       render: (value, record) => {
         return (
-          <div>
+          <div className="w-[300px]">
             <Select
               options={allEnum?.HowToApply?.map((ty, index) => {
                 return { label: ty, value: index };
               })}
               value={value}
               onChange={(e) =>
-                handleCellChange(`timePeriodsAndLocation.month`, e)
+                handleCellChange(`timePeriodAndLocation.month`, e)
               }
+              className="w-full"
             />
           </div>
         );
@@ -104,15 +106,16 @@ export default function TimeLocationLimits({ values, setField }) {
       key: "season",
       render: (value, record) => {
         return (
-          <div>
+          <div className="w-[300px]">
             <Select
               options={allEnum?.Season?.map((ty, index) => {
                 return { label: ty, value: index };
               })}
               value={value}
               onChange={(e) =>
-                handleCellChange(`timePeriodsAndLocation.season`, e)
+                handleCellChange(`timePeriodAndLocation.season`, e)
               }
+              className="w-full"
             />
           </div>
         );
@@ -129,7 +132,7 @@ export default function TimeLocationLimits({ values, setField }) {
             type="number"
             value={value}
             onChange={(e) =>
-              handleCellChange(`timePeriodsAndLocation.iranCities`, e)
+              handleCellChange(`timePeriodAndLocation.iranCities`, e)
             }
           />
         </div>
@@ -145,7 +148,7 @@ export default function TimeLocationLimits({ values, setField }) {
             checked={value}
             onChange={(e) => {
               handleCellChange(
-                `timePeriodsAndLocation.allTimePeriodsShouldBeTakenExceptDesignatedPeriod`,
+                `timePeriodAndLocation.allTimePeriodsShouldBeTakenExceptDesignatedPeriod`,
                 e.target.checked
               );
             }}
@@ -163,7 +166,7 @@ export default function TimeLocationLimits({ values, setField }) {
             checked={value}
             onChange={(e) => {
               handleCellChange(
-                `timePeriodsAndLocation.allAreasExceptWhereSpecified`,
+                `timePeriodAndLocation.allAreasExceptWhereSpecified`,
                 e.target.checked
               );
             }}
@@ -182,7 +185,7 @@ export default function TimeLocationLimits({ values, setField }) {
             value={value}
             onChange={(e) =>
               handleCellChange(
-                `timePeriodsAndLocation.description`,
+                `timePeriodAndLocation.description`,
                 e.target.value
               )
             }

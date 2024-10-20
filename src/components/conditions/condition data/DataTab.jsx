@@ -84,7 +84,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
       .post("/AdditionsAndDeductions/EditAdditionsAndDeduction", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت ساخته شد");
+          toast.success("با موفقیت تعریف شد");
           handleClose();
         }
       })

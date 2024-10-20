@@ -1,5 +1,5 @@
 import { Button, Dropdown, Select, Skeleton } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { IoMdMore } from "react-icons/io";
 import useHttp from "../../../../httpConfig/useHttp";
 import { MdFilterList } from "react-icons/md";
@@ -18,12 +18,15 @@ export default function Tasks({ boardId }) {
     filters: false,
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [showModal, setShowModal] = useState({ open: false, id: null });
 
   const viewByItems = [
     { key: "1", label: "کار های انجام نشده", value: "undone" },
   ];
   const sortBy = [{ key: "1", label: "پیش فرض", value: "default" }];
   const filters = [];
+
+  const TaskModal = lazy(() => import("../../../../modals/TaskModal"));
 
   const handleGetAllTasksList = async () => {
     setLoading(true);
@@ -45,13 +48,17 @@ export default function Tasks({ boardId }) {
     setLoading(false);
   };
 
+  const onTaskClick = async (id) => {
+    setShowModal({ open: true, id: id });
+  };
+
   useEffect(() => {
     if (!allTasksList) handleGetAllTasksList();
   }, [boardId]);
 
   return (
-    <>
-      <div className="w-full h-full max-h-pagesHeight overflow-y-auto flex flex-col text-lg">
+    <Suspense fallback={<></>}>
+      <div className="w-full h-full overflow-y-auto flex flex-col text-lg">
         {/* filters and sorts and show by */}
         <div className="w-full flex items-center justify-between p-8">
           <div className="flex gap-3">
@@ -95,6 +102,7 @@ export default function Tasks({ boardId }) {
           {/* actions */}
           <div className="flex items-center">
             <Button
+              onClick={() => onTaskClick(null)}
               type="primary"
               className="flex items-center justify-center p-5 bg-[#0f9d58]"
             >
@@ -104,15 +112,18 @@ export default function Tasks({ boardId }) {
         </div>
 
         {/* list */}
-        <div className="w-full h-ful flex flex-col gap-3 px-5">
+        <div className="w-full h-ful flex flex-col overflow-y-auto gap-3 px-5">
           {!loading ? (
             allTasksList && allTasksList?.length !== 0 ? (
               allTasksList?.map((task, index) => (
-                <Task
-                  data={task}
-                  key={index}
-                  getNewList={handleGetAllTasksList}
-                />
+                <>
+                  <Task
+                    data={task}
+                    key={index}
+                    getNewList={handleGetAllTasksList}
+                    onClick={() => onTaskClick(task?.id)}
+                  />
+                </>
               ))
             ) : (
               <div className="w-full h-full flex justify-center items-center pt-10 text-gray-500 text-xl">
@@ -126,11 +137,20 @@ export default function Tasks({ boardId }) {
                   key={index}
                   style={{ width: "100%", height: "50px" }}
                 />
-              ))}{" "}
+              ))}
             </>
           )}
         </div>
       </div>
-    </>
+
+      <TaskModal
+        open={showModal.open}
+        boardId={boardId}
+        workflowId={null}
+        getNewList={handleGetAllTasksList}
+        setOpen={(e) => setShowModal({ open: e })}
+        id={showModal.id}
+      />
+    </Suspense>
   );
 }

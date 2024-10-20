@@ -190,7 +190,7 @@ export default function AddressModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت آدرس برای شخص</>
+            <>تعریف آدرس برای شخص</>
           ) : (
             <>{`ویرایش آدرس "${data?.addressName}"`}</>
           )

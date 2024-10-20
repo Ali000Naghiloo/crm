@@ -92,7 +92,7 @@ export default function Factors({ pageType }) {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Button
             onClick={() => {

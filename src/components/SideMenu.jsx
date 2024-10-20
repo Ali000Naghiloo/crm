@@ -25,7 +25,7 @@ export default function SideMenu() {
   const navigate = useNavigate();
   const openMenu = useSelector((state) => state.sideMenu.isOpen);
   const [notifPermission, setNotifPermission] = useState(false);
-  let [selectedTabKey, setSelectedTaqbKey] = useState(pathname);
+  let [selectedTabKey, setSelectedTabKey] = useState(pathname);
   let [openMenuChildren, setOpenMenuChildren] = useState();
 
   const menuItems = [
@@ -602,7 +602,7 @@ export default function SideMenu() {
   const handleRouteSwitch = (e) => {
     if (e.keyPath[0] && e.keyPath[0] !== "logout") navigate(e.keyPath[0]);
     if (size && size.width < 1000) dispatch(setSideMenuIsOpen(!openMenu));
-    setSelectedTaqbKey(e?.key);
+    setSelectedTabKey(e?.key);
   };
 
   // notification permission changes
@@ -649,6 +649,10 @@ export default function SideMenu() {
     });
   }, []);
 
+  useEffect(() => {
+    console.log(size.width);
+  }, [size]);
+
   if (size && size.width > 1000) {
     return (
       <>
@@ -667,28 +671,26 @@ export default function SideMenu() {
   } else {
     return (
       <>
-        <div className="">
-          <Drawer
-            closeIcon={
-              <CgClose
-                className="text-textColor text-base mr-auto"
-                size={"2em"}
-              />
-            }
-            title={
-              <div className="w-full text-2xl flex items-center ltr">
-                <h1>CRM</h1>
-              </div>
-            }
-            open={!openMenu}
-            onClose={() => dispatch(setSideMenuIsOpen(!openMenu))}
-            className="!bg-backgroundColor !text-textColor text-base"
-          >
-            <MenuItems isOpen={!openMenu} />
+        <Drawer
+          closeIcon={
+            <CgClose
+              className="text-textColor text-base mr-auto"
+              size={"2em"}
+            />
+          }
+          title={
+            <div className="w-full text-2xl flex items-center ltr">
+              <h1>CRM</h1>
+            </div>
+          }
+          open={!openMenu}
+          onClose={() => dispatch(setSideMenuIsOpen(!openMenu))}
+          className="!bg-backgroundColor !text-textColor text-base"
+        >
+          <MenuItems isOpen={!openMenu} />
 
-            <NotifPermissionStatus />
-          </Drawer>
-        </div>
+          <NotifPermissionStatus />
+        </Drawer>
       </>
     );
   }

@@ -63,7 +63,7 @@ export default function Groups() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -164,7 +164,7 @@ export default function Groups() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت گروه جدید
+            تعریف گروه جدید
           </Button>
         </div>
 

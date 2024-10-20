@@ -107,7 +107,7 @@ export default function NoteModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت یادداشت برای شخص</>
+            <>تعریف یادداشت برای شخص</>
           ) : (
             <>ویرایش یادداشت {data?.phoneNumber}</>
           )

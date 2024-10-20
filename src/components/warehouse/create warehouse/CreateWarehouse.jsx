@@ -77,7 +77,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
       .post("/Warehouse/CreateWarehouse", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("انبار با موفقیت ساخته شد");
+          toast.success("انبار با موفقیت تعریف شد");
           handleClose();
           getNewList();
         }
@@ -96,7 +96,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
       <Modal
         open={open}
         onCancel={handleClose}
-        title="ساخت انبار جدید"
+        title="تعریف انبار جدید"
         className="!w-fit max-w-[1000px]"
         footer={
           <div className="flex justify-end gap-3 pt-5">

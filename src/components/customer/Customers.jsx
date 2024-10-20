@@ -205,7 +205,7 @@ export default function Customers() {
             size="large"
             onClick={() => setCreateCustomerModal({ open: true })}
           >
-            ساخت شخص جدید
+            تعریف شخص جدید
           </Button>
         </div>
 

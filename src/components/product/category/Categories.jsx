@@ -80,7 +80,7 @@ export default function Categories() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -171,7 +171,7 @@ export default function Categories() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت دسته بندی جدید
+            تعریف دسته بندی جدید
           </Button>
         </div>
 

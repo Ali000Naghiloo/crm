@@ -111,7 +111,7 @@ export default function ConnectorModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت رابط برای شخص</>
+            <>تعریف رابط برای شخص</>
           ) : (
             <>{`ویرایش رابط "${data?.connectorName}"`}</>
           )

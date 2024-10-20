@@ -53,7 +53,7 @@ export default function CustomerModal({ open, setOpen, id, getNewList }) {
     },
     {
       key: "method",
-      label: "روش قیمت گذاری",
+      label: "شروط قیمت گذاری",
       children: handleRenderTabContent("method", data),
     },
   ];

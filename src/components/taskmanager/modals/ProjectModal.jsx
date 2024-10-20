@@ -156,7 +156,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     if (id) {
       handleGetData();
     } else {
-      setTitle("ساخت پروژه جدید");
+      setTitle("تعریف پروژه جدید");
     }
   }, [open]);
 

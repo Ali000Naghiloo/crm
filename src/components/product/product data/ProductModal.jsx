@@ -70,36 +70,36 @@ export default function ProductModal({ open, setOpen, id, getNewList }) {
       label: "اطلاعات کالا و خدمات",
       children: handleRenderTabContent("data", data),
     },
-    {
-      key: "color",
-      label: "رنگ",
-      children: handleRenderTabContent("color", data),
-    },
-    {
-      key: "size",
-      label: "اندازه ها",
-      children: handleRenderTabContent("size", data),
-    },
+    // {
+    //   key: "color",
+    //   label: "رنگ",
+    //   children: handleRenderTabContent("color", data),
+    // },
+    // {
+    //   key: "size",
+    //   label: "اندازه ها",
+    //   children: handleRenderTabContent("size", data),
+    // },
     {
       key: "image",
       label: "عکس ها",
       children: handleRenderTabContent("image", data),
     },
-    {
-      key: "weight",
-      label: "وزن",
-      children: handleRenderTabContent("weight", data),
-    },
-    {
-      key: "price",
-      label: "قیمت بر حسب واحد",
-      children: handleRenderTabContent("price", data),
-    },
+    // {
+    //   key: "weight",
+    //   label: "وزن",
+    //   children: handleRenderTabContent("weight", data),
+    // },
     // {
     //   key: "unit",
     //   label: "واحد",
     //   children: handleRenderTabContent("unit", data),
     // },
+    {
+      key: "price",
+      label: "قیمت بر حسب واحد",
+      children: handleRenderTabContent("price", data),
+    },
   ];
 
   useEffect(() => {

@@ -17,8 +17,8 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
 
   const validationSchema = yup.object().shape({
     productName: yup.string().required("این فیلد را پر کنید"),
-    manufactureDate: yup.string().required("این فیلد را پر کنید"),
-    expiryDate: yup.string().required("این فیلد را پر کنید"),
+    // manufactureDate: yup.string().required("این فیلد را پر کنید"),
+    // expiryDate: yup.string().required("این فیلد را پر کنید"),
     productCategoryId: yup.number().required("این فیلد را پر کنید"),
   });
 
@@ -28,15 +28,15 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       productManualCode: null,
       productName: "",
       latinName: "",
-      serviceProduct: true,
+      serviceProduct: false,
       isActive: true,
       natureOfProduct: null,
       storageConditions: "",
       productIsAllowedToUseSerial: true,
       productSerialNumber: "",
       description: "",
-      manufactureDate: "",
-      expiryDate: "",
+      manufactureDate: null,
+      expiryDate: null,
       sku: null,
       stockQuantity: 0,
       productCategoryId: null,
@@ -104,7 +104,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       .post("/Product/CreateProduct", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("کالا و خدمات با موفقیت ساخته شد");
+          toast.success("کالا و خدمات با موفقیت تعریف شد");
           handleClose();
         }
       })
@@ -186,7 +186,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       <Modal
         open={open}
         onCancel={handleClose}
-        title="ساخت کالا و خدمات جدید"
+        title="تعریف کالا و خدمات جدید"
         className="!w-fit max-w-[1000px]"
         footer={
           <div className="flex justify-end gap-3 pt-5">
@@ -280,40 +280,44 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             )}
           </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>تاریخ تولید :</span>
-            <MyDatePicker
-              value={validation.values.manufactureDate}
-              setValue={(e) => {
-                validation.setFieldValue("manufactureDate", e);
-                console.log(e);
-              }}
-              className={"w-[300px]"}
-              status={
-                validation.touched.manufactureDate &&
-                validation.errors.manufactureDate &&
-                "error"
-              }
-            />
-          </div>
+          {!validation.values.serviceProduct && (
+            <>
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>تاریخ تولید :</span>
+                <MyDatePicker
+                  value={validation.values.manufactureDate}
+                  setValue={(e) => {
+                    validation.setFieldValue("manufactureDate", e);
+                    console.log(e);
+                  }}
+                  className={"w-[300px]"}
+                  status={
+                    validation.touched.manufactureDate &&
+                    validation.errors.manufactureDate &&
+                    "error"
+                  }
+                />
+              </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>تاریخ انقضا :</span>
-            <MyDatePicker
-              value={validation.values.expiryDate}
-              setValue={(e) => {
-                validation.setFieldValue("expiryDate", e);
-              }}
-              className={"w-[300px]"}
-              status={
-                validation.touched.expiryDate &&
-                validation.errors.expiryDate &&
-                "error"
-              }
-            />
-          </div>
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>تاریخ انقضا :</span>
+                <MyDatePicker
+                  value={validation.values.expiryDate}
+                  setValue={(e) => {
+                    validation.setFieldValue("expiryDate", e);
+                  }}
+                  className={"w-[300px]"}
+                  status={
+                    validation.touched.expiryDate &&
+                    validation.errors.expiryDate &&
+                    "error"
+                  }
+                />
+              </div>
+            </>
+          )}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+          {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>گروه قیمت گذاری :</span>
             <Select
               options={pricingMethodGroupList}
@@ -330,7 +334,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                   {validation.errors.pricingMethodGroupId}
                 </span>
               )}
-          </div>
+          </div> */}
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>دسته بندی کالا :</span>
@@ -372,7 +376,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               )}
           </div>
 
-          {validation.values.productIsAllowedToUseSerial && (
+          {/* {validation.values.productIsAllowedToUseSerial && (
             <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
               <span>سریال کالا :</span>
               <Input
@@ -391,9 +395,9 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                   </span>
                 )}
             </div>
-          )}
+          )} */}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+          {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>شماره سریال کالا در انبار :</span>
             <Input
               value={validation.values.sku}
@@ -408,43 +412,48 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                 {validation.errors.sku}
               </span>
             )}
-          </div>
+          </div> */}
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>موجودی کالا در انبار :</span>
-            <Input
-              type="number"
-              min={0}
-              value={validation.values.stockQuantity}
-              name="stockQuantity"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.stockQuantity &&
-              validation.errors.stockQuantity && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.stockQuantity}
-                </span>
-              )}
-          </div>
+          {!validation.values.serviceProduct &&
+            validation.values.productIsAllowedToUseSerial && (
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>موجودی کالا در انبار :</span>
+                <Input
+                  type="number"
+                  min={0}
+                  value={validation.values.stockQuantity}
+                  name="stockQuantity"
+                  onChange={validation.handleChange}
+                  className="w-[100%]"
+                  placeholder="لطفا اینجا وارد کنید..."
+                />
+                {validation.touched.stockQuantity &&
+                  validation.errors.stockQuantity && (
+                    <span className="text-red-300 text-xs">
+                      {validation.errors.stockQuantity}
+                    </span>
+                  )}
+              </div>
+            )}
 
-          <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>شروط نگهداری :</span>
-            <Input.TextArea
-              value={validation.values.storageConditions}
-              name="storageConditions"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.storageConditions &&
-              validation.errors.storageConditions && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.storageConditions}
-                </span>
-              )}
-          </div>
+          {!validation.values.serviceProduct && (
+            <div className="flex gap-1 flex-col items-start w-full mx-auto">
+              <span>شروط نگهداری :</span>
+              <Input.TextArea
+                value={validation.values.description}
+                name="description"
+                onChange={validation.handleChange}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.description &&
+                validation.errors.description && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.description}
+                  </span>
+                )}
+            </div>
+          )}
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>توضیحات :</span>

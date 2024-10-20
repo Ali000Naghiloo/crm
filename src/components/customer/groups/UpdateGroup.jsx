@@ -24,7 +24,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
       customerGroupType: null,
       title: "",
       description: "",
-      customerGroupCustomers: null,
+      customerGroupCustomers: [],
     },
     validationSchema,
     onSubmit: (values) => {
@@ -50,7 +50,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
         ? values.customerGroupCustomers?.map((cu) => {
             return { customerId: cu };
           })
-        : null,
+        : [],
     };
 
     await httpService

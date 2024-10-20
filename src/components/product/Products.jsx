@@ -9,6 +9,7 @@ import { HiRefresh } from "react-icons/hi";
 import CreateProduct from "./create product/CreateProduct";
 import ProductModal from "./product data/ProductModal";
 import { convertISOToDate } from "../../hooks/functions";
+import moment from "jalali-moment";
 
 export default function Products() {
   const dispatch = useDispatch();
@@ -69,7 +70,9 @@ export default function Products() {
       title: "تاریخ تولید",
       dataIndex: "manufactureDate",
       render: (value) => (
-        <div>{value ? value?.split("T")[0].replaceAll("-", "/") : "-"}</div>
+        <div>
+          {value ? moment.utc(value).locale("fa").format("YYYY/MM/DD") : "-"}
+        </div>
       ),
       key: "manufactureDate",
     },
@@ -103,7 +106,7 @@ export default function Products() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -204,7 +207,7 @@ export default function Products() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت کالا و خدمات جدید
+            تعریف کالا/خدمات جدید
           </Button>
         </div>
 

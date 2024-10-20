@@ -72,7 +72,7 @@ export default function Prices() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -168,7 +168,7 @@ export default function Prices() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت قیمت جدید
+            تعریف قیمت جدید
           </Button>
         </div>
 

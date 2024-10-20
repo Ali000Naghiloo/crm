@@ -71,7 +71,7 @@ const Projects = () => {
                 type="default"
                 className="text-[#1f5c88] border-[#1f5c88] border-2 rounded-xl"
               >
-                <FaPlus /> ساخت برد جدید
+                <FaPlus /> تعریف برد جدید
               </Button>
             </div>
           </div>

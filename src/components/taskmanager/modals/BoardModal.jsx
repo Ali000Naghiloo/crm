@@ -185,7 +185,7 @@ export default function BoardModal({
     if (id) {
       handleGetData();
     } else {
-      setTitle("ساخت برد جدید");
+      setTitle("تعریف برد جدید");
     }
   }, [open]);
 

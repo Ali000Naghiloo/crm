@@ -94,7 +94,7 @@ export default function Warehouses() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -153,7 +153,7 @@ export default function Warehouses() {
 
     setLoading(false);
   };
-  
+
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "انبار" }, { label: "فهرست انبار ها" }]));
 
@@ -190,7 +190,7 @@ export default function Warehouses() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت انبار جدید
+            تعریف انبار جدید
           </Button>
         </div>
 

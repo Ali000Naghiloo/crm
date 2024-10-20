@@ -2,7 +2,7 @@ import { Checkbox, Tag } from "antd";
 import moment from "jalali-moment";
 import { useState } from "react";
 
-export default function Task({ data }) {
+export default function Task({ data, onClick }) {
   const [loading, setLoading] = useState(false);
 
   const handleChangeTaskStatus = async (e) => {};
@@ -11,7 +11,8 @@ export default function Task({ data }) {
   return (
     <>
       <div
-        className={`w-full flex flex-col gap-3 max-h-[275px] bg-white hover:bg-gray-100 cursor-pointer p-2 rounded-md ${
+        onClick={onClick}
+        className={`w-full flex flex-col gap-3 max-h-[275px] hover:bg-gray-100 cursor-pointer p-2 rounded-md  bg-[#e6e8ec] ${
           data?.isDelayed ? "border-red-500 border-4" : ""
         }`}
       >

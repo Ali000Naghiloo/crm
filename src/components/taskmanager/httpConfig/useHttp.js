@@ -1,10 +1,16 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// export const baseURL = "http://192.168.3.12:5001/api";
-// export const imageUrl = "http://192.168.3.12/upload/userimage/";
-export const baseURL = "https://taskmanagerapi.fanwebautomation.ir/api/";
-export const imageUrl = "https://fanwebautomation.ir/upload/userimage/";
+const grantil = import.meta.env.VITE_GRANTILL;
+
+export const baseURL =
+  grantil == "true"
+    ? "http://192.168.3.12:9002/api"
+    : "https://taskmanagerapi.fanwebautomation.ir/api/";
+export const imageUrl =
+  grantil == "true"
+    ? "http://192.168.3.12/upload/userimage/"
+    : "https://fanwebautomation.ir/upload/userimage/";
 
 const useHttp = () => {
   var token = localStorage.getItem("token");

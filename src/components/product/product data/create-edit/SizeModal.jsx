@@ -82,7 +82,7 @@ export default function SizeModal({
       <Modal
         open={open}
         onCancel={handleClose}
-        title={<>ساخت اندازه برای کالا و خدمات</>}
+        title={<>تعریف اندازه برای کالا و خدمات</>}
         footer={
           <div>
             <Button type="primary" danger onClick={handleClose}>

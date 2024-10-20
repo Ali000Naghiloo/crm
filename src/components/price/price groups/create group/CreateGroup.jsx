@@ -48,7 +48,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
       .post("/PricingMethodGroup/CreatePricingMethodGroup", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت ساخته شد");
+          toast.success("با موفقیت تعریف شد");
           handleClose();
         }
       })
@@ -64,7 +64,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
         open={open}
         onCancel={handleClose}
         onClose={handleClose}
-        title="ساخت گروه قیمت گذاری جدید"
+        title="تعریف گروه قیمت گذاری جدید"
         footer={
           <div className="w-full flex gap-3 justify-end pt-5">
             <Button type="primary" danger onClick={handleClose}>
@@ -76,7 +76,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
               disabled={loading}
               loading={loading}
             >
-              ساخت گروه
+              تعریف گروه
             </Button>
           </div>
         }

@@ -154,7 +154,7 @@ export default function PriceModal({
         onCancel={handleClose}
         title={
           mode === "create" ? (
-            <>ساخت قیمت برای کالا و خدمات</>
+            <>تعریف قیمت برای کالا و خدمات</>
           ) : (
             <>{`ویرایش قیمت "${data?.connectorName}"`}</>
           )

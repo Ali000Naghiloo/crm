@@ -199,7 +199,7 @@ export default function MethodModal({
           onCancel={handleClose}
           title={
             mode === "create" ? (
-              <>ساخت روش قیمت گذاری</>
+              <>تعریف روش قیمت گذاری</>
             ) : (
               <>ویرایش روش : {data?.pricingMethodTitle}</>
             )

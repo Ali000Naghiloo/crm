@@ -107,7 +107,7 @@ export default function Roles() {
   //           size="middle"
   //           type="primary"
   //         >
-  //           مشاهده
+  //           اطلاعات تکمیلی
   //         </Button>
   //         <Popconfirm
   //           cancelText="لغو"
@@ -210,7 +210,7 @@ export default function Roles() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت نقش جدید
+            تعریف نقش جدید
           </Button>
         </div>
 

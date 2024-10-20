@@ -109,7 +109,7 @@ export default function Factors({ pageType }) {
       render: (data) => (
         <div className="flex gap-2">
           <Button onClick={() => {}} size="middle" type="primary">
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Button
             onClick={() => {

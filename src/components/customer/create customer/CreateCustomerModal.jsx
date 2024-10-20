@@ -123,7 +123,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       .post("/Customer/CreateCustomer", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("شخص با موفقیت ساخته شد");
+          toast.success("شخص با موفقیت تعریف شد");
           handleClose();
         }
       })
@@ -405,7 +405,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   };
 
   // handle represent
-  const handleGetCustomersList = async () => {
+  const handleGetRepresenterList = async () => {
     let datas = [];
     setRepresentList(null);
 
@@ -423,7 +423,16 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     }
 
     if (validation.values.representerType === 1) {
-      return;
+      await httpService
+        .post("/CustomerGroup/CustomerGroups")
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            res.data?.customerGroupViewModelList?.map((cu) => {
+              datas.push({ label: cu.title, value: cu.id });
+            });
+          }
+        })
+        .catch(() => {});
     }
 
     setRepresentList(datas);
@@ -487,7 +496,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   };
 
   useEffect(() => {
-    handleGetCustomersList();
+    handleGetRepresenterList();
   }, [validation.values.representerType]);
 
   useEffect(() => {
@@ -499,7 +508,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       <Modal
         open={open}
         onCancel={handleClose}
-        title="ساخت شخص جدید"
+        title="تعریف شخص جدید"
         className="!w-fit max-w-[1000px]"
         footer={
           <div className="flex justify-end gap-3 pt-5">

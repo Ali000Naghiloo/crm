@@ -1,13 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import useHttp from "../../../../httpConfig/useHttp";
-import { Skeleton } from "antd";
+import { Button, Skeleton } from "antd";
 import Task from "./Task";
+import { Suspense } from "react";
 
 export default function Workflows({ boardId, workflows }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(true);
   const [workflowList, setWorkflowList] = useState(null);
   const [taskList, setTaskList] = useState(null);
+  const [showModal, setShowModal] = useState({
+    open: false,
+    id: null,
+    workflowId: null,
+  });
+  const [showTaskModal, setShowTaskModal] = useState({
+    open: false,
+    id: null,
+    workflowId: null,
+  });
+
+  // imports
+  const TaskModal = lazy(() => import("../../../../modals/TaskModal"));
 
   const handleGetTasks = async () => {
     setLoading(true);
@@ -29,14 +43,28 @@ export default function Workflows({ boardId, workflows }) {
     setLoading(false);
   };
 
+  const onTaskClick = async (id, workFlowId) => {
+    setShowModal({ open: true, id: id, workflowId: workFlowId });
+  };
+
   // wf parts
   const workFlowHeader = (wf) => (
-    <div
-      className={`w-full min-h-[33px] flex items-center p-2 rounded-md text-white text-lg text-bold sticky top-0 ${
-        wf.color ? `bg-[${wf?.color}]` : "bg-accent"
-      }`}
-    >
-      {wf?.name}
+    <div className="w-full sticky top-0 flex flex-col gap-2">
+      <div
+        className={`w-full min-h-[33px] flex items-center p-2 rounded-md text-white text-lg text-bold ${
+          wf.color ? `bg-[${wf?.color}]` : "bg-accent"
+        }`}
+      >
+        {wf?.name}
+      </div>
+      <Button
+        onClick={() =>
+          setShowModal({ open: true, workflowId: wf?.id, id: null })
+        }
+        className="w-full"
+      >
+        ایجاد وظیفه جدید +
+      </Button>
     </div>
   );
   const workflowBody = (wf) => {
@@ -48,7 +76,13 @@ export default function Workflows({ boardId, workflows }) {
     return (
       <>
         {filteredTasks &&
-          filteredTasks.map((task, index) => <Task key={index} data={task} />)}
+          filteredTasks.map((task, index) => (
+            <Task
+              key={index}
+              data={task}
+              onClick={() => onTaskClick(task.id, task?.workFlow)}
+            />
+          ))}
       </>
     );
   };
@@ -62,14 +96,14 @@ export default function Workflows({ boardId, workflows }) {
   }, [boardId]);
 
   return (
-    <>
-      <div className="w-full h-full overflow-x-auto flex gap-4 pr-5">
+    <Suspense fallback={<></>}>
+      <div className="w-ful h-full overflow-x-auto flex gap-4 p-5">
         {workflowList && taskList ? (
           workflowList?.length !== 0 ? (
             workflowList.map((wf) => (
               <div
                 key={wf.id}
-                className="w-[300px] overflow-y-auto flex flex-col gap-2 relative"
+                className="w-[300px] max-h-[100%] overflow-y-auto flex flex-col gap-2 relative"
               >
                 {workFlowHeader(wf)}
                 {taskList && workflowBody(wf)}
@@ -77,7 +111,12 @@ export default function Workflows({ boardId, workflows }) {
             ))
           ) : null
         ) : (
-          <Skeleton.Node style={{ width: "270px", height: "33px" }} />
+          <>
+            <Skeleton.Node style={{ width: "270px", height: "33px" }} />
+            <Skeleton.Node style={{ width: "270px", height: "33px" }} />
+            <Skeleton.Node style={{ width: "270px", height: "33px" }} />
+            <Skeleton.Node style={{ width: "270px", height: "33px" }} />
+          </>
         )}
 
         {/* add new workflow */}
@@ -89,6 +128,15 @@ export default function Workflows({ boardId, workflows }) {
           </div>
         </div>
       </div>
-    </>
+
+      <TaskModal
+        open={showModal.open}
+        setOpen={(e) => setShowModal({ open: e })}
+        workflowId={showModal.workflowId}
+        id={showModal.id}
+        boardId={boardId}
+        getNewList={handleGetTasks}
+      />
+    </Suspense>
   );
 }

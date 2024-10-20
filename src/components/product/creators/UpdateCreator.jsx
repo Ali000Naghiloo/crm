@@ -51,7 +51,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
       .post("/Manufacturer/EditManufacturer", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت ساخته شد");
+          toast.success("با موفقیت تعریف شد");
           handleClose();
         }
       })

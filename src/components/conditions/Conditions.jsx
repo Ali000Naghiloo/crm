@@ -129,7 +129,7 @@ export default function Conditions() {
             size="middle"
             type="primary"
           >
-            مشاهده
+            اطلاعات تکمیلی
           </Button>
           <Popconfirm
             cancelText="لغو"
@@ -233,7 +233,7 @@ export default function Conditions() {
             size="large"
             onClick={() => setCreateModal({ open: true })}
           >
-            ساخت اضافه کسری جدید
+            تعریف اضافه کسری جدید
           </Button>
         </div>
 

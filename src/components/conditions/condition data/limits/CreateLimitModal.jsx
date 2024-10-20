@@ -7,7 +7,7 @@ export default function CreateLimitModal({ open, setOpen, conditionId }) {
   };
 
   return (
-    <Modal open={open} onCancel={handleClose}>
+    <Modal open={open} onCancel={handleClose} className="w-full min-w-[900px]">
       <CreateLimit limitId={null} conditionId={conditionId} />
     </Modal>
   );
