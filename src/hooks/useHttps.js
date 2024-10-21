@@ -36,7 +36,11 @@ const useHttp = () => {
         toast.error("شما از برنامه خارج شده اید");
       }
       if (response?.status === 400) {
-        toast.error("مشکلی در اطلاعات ارسالی وجود دارد");
+        if (response?.data?.msg) {
+          toast.error(response.data.msg);
+        } else {
+          toast.error("مشکلی در اطلاعات ارسالی وجود دارد");
+        }
       } else if (response?.status === 403) {
         toast.error("شما به این بخش دسترسی ندارید");
       } else if (response?.status === 404) {

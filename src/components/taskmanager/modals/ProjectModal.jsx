@@ -68,8 +68,8 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     await httpService
       .post("/ProjectController/CreateProject", formData)
       .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          toast.success("");
+        if (res.status >= 200 && res.status < 300 && res.data?.code == 1) {
+          toast.success("پروژه با موفقیت ثبت شد");
           getNewList();
           handleClose();
         }
@@ -102,8 +102,8 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     await httpService
       .post("/ProjectController/EditProject", formData)
       .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          toast.success("");
+        if (res.status >= 200 && res.status < 300 && res.data?.code == 1) {
+          toast.success("پروژه با موفقیت بروزرسانی شد");
           getNewList();
           handleClose();
         }
@@ -115,6 +115,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
 
   const handleClose = () => {
     setOpen(false);
+    validation.resetForm();
   };
 
   const handleGetAllUsers = async () => {
@@ -170,6 +171,16 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
     if (data) {
       validation.setFieldValue("name", data?.name);
       validation.setFieldValue("dueDateTime", data?.dueDateTime);
+      validation.setFieldValue(
+        "projectAssignedUsersViewModel",
+        data?.projectAssignedUsersViewModel &&
+          data?.projectAssignedUsersViewModel?.length !== 0
+          ? data?.projectAssignedUsersViewModel?.map((i) => {
+              return i?.userId;
+            })
+          : []
+      );
+      validation.setFieldValue("projectPriority", data?.projectPriority);
       validation.setFieldValue("description", data?.description);
     }
   }, [data]);
@@ -280,10 +291,9 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
             <Input
               type="number"
               className="w-full"
+              name="projectPriority"
               value={validation.values.projectPriority}
-              onChange={(e) => {
-                validation.setFieldValue("projectPriority", e);
-              }}
+              onChange={validation.handleChange}
               placeholder={"اولویت را وارد کنید"}
             />
             {validation.errors.projectPriority &&

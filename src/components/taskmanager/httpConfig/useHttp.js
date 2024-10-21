@@ -5,7 +5,7 @@ const grantil = import.meta.env.VITE_GRANTILL;
 
 export const baseURL =
   grantil == "true"
-    ? "http://192.168.3.12:9002/api"
+    ? "http://192.168.3.12:9001/api"
     : "https://taskmanagerapi.fanwebautomation.ir/api/";
 export const imageUrl =
   grantil == "true"

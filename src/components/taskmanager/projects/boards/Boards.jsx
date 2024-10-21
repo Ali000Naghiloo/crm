@@ -3,12 +3,14 @@ import useHttp from "../../httpConfig/useHttp";
 import { useDispatch } from "react-redux";
 import { setPageRoutes } from "../../../../store/reducers/pageRoutes";
 import PageRoutes from "../../../../common/PageRoutes";
-import { Avatar, Button, Input, Progress, Skeleton } from "antd";
+import { Avatar, Button, Input, Popconfirm, Progress, Skeleton } from "antd";
 import { HiRefresh } from "react-icons/hi";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { IoMdSettings } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 const loadings = ["", "", "", "", "", "", "", ""];
 
 const Projects = () => {
@@ -35,6 +37,25 @@ const Projects = () => {
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
           setBoards(res.data?.data);
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    const formData = {
+      boardid: id,
+    };
+
+    await httpService
+      .get("/BoardController/DeleteBoard", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          toast.success("با موفقیت حذف شد");
+          handleGetList();
         }
       })
       .catch(() => {});
@@ -111,13 +132,30 @@ const Projects = () => {
                     className="w-[220px] min-h-[220px] relative shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%]"
                   >
                     {/* options */}
-                    <div className="absolute left-[15px] top-[15px]">
+                    <div className="flex gap-2 absolute left-[10px] top-[10px]">
+                      <Popconfirm
+                        title="آیا از حذف کردن این برد اطمینان دارید؟"
+                        okText="بله"
+                        cancelText="خیر"
+                        onConfirm={() => handleDelete(br?.id)}
+                      >
+                        <Button
+                          className="p-1"
+                          type="primary"
+                          danger
+                          size="small"
+                        >
+                          <MdDelete className="w-full h-full" size={"2em"} />
+                        </Button>
+                      </Popconfirm>
+
                       <Button
                         className="p-1"
                         type="primary"
                         onClick={() =>
                           setShowModal({ open: true, boradId: br?.id })
                         }
+                        size="small"
                       >
                         <IoMdSettings className="w-full h-full" size={"2em"} />
                       </Button>

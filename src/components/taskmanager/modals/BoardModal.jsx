@@ -73,8 +73,8 @@ export default function BoardModal({
     await httpService
       .post("/BoardController/CreateBoard", formData)
       .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          toast.success("");
+        if (res.status >= 200 && res.status < 300 && res.data?.code == 1) {
+          toast.success("برد با موفقیت ثبت شد");
           getNewList();
           handleClose();
         }
@@ -107,8 +107,8 @@ export default function BoardModal({
     await httpService
       .post("/BoardController/EditBoard", formData)
       .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          toast.success("");
+        if (res.status >= 200 && res.status < 300 && res.data?.code == 1) {
+          toast.success("برد با موفقیت بروزرسانی شد");
           getNewList();
           handleClose();
         }
@@ -120,13 +120,17 @@ export default function BoardModal({
 
   const handleClose = () => {
     setOpen(false);
+    validation.resetForm();
   };
 
   const handleGetAllUsers = async () => {
     let datas = [];
+    const formData = {
+      projectId: projectId,
+    };
 
     await httpService
-      .get("/Account/GetAllUsers")
+      .get("/ProjectController/ProjectUsers", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
           res.data?.data?.map((u) =>
@@ -144,6 +148,24 @@ export default function BoardModal({
 
     await httpService
       .get("/WorkFlowController/DefaultWorkFlows")
+      .then((res) => {
+        if (res.status == 200 && res.data?.code) {
+          res.data?.data?.map((u) =>
+            datas.push({
+              label: (
+                <div className={`w-full !bg-[${u?.color}] text-lg`}>
+                  {u.name}
+                </div>
+              ),
+              value: u.id,
+            })
+          );
+        }
+      })
+      .catch(() => {});
+
+    await httpService
+      .get("/WorkFlowController/WorkFlows")
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
           res.data?.data?.map((u) =>
@@ -187,6 +209,8 @@ export default function BoardModal({
     } else {
       setTitle("تعریف برد جدید");
     }
+
+    handleGetAllUsers();
   }, [open]);
 
   useEffect(() => {
@@ -203,7 +227,12 @@ export default function BoardModal({
       validation.setFieldValue("name", data?.name);
       validation.setFieldValue(
         "boardWorkFlowsCreateViewModels",
-        data?.boardWorkFlowsCreateViewModels
+        data?.boardWorkFlowsViewModel &&
+          data?.boardWorkFlowsViewModel?.length !== 0
+          ? data?.boardWorkFlowsViewModel?.map((i) => {
+              return { label: i?.name, value: i?.id };
+            })
+          : []
       );
       validation.setFieldValue("boardUsersId", data?.boardUsersId);
       validation.setFieldValue("description", data?.description);
@@ -276,16 +305,16 @@ export default function BoardModal({
               mode="multiple"
               placeholder="کاربران برد را وارد کنید"
               className="w-full"
-              name="projectAssignedUsersViewModel"
-              value={validation.values.projectAssignedUsersViewModel}
+              name="boardUsersId"
+              value={validation.values.boardUsersId}
               onChange={(e) => {
-                validation.setFieldValue("projectAssignedUsersViewModel", e);
+                validation.setFieldValue("boardUsersId", e);
               }}
             />
-            {validation.errors.projectAssignedUsersViewModel &&
-              validation.touched.projectAssignedUsersViewModel && (
+            {validation.errors.boardUsersId &&
+              validation.touched.boardUsersId && (
                 <span className="text-error">
-                  {validation.errors.projectAssignedUsersViewModel}
+                  {validation.errors.boardUsersId}
                 </span>
               )}
           </div>

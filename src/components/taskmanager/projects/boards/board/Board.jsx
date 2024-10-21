@@ -1,5 +1,5 @@
 import { Button, Dropdown, Tabs } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { FaAngleLeft, FaTasks } from "react-icons/fa";
 import { IoMdChatboxes, IoMdMore, IoMdSettings } from "react-icons/io";
 import { PiColumnsPlusLeftFill, PiPushPinFill } from "react-icons/pi";
@@ -17,11 +17,16 @@ export default function Board() {
   const [selectedTab, setSelectedTab] = useState();
   const [boardData, setBoardData] = useState(null);
   const boardId = serachParams.get("boardId");
+  const [showModal, setShowModal] = useState({
+    open: false,
+  });
 
   const boardOptions = [
     { key: 1, label: "تنظیمات", icon: <IoMdSettings /> },
     { key: 2, label: "پین کردن پروژ", icon: <PiPushPinFill /> },
   ];
+
+  const BoardModal = lazy(() => import("../../../modals/BoardModal"));
 
   const handleGetBoardData = async () => {
     setLoading(true);
@@ -98,10 +103,15 @@ export default function Board() {
   }, [boardId]);
 
   return (
-    <>
+    <Suspense fallback={<></>}>
       <div className="min-h-pagesHeight max-h-pagesHeight w-full flex flex-col gap-0 overflow-y-auto">
         {/* board data */}
-        <div className="w-full h-[90px] flex justify-between p-5 border-gray-300 border-b-2">
+        <div className="w-full h-[90px] flex justify-between p-5 border-gray-300 border-b-2 relative">
+          <div
+            onClick={() => setShowModal({ open: true })}
+            className="w-full h-full z-0 absolute left-0 top-0 cursor-pointer"
+          ></div>
+
           <div className="flex gap-2">
             <div
               className={`flex justify-center items-center w-[50px] h-[50px] text-white rounded-full ${
@@ -149,6 +159,16 @@ export default function Board() {
           <Tabs items={boardTabs} className="w-full p-0 pt-5 h-full" />
         </div>
       </div>
-    </>
+
+      <BoardModal
+        getNewList={handleGetBoardData}
+        open={showModal.open}
+        setOpen={(e) => {
+          setShowModal({ open: e });
+        }}
+        id={boardId}
+        projectId={boardData?.peojectId}
+      />
+    </Suspense>
   );
 }

@@ -170,9 +170,9 @@ export default function Factors({ pageType }) {
   };
 
   const renderPageTitle = () => {
-    // if (pageType === 0) {
-    //   return "درخواست اولیه";
-    // }
+    if (pageType === 0) {
+      return "درخواست کالا";
+    }
     if (pageType === 2) {
       return "فهرست پیش فاکتور";
     }
