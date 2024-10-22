@@ -134,7 +134,7 @@ export default function BoardModal({
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
           res.data?.data?.map((u) =>
-            datas.push({ label: u.fullName, value: u.id })
+            datas.push({ label: u.fullName, value: u.userId })
           );
         }
       })
@@ -230,7 +230,7 @@ export default function BoardModal({
         data?.boardWorkFlowsViewModel &&
           data?.boardWorkFlowsViewModel?.length !== 0
           ? data?.boardWorkFlowsViewModel?.map((i) => {
-              return { label: i?.name, value: i?.id };
+              return i?.id;
             })
           : []
       );

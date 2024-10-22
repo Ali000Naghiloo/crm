@@ -41,95 +41,72 @@ export default function AllRoutes() {
 
   if (userRole === "user") {
     return (
-      <div className="w-full h-full flex flex-col">
-        <Header />
-
-        <div className="w-full flex">
-          <div className="min-w-sideBarWidth">
-            <SideMenu />
-          </div>
-
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            {/* customers */}
-            <Route path="/customers" element={<CustomersPage />} />
-            <Route path="/customers/groups" element={<CustomerGroups />} />
-            <Route path="/customers/roles" element={<CustomerRoles />} />
-            {/* products */}
-            <Route path="/products" element={<ProductsPage />} />
-            <Route
-              path="/products/categories"
-              element={<ProductCategories />}
-            />
-            <Route path="/products/creators" element={<ProductCreators />} />
-            {/* prices */}
-            <Route path="/prices" element={<PricesPage />} />
-            <Route path="/prices/groups" element={<PriceGroups />} />
-            {/* commissions */}
-            <Route path="/commissions" element={<CommissionsPage />} />
-            {/* requests */}
-            <Route path="/requests/request" element={<InitialRequestPage />} />
-            <Route path="/requests/initial" element={<InitialRequestPage />} />
-            {/* factors */}
-            <Route path="/factors/preFactors" element={<PreFactorsPage />} />
-            <Route path="/factors/sell-factors" element={<FactorsPage />} />
-            <Route
-              path="/factors/sell-rejected"
-              element={<RejectedFactorsPage />}
-            />
-            <Route path="/buy-factors" element={<FactorsPage />} />
-            <Route
-              path="/factors/buy-rejected"
-              element={<RejectedFactorsPage />}
-            />
-            <Route path="/factors/create" element={<CreateFactorPage />} />
-            <Route path="/factors/edit" element={<CreateFactorPage />} />
-            {/* conditions */}
-            <Route path="/conditions" element={<ConditionsPage />} />
-            {/* reports */}
-            <Route path="/reports/factors" element={<ReportFactorsPage />} />
-            {/* requests */}
-            {/* warehouses */}
-            <Route path="/warehouses" element={<WarehousesPage />} />
-            {/* taskmanager */}
-            <Route path="/taskmanager/chat" element={<ChatPage />} />
-            <Route path="/taskmanager/projects" element={<ProjectsPage />} />
-            <Route
-              path="/taskmanager/projects/boards"
-              element={<BoardsPage />}
-            />
-            <Route
-              path="/taskmanager/projects/boards/board"
-              element={<BoardPage />}
-            />
-            <Route path="/taskmanager/my-tasks" element={<MyTasksPage />} />
-            <Route
-              path="/taskmanager/create-note"
-              element={<CreateNotePage />}
-            />
-          </Routes>
-        </div>
+      <div className="w-full flex">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          {/* customers */}
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/customers/groups" element={<CustomerGroups />} />
+          <Route path="/customers/roles" element={<CustomerRoles />} />
+          {/* products */}
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/categories" element={<ProductCategories />} />
+          <Route path="/products/creators" element={<ProductCreators />} />
+          {/* prices */}
+          <Route path="/prices" element={<PricesPage />} />
+          <Route path="/prices/groups" element={<PriceGroups />} />
+          {/* commissions */}
+          <Route path="/commissions" element={<CommissionsPage />} />
+          {/* requests */}
+          <Route path="/requests/request" element={<InitialRequestPage />} />
+          <Route path="/requests/initial" element={<InitialRequestPage />} />
+          {/* factors */}
+          <Route path="/factors/preFactors" element={<PreFactorsPage />} />
+          <Route path="/factors/sell-factors" element={<FactorsPage />} />
+          <Route
+            path="/factors/sell-rejected"
+            element={<RejectedFactorsPage />}
+          />
+          <Route path="/buy-factors" element={<FactorsPage />} />
+          <Route
+            path="/factors/buy-rejected"
+            element={<RejectedFactorsPage />}
+          />
+          <Route path="/factors/create" element={<CreateFactorPage />} />
+          <Route path="/factors/edit" element={<CreateFactorPage />} />
+          {/* conditions */}
+          <Route path="/conditions" element={<ConditionsPage />} />
+          {/* reports */}
+          <Route path="/reports/factors" element={<ReportFactorsPage />} />
+          {/* requests */}
+          {/* warehouses */}
+          <Route path="/warehouses" element={<WarehousesPage />} />
+          {/* taskmanager */}
+          <Route path="/taskmanager/chat" element={<ChatPage />} />
+          <Route path="/taskmanager/projects" element={<ProjectsPage />} />
+          <Route path="/taskmanager/projects/boards" element={<BoardsPage />} />
+          <Route
+            path="/taskmanager/projects/boards/board"
+            element={<BoardPage />}
+          />
+          <Route path="/taskmanager/my-tasks" element={<MyTasksPage />} />
+          <Route path="/taskmanager/create-note" element={<CreateNotePage />} />
+        </Routes>
       </div>
     );
   } else if (userRole === "admin") {
     return (
-      <div className="w-full h-full flex flex-col">
-        <Header />
-
-        <div className="w-full flex">
-          <AdminSideMenu />
-
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<AdminDashboard />} />
-            <Route path="/dashboard" element={<AdminDashboard />} />
-            <Route path="/employees" element={<EmployeesPage />} />
-            {/* factor settings */}
-            <Route path="/factor-settings" element={<FactorSettingsPage />} />
-          </Routes>
-        </div>
+      <div className="w-full flex">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/employees" element={<EmployeesPage />} />
+          {/* factor settings */}
+          <Route path="/factor-settings" element={<FactorSettingsPage />} />
+        </Routes>
       </div>
     );
   } else {

@@ -2,19 +2,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData, setUserRole } from "../store/reducers/userDataReducer";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Button, Dropdown } from "antd";
+import { Button } from "antd";
 import { RiMenuFoldLine, RiMenuUnfoldLine } from "react-icons/ri";
 import { setSideMenuIsOpen } from "../store/reducers/sideMenu";
-import logo from "../assets/images/logo.svg";
 import { ThemeButton } from "../assets/icons/ThemButton";
 import useHttp, { imageUrl } from "../hooks/useHttps";
 import { toast } from "react-toastify";
 import LogoutModal from "./LogoutModal";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { setAllEnum } from "../store/reducers/enumReducer";
-import { FaUserCircle } from "react-icons/fa";
 
-export default function Header() {
+export default function AppHeader() {
   const { httpService } = useHttp();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,27 +20,7 @@ export default function Header() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const token = localStorage.getItem("token");
   const sideMenu = useSelector((state) => state.sideMenu.isOpen);
-  const userData = useSelector((state) => state.userData.userData);
   const userRole = useSelector((state) => state.userData.userRole);
-
-  const profile = [
-    {
-      key: "1",
-      label: <div className="">{userData && userData?.fullName}</div>,
-      disabled: true,
-    },
-    {
-      key: "2",
-      label: <div>اطلاعات تکمیلی اطلاعات کاربری</div>,
-      // disabled: true,
-    },
-    {
-      key: "3",
-      danger: true,
-      label: <div className="w-full">خروج از حساب کابری</div>,
-      onClick: () => setShowLogoutModal(!showLogoutModal),
-    },
-  ];
 
   const handleGetUserData = () => {
     httpService
@@ -99,8 +77,8 @@ export default function Header() {
   if (window.location.pathname !== "/login" && token && userRole) {
     return (
       <>
-        <div className="sticky flex items-center top-0 w-full min-h-header max-h-header bg-backgroundColor text-textColor rounded-ee-lg shadow-md z-10">
-          <div className="flex justify-between items-center w-full max-h-[100%] px-2 md:px-5">
+        <div className="sticky flex items-center top-0 w-full h-full min-h-header max-h-header bg-backgroundColor text-textColor rounded-ee-lg shadow-md z-10">
+          <div className="flex justify-between items-center w-full h-full max-h-[100%] px-2 md:px-5">
             <div className="flex gap-3 items-center">
               <Button
                 onClick={handleToggleSideMenu}
@@ -113,51 +91,15 @@ export default function Header() {
                   <RiMenuFoldLine size={"2em"} />
                 )}
               </Button>
-
-              <Dropdown
-                menu={{ items: profile }}
-                placement="bottom"
-                trigger={[size && size?.width < 1000 ? "click" : "hover"]}
-              >
-                <div className="flex items-center gap-2">
-                  {userData?.imagePath && userData?.imagePath === imageUrl ? (
-                    <Avatar
-                      icon={
-                        <FaUserCircle
-                          style={{ width: "100%", height: "100%" }}
-                        />
-                      }
-                      className="w-10 h-10 rounded-full"
-                    />
-                  ) : (
-                    <img
-                      src={userData?.imagePath}
-                      alt="پروفایل"
-                      className="w-10 h-10 rounded-full"
-                    />
-                  )}
-
-                  <span className="text-nowrap">
-                    {userData &&
-                      size &&
-                      size.width > 1000 &&
-                      userData?.fullName}
-                  </span>
-                </div>
-              </Dropdown>
             </div>
 
             {/* current tab name */}
-            <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col items-center gap-2">
+            <div className="h-full flex flex-col items-center">
               <h1 className="font-bold text-xl">CRM گرانتیل</h1>
-              <span>داشبورد</span>
             </div>
 
-            {/* logo  */}
             <div className="flex justify-end items-center gap-2 h-full">
               <ThemeButton />
-
-              <img className="w-[90px] h-full" src={logo} alt="logo" />
             </div>
           </div>
         </div>

@@ -145,7 +145,7 @@ const UserChat = ({ selectedChat }) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-between h-full bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="w-full flex flex-col justify-between h-full bg-gradient-to-br from-blue-50 to-purple-50 border rounded-md">
       {/* selected chat datas */}
       <div className="w-full flex">
         <ChatHeader />
