@@ -302,7 +302,7 @@ export default function SideMenu() {
           )}
 
           <span className="text-nowrap text-sm">
-            {userData && size && size.width > 1000 && userData?.fullName}
+            {userData && openMenu && userData?.fullName}
           </span>
         </div>
       </Dropdown>
@@ -357,42 +357,45 @@ export default function SideMenu() {
     console.log(size.width);
   }, [size]);
 
-  return (
-    <>
-      {/* stick to top equal to header height */}
-      <div
-        className={`flex flex-col gap-4 text-base top-[80px] overflow-y-auto mt-3`}
-      >
-        <UserData />
+  if (size && size.width > 1000) {
+    return (
+      <>
+        {/* stick to top equal to header height */}
+        <div
+          className={`flex flex-col gap-4 text-base top-[80px] overflow-y-auto mt-3`}
+        >
+          <UserData />
 
-        <MenuItems isOpen={openMenu} />
+          <MenuItems isOpen={openMenu} />
 
-        {/* {openMenu && <NotifPermissionStatus />} */}
-      </div>
-    </>
-  );
-  // return (
-  //   <>
-  //     <Drawer
-  //       closeIcon={
-  //         <CgClose
-  //           className="text-textColor text-base mr-auto"
-  //           size={"2em"}
-  //         />
-  //       }
-  //       title={
-  //         <div className="w-full text-2xl flex items-center ltr">
-  //           <h1>CRM</h1>
-  //         </div>
-  //       }
-  //       open={!openMenu}
-  //       onClose={() => dispatch(setSideMenuIsOpen(!openMenu))}
-  //       className="!bg-backgroundColor !text-textColor text-base"
-  //     >
-  //       <MenuItems isOpen={!openMenu} />
+          {/* {openMenu && <NotifPermissionStatus />} */}
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Drawer
+          closeIcon={
+            <CgClose
+              className="text-textColor text-base mr-auto"
+              size={"2em"}
+            />
+          }
+          title={
+            <div className="w-full text-2xl flex items-center ltr">
+              <h1>CRM</h1>
+            </div>
+          }
+          open={!openMenu}
+          onClose={() => dispatch(setSideMenuIsOpen(!openMenu))}
+          className="!bg-backgroundColor !text-textColor text-base"
+        >
+          <MenuItems isOpen={!openMenu} />
 
-  //       <NotifPermissionStatus />
-  //     </Drawer>
-  //   </>
-  // );
+          <NotifPermissionStatus />
+        </Drawer>
+      </>
+    );
+  }
 }
