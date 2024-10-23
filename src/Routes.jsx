@@ -5,11 +5,9 @@ import LoginPage from "./pages/Login";
 import Loading from "./common/Loading";
 import Header from "./common/Header";
 // admin
-import AdminSideMenu from "./admin components/AdminSideMenu";
 import AdminDashboard from "./admin components/dashboard/Dashboard";
 import FactorSettingsPage from "./pages/admin/factor setting/FactorSettingsPage";
 // user
-import SideMenu from "./components/SideMenu";
 import DashboardPage from "./pages/user/DashboardPage";
 import CustomersPage from "./pages/user/customers/CustomersPage";
 import EmployeesPage from "./pages/admin/EmployeesPage";

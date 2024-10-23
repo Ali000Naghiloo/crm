@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PageRoutes from "../../common/PageRoutes";
 import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table, Tag } from "antd";
+import { Button, Input, Popconfirm, Table, Tag } from "antd";
 import CustomerModal from "./customer data/CustomerModal";
 import CreateCustomerModal from "./create customer/CreateCustomerModal";
 import { toast } from "react-toastify";
@@ -24,6 +24,10 @@ export default function Customers() {
     open: false,
     id: null,
   });
+  const [filters, setFilters] = useState({
+    keyword: "",
+    loading: false,
+  });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const columns = [
@@ -42,12 +46,23 @@ export default function Customers() {
     {
       title: "نوع شخص",
       dataIndex: "customerType",
+      showSorterTooltip: {
+        target: "full-header",
+      },
       render: (value) => (
         <div>
           {allEnum?.CustomerType[value] ? allEnum?.CustomerType[value] : "-"}
         </div>
       ),
+      filters: allEnum
+        ? allEnum?.CustomerType?.map((i, index) => {
+            return { text: i, value: index };
+          })
+        : [],
       sorter: (a, b) => a.customerType - b.customerType,
+      onFilter: (value, record) => {
+        console.log(value, record);
+      },
       key: "customerType",
     },
     {
@@ -141,7 +156,7 @@ export default function Customers() {
       })
       .catch(() => {});
 
-    handleGetCustomers();
+    handleGetList();
     setLoading(false);
   };
 
@@ -150,7 +165,7 @@ export default function Customers() {
     setPerPage(pagination.pageSize);
   };
 
-  const handleGetCustomers = async () => {
+  const handleGetList = async () => {
     setLoading(true);
 
     await httpService
@@ -169,11 +184,44 @@ export default function Customers() {
     setLoading(false);
   };
 
+  const handleGetListByKeyword = async () => {
+    setLoading(true);
+    const formData = {
+      keyword: filters.keyword,
+    };
+
+    await httpService
+      .get("/Customer/SearchCustomers", { params: formData })
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          let datas = [];
+          res.data.customerList.map((data, index) => {
+            datas.push({ ...data, index: index + 1, key: index });
+          });
+          setPageList(datas);
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "فهرست اشخاص" }]));
-
-    handleGetCustomers();
   }, []);
+
+  useEffect(() => {
+    if (filters.keyword.length !== 0) {
+      const timeoutId = setTimeout(() => {
+        handleGetListByKeyword();
+      }, 1000);
+      setFilters({ ...filters, loading: false });
+      return () => clearTimeout(timeoutId);
+    } else {
+      handleGetList();
+      setFilters({ ...filters, loading: false });
+    }
+  }, [filters.keyword]);
 
   return (
     <>
@@ -183,7 +231,7 @@ export default function Customers() {
           <h1>اشخاص</h1>
 
           <div className="flex items-center justify-center pl-5">
-            <Button className="p-1" type="text" onClick={handleGetCustomers}>
+            <Button className="p-1" type="text" onClick={handleGetList}>
               <HiRefresh size={"2em"} />
             </Button>
           </div>
@@ -207,6 +255,22 @@ export default function Customers() {
           >
             تعریف شخص جدید
           </Button>
+        </div>
+
+        {/* filter bar */}
+        <div className="w-full mt-10">
+          <Input.Search
+            className="w-full"
+            size="large"
+            variant="filled"
+            placeholder="برای جستجو در مشخصات اشخاص شروع به نوشتن کنید..."
+            loading={filters.loading}
+            value={filters.keyword}
+            onChange={(e) =>
+              setFilters({ loading: true, keyword: e.target.value })
+            }
+            allowClear
+          />
         </div>
 
         {/* content */}
@@ -237,7 +301,7 @@ export default function Customers() {
           });
         }}
         id={customerDataModal.id}
-        getNewList={handleGetCustomers}
+        getNewList={handleGetList}
       />
 
       <CreateCustomerModal
@@ -248,7 +312,7 @@ export default function Customers() {
             open: e?.target?.value,
           });
         }}
-        getNewList={handleGetCustomers}
+        getNewList={handleGetList}
       />
     </>
   );

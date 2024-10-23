@@ -3,37 +3,37 @@ import { useDispatch, useSelector } from "react-redux";
 import PageRoutes from "../../../common/PageRoutes";
 import { setPageRoutes } from "../../../store/reducers/pageRoutes";
 import useHttp from "../../../hooks/useHttps";
-import { Button, Popconfirm, Table, Tag } from "antd";
+import { Button, Popconfirm, Skeleton, Table, Tag, Tree } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import CreateGroup from "./CreateGroup";
 import UpdateGroup from "./UpdateGroup";
+import { BsPerson } from "react-icons/bs";
 
-const compareChildrens = (roles) => {
-  const roleMap = {};
+const compareChildrens = (groups) => {
+  const groupMap = {};
 
-  // Create a map of roles by their ID
-  roles.forEach((role) => {
-    roleMap[role.customerRoleId] = { ...role, children: [] };
+  // Create a map of groups by their ID
+  groups.forEach((group) => {
+    groupMap[group.id] = { ...group, children: [] };
   });
 
-  // Iterate through the roles and assign children to their respective parents
-  roles.forEach((role) => {
-    if (role.parentCustomerRoleId !== null) {
-      roleMap[role.parentCustomerRoleId].children.push(
-        roleMap[role.customerRoleId]
-      );
+  // Iterate through the groups and assign children to their respective parents
+  groups.forEach((group) => {
+    if (group.parentGroupId !== null) {
+      groupMap[group.parentGroupId].children.push(groupMap[group.id]);
     }
   });
 
-  // Extract the top-level roles (those without a parent)
-  const organizedRoles = roles
-    .filter((role) => role.parentCustomerRoleId === null)
-    .map((role) => roleMap[role.customerRoleId]);
+  // Extract the top-level groups (those without a parent)
+  const organizedGroups = groups
+    .filter((group) => group.parentGroupId === null)
+    .map((group) => groupMap[group.id]);
 
-  return organizedRoles;
+  return organizedGroups;
 };
+const skeleton = [{}, {}, {}, {}, {}, {}, {}];
 
 export default function Groups() {
   const dispatch = useDispatch();
@@ -50,93 +50,106 @@ export default function Groups() {
     open: false,
     id: null,
   });
-  const allEnum = useSelector((state) => state.allEnum.allEnum);
 
-  const columns = [
-    {
-      title: "ردیف",
-      dataIndex: "index",
-      sorter: (a, b) => a.index - b.index,
-      key: "index",
-    },
-    {
-      title: "نام گروه",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "نوع گروه",
-      dataIndex: "customerGroupType",
-      render: (value) => <div>{allEnum?.CustomerGroupType[value]}</div>,
-      key: "customerGroupType",
-    },
-    {
-      title: "اعضای گروه",
-      dataIndex: "customerGroupCustomers",
-      width: "250px",
-      render: (value) => {
-        return (
-          <>
-            {value && value?.length !== 0 ? (
-              value?.length < 5 ? (
-                <div className="w-full flex justify-start gap-1 flex-wrap">
-                  {value?.map((cu, index) => {
-                    return (
-                      <Tag key={index} color="blue" className="m-0">
-                        {cu.customer}
-                      </Tag>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="w-full flex justify-start gap-1 flex-wrap">
-                  {value?.map((cu, index) => {
-                    if (index < 5) {
-                      return (
-                        <Tag key={index} color="blue" className="m-0">
-                          {cu.customer}
-                        </Tag>
-                      );
-                    }
-                  })}
-                  <Tag color="blue-inverse">... +</Tag>
-                </div>
-              )
-            ) : (
-              <div className="">-</div>
-            )}
-          </>
-        );
-      },
-      key: "customerGroupCustomers",
-    },
-    {
-      title: "عملیات",
-      render: (data) => (
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setDataModal({ data: data, open: true })}
-            size="middle"
-            type="primary"
-          >
-            اطلاعات تکمیلی
-          </Button>
-          <Popconfirm
-            cancelText="لغو"
-            okText="حذف"
-            title="آیا از حذف این شخص اطمینان دارید؟"
-            placement="topRight"
-            onConfirm={() => handleDelete(data?.id)}
-          >
-            <Button size="middle" type="primary" danger>
-              حذف
-            </Button>
-          </Popconfirm>
-        </div>
-      ),
-      key: "actions",
-    },
-  ];
+  // const allEnum = useSelector((state) => state.allEnum.allEnum);
+
+  // const columns = [
+  //   {
+  //     title: "ردیف",
+  //     dataIndex: "index",
+  //     sorter: (a, b) => a.index - b.index,
+  //     key: "index",
+  //   },
+  //   {
+  //     title: "نام گروه",
+  //     dataIndex: "title",
+  //     key: "title",
+  //   },
+  //   {
+  //     title: "نوع گروه",
+  //     dataIndex: "customerGroupType",
+  //     render: (value) => <div>{allEnum?.CustomerGroupType[value]}</div>,
+  //     key: "customerGroupType",
+  //   },
+  //   {
+  //     title: "اعضای گروه",
+  //     dataIndex: "customerGroupCustomers",
+  //     width: "250px",
+  //     render: (value) => {
+  //       return (
+  //         <>
+  //           {value && value?.length !== 0 ? (
+  //             value?.length < 5 ? (
+  //               <div className="w-full flex justify-start gap-1 flex-wrap">
+  //                 {value?.map((cu, index) => {
+  //                   return (
+  //                     <Tag key={index} color="blue" className="m-0">
+  //                       {cu.customer}
+  //                     </Tag>
+  //                   );
+  //                 })}
+  //               </div>
+  //             ) : (
+  //               <div className="w-full flex justify-start gap-1 flex-wrap">
+  //                 {value?.map((cu, index) => {
+  //                   if (index < 5) {
+  //                     return (
+  //                       <Tag key={index} color="blue" className="m-0">
+  //                         {cu.customer}
+  //                       </Tag>
+  //                     );
+  //                   }
+  //                 })}
+  //                 <Tag color="blue-inverse">... +</Tag>
+  //               </div>
+  //             )
+  //           ) : (
+  //             <div className="">-</div>
+  //           )}
+  //         </>
+  //       );
+  //     },
+  //     key: "customerGroupCustomers",
+  //   },
+  //   {
+  //     title: "عملیات",
+  //     render: (data) => (
+  //       <div className="flex gap-2">
+  //         <Button
+  //           onClick={() => setDataModal({ data: data, open: true })}
+  //           size="middle"
+  //           type="primary"
+  //         >
+  //           اطلاعات تکمیلی
+  //         </Button>
+  //         <Popconfirm
+  //           cancelText="لغو"
+  //           okText="حذف"
+  //           title="آیا از حذف این شخص اطمینان دارید؟"
+  //           placement="topRight"
+  //           onConfirm={() => handleDelete(data?.id)}
+  //         >
+  //           <Button size="middle" type="primary" danger>
+  //             حذف
+  //           </Button>
+  //         </Popconfirm>
+  //       </div>
+  //     ),
+  //     key: "actions",
+  //   },
+  // ];
+
+  // const handleTableChange = (pagination) => {
+  //   setCurrentPage(pagination.current);
+  //   setPerPage(pagination.pageSize);
+  // };
+
+  const onSelect = (selectedKeys, info) => {
+    setDataModal({
+      open: true,
+      data: info?.node,
+    });
+  };
 
   const handleDelete = async (id) => {
     setLoading(true);
@@ -155,11 +168,6 @@ export default function Groups() {
     setLoading(false);
   };
 
-  const handleTableChange = (pagination) => {
-    setCurrentPage(pagination.current);
-    setPerPage(pagination.pageSize);
-  };
-
   const handleGetList = async () => {
     setLoading(true);
 
@@ -171,10 +179,11 @@ export default function Groups() {
           res.data.customerGroupViewModelList?.map((group, index) => {
             formattedArray.push({
               ...group,
-              index: index + 1,
-              key: Math.random() * 1000,
+              key: group?.id,
+              icon: <BsPerson />,
             });
           });
+          console.log(formattedArray);
           setPageList(formattedArray);
         }
       })
@@ -226,8 +235,8 @@ export default function Groups() {
         </div>
 
         {/* content */}
-        <div className="w-full py-5 overflow-x-auto">
-          <Table
+        <div className="w-full">
+          {/* <Table
             loading={loading}
             columns={columns}
             dataSource={pageList}
@@ -248,7 +257,29 @@ export default function Groups() {
                 </div>
               ),
             }}
-          />
+          /> */}
+
+          {!loading ? (
+            <Tree
+              treeData={pageList}
+              fieldNames={{
+                title: "groupName",
+                value: "id",
+                children: "subGroups",
+              }}
+              showLine
+              className="text-2xl"
+              // switcherIcon={<GrDown />}
+              onSelect={onSelect}
+              defaultExpandAll
+            />
+          ) : (
+            <div className="w-full h-[500px] flex flex-col justify-start gap-3 items-center">
+              {skeleton.map((s, index) => (
+                <Skeleton.Input active block key={index}></Skeleton.Input>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

@@ -10,36 +10,8 @@ import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import CreateRole from "./CreateRole";
 import UpdateRole from "./UpdateRole";
-import { BsPerson } from "react-icons/bs";
-import { GrDown } from "react-icons/gr";
-
-const compareChildrens = (roles) => {
-  const roleMap = {};
-
-  // Create a map of roles by their ID
-  roles.forEach((role) => {
-    roleMap[role.customerRoleId] = { ...role, children: [] };
-  });
-
-  // Iterate through the roles and assign children to their respective parents
-  roles.forEach((role) => {
-    if (role.parentCustomerRoleId !== null) {
-      roleMap[role.parentCustomerRoleId].children.push(
-        roleMap[role.customerRoleId]
-      );
-    }
-  });
-
-  // Extract the top-level roles (those without a parent)
-  const organizedRoles = roles
-    .filter((role) => role.parentCustomerRoleId === null)
-    .map((role) => roleMap[role.customerRoleId]);
-
-  return organizedRoles;
-};
 
 export default function Roles() {
-  const skeleton = [{}, {}, {}, {}, {}, {}, {}];
   const dispatch = useDispatch();
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
@@ -57,79 +29,79 @@ export default function Roles() {
     open: false,
     id: null,
   });
-  //   const allEnum = useSelector((state) => state.allEnum.allEnum);
+  const allEnum = useSelector((state) => state.allEnum.allEnum);
 
-  // const columns = [
-  //   {
-  //     title: "ایدی",
-  //     dataIndex: "customerRoleId",
-  //     key: "customerRoleId",
-  //   },
-  //   {
-  //     title: "نام نقش",
-  //     dataIndex: "roleName",
-  //     key: "roleName",
-  //   },
-  //   {
-  //     title: "توضیحات",
-  //     dataIndex: "description",
-  //     render: (value) => <div>{formatHelper.cutString(value, 40)}</div>,
-  //     key: "description",
-  //   },
-  //   {
-  //     title: "نام سردسته",
-  //     dataIndex: "parentCustomerRoleId",
-  //     render: (value) => (
-  //       <>
-  //         {value ? (
-  //           <div className="">
-  //             {allItems
-  //               ? allItems.map((role) => {
-  //                   if (role.customerRoleId === value) {
-  //                     return `${role.roleName}`;
-  //                   }
-  //                 })
-  //               : null}
-  //           </div>
-  //         ) : (
-  //           <div className="">-</div>
-  //         )}
-  //       </>
-  //     ),
-  //     key: "parentName",
-  //   },
-  //   {
-  //     title: "عملیات",
-  //     render: (data) => (
-  //       <div className="flex gap-2">
-  //         <Button
-  //           onClick={() => setDataModal({ data: data, open: true })}
-  //           size="middle"
-  //           type="primary"
-  //         >
-  //           اطلاعات تکمیلی
-  //         </Button>
-  //         <Popconfirm
-  //           cancelText="لغو"
-  //           okText="حذف"
-  //           title="آیا از حذف این شخص اطمینان دارید؟"
-  //           placement="topRight"
-  //           onConfirm={() => handleDelete(data?.customerRoleId)}
-  //         >
-  //           <Button size="middle" type="primary" danger>
-  //             حذف
-  //           </Button>
-  //         </Popconfirm>
-  //       </div>
-  //     ),
-  //     key: "actions",
-  //   },
-  // ];
+  const columns = [
+    {
+      title: "ایدی",
+      dataIndex: "customerRoleId",
+      key: "customerRoleId",
+    },
+    {
+      title: "نام نقش",
+      dataIndex: "roleName",
+      key: "roleName",
+    },
+    {
+      title: "توضیحات",
+      dataIndex: "description",
+      render: (value) => <div>{formatHelper.cutString(value, 40)}</div>,
+      key: "description",
+    },
+    {
+      title: "نام سردسته",
+      dataIndex: "parentCustomerRoleId",
+      render: (value) => (
+        <>
+          {value ? (
+            <div className="">
+              {allItems
+                ? allItems.map((role) => {
+                    if (role.customerRoleId === value) {
+                      return `${role.roleName}`;
+                    }
+                  })
+                : null}
+            </div>
+          ) : (
+            <div className="">-</div>
+          )}
+        </>
+      ),
+      key: "parentName",
+    },
+    {
+      title: "عملیات",
+      render: (data) => (
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setDataModal({ data: data, open: true })}
+            size="middle"
+            type="primary"
+          >
+            اطلاعات تکمیلی
+          </Button>
+          <Popconfirm
+            cancelText="لغو"
+            okText="حذف"
+            title="آیا از حذف این نقش اطمینان دارید؟"
+            placement="topRight"
+            onConfirm={() => handleDelete(data?.customerRoleId)}
+          >
+            <Button size="middle" type="primary" danger>
+              حذف
+            </Button>
+          </Popconfirm>
+        </div>
+      ),
+      key: "actions",
+    },
+  ];
 
-  // const handleTableChange = (pagination) => {
-  //   setCurrentPage(pagination.current);
-  //   setPerPage(pagination.pageSize);
-  // };
+  const handleTableChange = (pagination) => {
+    setCurrentPage(pagination.current);
+    setPerPage(pagination.pageSize);
+  };
 
   const handleGetList = async () => {
     setLoading(true);
@@ -138,30 +110,20 @@ export default function Roles() {
       .get("/CustomerRole/GetAllCustomerRoles")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          const formattedArray = [];
-          setAllItems(res.data.customerRoleList);
+          const datas = [];
           res.data.customerRoleList?.map((role, index) => {
-            formattedArray.push({
+            datas.push({
               ...role,
+              index: index + 1,
               key: role?.customerRoleId,
-              icon: <BsPerson />,
             });
           });
-          let datas = compareChildrens(formattedArray);
           setPageList(datas);
         }
       })
       .catch(() => {});
 
     setLoading(false);
-  };
-
-  const onSelect = (selectedKeys, info) => {
-    // console.log("selected", selectedKeys, info);
-    setDataModal({
-      open: true,
-      data: info?.node,
-    });
   };
 
   useEffect(() => {
@@ -216,7 +178,7 @@ export default function Roles() {
 
         {/* content */}
         <div className="w-full py-5 overflow-x-auto">
-          {/* <Table
+          <Table
             bordered
             loading={loading}
             columns={columns}
@@ -230,29 +192,7 @@ export default function Roles() {
               pageSizeOptions: ["10", "20", "30", "50"],
             }}
             onChange={handleTableChange}
-          /> */}
-
-          {!loading ? (
-            <Tree
-              treeData={pageList}
-              fieldNames={{
-                title: "roleName",
-                value: "customerRoleId",
-                children: "children",
-              }}
-              showLine
-              className="text-2xl"
-              // switcherIcon={<GrDown />}
-              onSelect={onSelect}
-              defaultExpandAll
-            />
-          ) : (
-            <div className="w-full h-[500px] flex flex-col justify-start gap-3 items-center">
-              {skeleton.map((s, index) => (
-                <Skeleton.Input active block key={index}></Skeleton.Input>
-              ))}
-            </div>
-          )}
+          />
         </div>
       </div>
 

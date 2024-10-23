@@ -81,7 +81,7 @@ export default function CustomerModal({ open, setOpen, id, getNewList }) {
         >
           <Tabs
             // defaultActiveKey="phone"
-            className="pt-5"
+            className="py-5"
             centered
             items={customerTabs}
             indicator={{ size: (origin) => origin - 20 }}

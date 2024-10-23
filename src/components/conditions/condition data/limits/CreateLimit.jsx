@@ -257,7 +257,10 @@ export default function CreateLimit({ conditionId, limitId }) {
         <div className="w-full flex justify-center items-center px-8 pt-10">
           {!loading ? (
             <div className="w-full">
-              <Tabs items={conditionTabs} className="w-full" />
+              <Tabs
+                items={conditionTabs}
+                className="w-full flex flex-col gap-5"
+              />
 
               {/* submit */}
               <div className="w-full flex justify-center items-center py-8 mt-10">

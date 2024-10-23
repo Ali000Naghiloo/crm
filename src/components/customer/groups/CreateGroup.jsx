@@ -20,10 +20,14 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
 
   const validation = useFormik({
     initialValues: {
-      customerGroupType: null,
-      title: "",
+      groupName: "",
       description: "",
-      customerGroupCustomers: null,
+      parentGroupId: 0,
+      customersGroups: [
+        {
+          customerId: 0,
+        },
+      ],
     },
     validationSchema,
     onSubmit: (values) => {

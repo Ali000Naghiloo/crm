@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Modal, Select } from "antd";
+import { Button, Checkbox, Form, Input, Modal, Select, TreeSelect } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
@@ -14,17 +14,16 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
-    customerGroupType: yup.string().required("این فیلد را پر کنید"),
-    title: yup.string().required("این فیلد را پر کنید"),
+    groupName: yup.string().required("این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
     initialValues: {
-      id: null,
-      customerGroupType: null,
-      title: "",
+      id: 0,
+      groupName: "",
       description: "",
-      customerGroupCustomers: [],
+      parentGroupId: null,
+      customersGroups: [],
     },
     validationSchema,
     onSubmit: (values) => {
@@ -42,15 +41,16 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
   const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
+      ...values,
       id: values?.id,
-      customerGroupType: values?.customerGroupType,
-      title: values?.title,
-      description: values?.description,
-      customerGroupCustomers: values?.customerGroupCustomers
-        ? values.customerGroupCustomers?.map((cu) => {
-            return { customerId: cu };
-          })
-        : [],
+      customersGroups:
+        values?.customersGroups && values?.customersGroups?.length !== 0
+          ? values?.customersGroups?.map((i) => {
+              return {
+                customerId: i,
+              };
+            })
+          : [],
     };
 
     await httpService
@@ -101,27 +101,14 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
   }, []);
 
   useEffect(() => {
-    if (
-      validation.values.customerGroupCustomers?.length === customerList?.length
-    ) {
-      setSelectAll(true);
-    }
-    if (
-      validation.values.customerGroupCustomers?.length !== customerList?.length
-    ) {
-      setSelectAll(false);
-    }
-  }, [validation.values.customerGroupCustomers]);
-
-  useEffect(() => {
     if (data) {
       validation.setFieldValue("id", data?.id);
-      validation.setFieldValue("customerGroupType", data?.customerGroupType);
+      validation.setFieldValue("groupName", data?.groupName);
+      validation.setFieldValue("parentGroupId", data?.parentGroupId);
       validation.setFieldValue(
-        "customerGroupCustomers",
-        data?.customerGroupCustomers?.map((data) => data?.customerId)
+        "customersGroups",
+        data?.customersGroups?.map((data) => data?.customerId)
       );
-      validation.setFieldValue("title", data?.title);
       validation.setFieldValue("description", data?.description);
     }
   }, [data]);
@@ -154,38 +141,17 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
           className="w-full flex flex-wrap gap-4"
         >
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>نوع گروه اشخاص</span>
-            <Select
-              options={allEnum?.CustomerGroupType?.map((type, index) => {
-                return { label: type, value: index };
-              })}
-              value={validation.values.customerGroupType}
-              onChange={(e) => {
-                validation.setFieldValue("customerGroupType", e);
-              }}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.customerGroupType &&
-              validation.errors.customerGroupType && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.customerGroupType}
-                </span>
-              )}
-          </div>
-
-          <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>نام گروه اشخاص</span>
             <Input
-              value={validation.values.title}
-              name="title"
+              value={validation.values.groupName}
+              name="groupName"
               onChange={validation.handleChange}
               className="w-full"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.title && validation.errors.title && (
+            {validation.touched.groupName && validation.errors.groupName && (
               <span className="text-red-300 text-xs">
-                {validation.errors.title}
+                {validation.errors.groupName}
               </span>
             )}
           </div>
@@ -197,17 +163,46 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
               mode="multiple"
               maxTagCount={3}
               options={customerList}
-              value={validation.values.customerGroupCustomers}
+              value={validation.values.customersGroups}
               onChange={(e) => {
-                validation.setFieldValue("customerGroupCustomers", e);
+                validation.setFieldValue("customersGroups", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.customerGroupCustomers &&
-              validation.errors.customerGroupCustomers && (
+            {validation.touched.customersGroups &&
+              validation.errors.customersGroups && (
                 <span className="text-red-300 text-xs">
-                  {validation.errors.customerGroupCustomers}
+                  {validation.errors.customersGroups}
+                </span>
+              )}
+            <div>
+              <span>انتخاب همه اشخاص : </span>
+              <Checkbox
+                checked={selectAll}
+                onChange={handleSelectAll}
+              ></Checkbox>
+            </div>
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-full mx-auto">
+            <span>گروه والد</span>
+            <TreeSelect
+              allowClear
+              mode="multiple"
+              maxTagCount={3}
+              options={customerList}
+              value={validation.values.customersGroups}
+              onChange={(e) => {
+                validation.setFieldValue("customersGroups", e);
+              }}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.customersGroups &&
+              validation.errors.customersGroups && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.customersGroups}
                 </span>
               )}
             <div>

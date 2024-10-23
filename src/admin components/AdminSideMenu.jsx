@@ -2,13 +2,10 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { Checkbox, Drawer, Menu } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setSideMenuIsOpen } from "../store/reducers/sideMenu";
-import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { setPageRoutes } from "../store/reducers/pageRoutes";
-import { IoPersonSharp } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MdFactCheck } from "react-icons/md";
 
 export default function SideMenu() {
   const { pathname } = useLocation();
@@ -20,58 +17,7 @@ export default function SideMenu() {
   let [selectedTabKey, setSelectedTaqbKey] = useState(pathname);
   let [openMenuChildren, setOpenMenuChildren] = useState();
 
-  const menuItems = [
-    {
-      key: "/",
-      icon: (
-        <TbLayoutDashboardFilled size={"1.5em"} className="!text-textColor" />
-      ),
-      label: (
-        <div
-          onClick={() =>
-            handleAddToPageNames([{ label: "داشبورد" }, { label: "اطلاعات" }])
-          }
-          className="text-textColor flex items-center"
-        >
-          داشبورد
-        </div>
-      ),
-    },
-    {
-      key: "/employees",
-      icon: <IoPersonSharp size={"1.5em"} className="!text-textColor" />,
-      label: (
-        <div
-          onClick={() =>
-            handleAddToPageNames([
-              { label: "کارمندان" },
-              { label: "فهرست کارمندان" },
-            ])
-          }
-          className="text-textColor flex items-center"
-        >
-          کارمندان
-        </div>
-      ),
-    },
-    {
-      key: "/factor-settings",
-      icon: <MdFactCheck size={"1.5em"} className="!text-textColor" />,
-      label: (
-        <div
-          onClick={() =>
-            handleAddToPageNames([
-              { label: "فاکتور ها" },
-              { label: "تنظیمات فاکتور" },
-            ])
-          }
-          className="text-textColor flex items-center"
-        >
-          تنظیمات فاکتور
-        </div>
-      ),
-    },
-  ];
+  const menuItems = [];
 
   const handleAddToPageNames = (value) => {
     dispatch(setPageRoutes(value));
