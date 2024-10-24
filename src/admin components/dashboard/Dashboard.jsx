@@ -24,7 +24,7 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <div className="max-w-pagesWidth w-full box-border flex flex-col gap-14 min-h-pagesHeight m-5">
+      <div className="max-w-pagesWidth w-full box-border flex flex-col gap-14 h-full m-5">
         {/* page title */}
         <div className="w-full flex justify-center items-center text-4xl font-bold pt-20">
           <h1>داشبورد</h1>

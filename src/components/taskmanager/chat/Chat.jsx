@@ -23,7 +23,7 @@ const Chat = () => {
 
   return (
     <>
-      <div className="w-full min-h-pagesHeight max-h-pagesHeight">
+      <div className="w-full h-full ">
         {/* page title */}
         <div className="w-full h-[10%] flex justify-between items-center text-4xl p-3 font-bold">
           <h1>گفتگو</h1>

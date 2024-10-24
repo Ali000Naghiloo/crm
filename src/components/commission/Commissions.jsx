@@ -130,7 +130,7 @@ export default function Commissions() {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full min-h-pagesHeight p-2 md:p-5">
+      <div className="w-full h-full p-2 md:p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
           <h1>پورسانت ها</h1>

@@ -58,7 +58,7 @@ export default function Tasks({ boardId }) {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full h-full overflow-y-auto flex flex-col text-lg">
+      <div className="w-full h-full overflow-y-auto flex flex-col text-lg py-5">
         {/* filters and sorts and show by */}
         <div className="w-full flex items-center justify-between p-8">
           <div className="flex gap-3">

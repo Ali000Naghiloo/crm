@@ -112,7 +112,7 @@ export default function SideMenu() {
         <div
           className={`${
             openMenu ? "min-w-sideBarWidth" : "min-w-[70px]"
-          } sticky flex flex-col bg-backgroundColor text-textColor top-[80px] max-h-pagesHeight px-5 overflow-y-auto transition-all shadow-md min-h-pagesHeight z-10`}
+          } sticky flex flex-col bg-backgroundColor text-textColor top-[80px]  px-5 overflow-y-auto transition-all shadow-md h-full z-10`}
         >
           <MenuItems isOpen={openMenu} />
 

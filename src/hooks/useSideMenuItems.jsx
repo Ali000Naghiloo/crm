@@ -166,18 +166,6 @@ export default function useSideMenuItems() {
             key: "/requests",
             icon: <MdFactCheck size={"1.5em"} className="" />,
             label: "درخواست ها",
-            children: [
-              {
-                key: "/requests/initial-request",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "درخواست کالا",
-              },
-              {
-                key: "/requests/request",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "درخواست همکاری",
-              },
-            ],
           },
           {
             key: "/reports",

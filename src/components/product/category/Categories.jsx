@@ -143,7 +143,7 @@ export default function Categories() {
 
   return (
     <>
-      <div className="w-full min-h-pagesHeight p-5">
+      <div className="w-full h-full p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
           <h1>دسته بندی ها</h1>

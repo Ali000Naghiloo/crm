@@ -144,7 +144,7 @@ export default function Roles() {
 
   return (
     <>
-      <div className="w-full min-h-pagesHeight p-5">
+      <div className="w-full h-full p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
           <h1>نقش ها</h1>

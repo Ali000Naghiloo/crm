@@ -53,19 +53,19 @@ export default function MyLayout() {
 
   return (
     <>
-      <Layout hasSider>
+      <Layout hasSider className="transition-all">
         <MySidebar />
       </Layout>
-      <Layout className={`${handleLayoutMargin()} bg-[#5B99C2]`}>
+      <Layout className={`${handleLayoutMargin()} bg-[#5B99C2] transition-all`}>
         <Header className="sticky top-0 h-auto p-0 z-50">
           <AppHeader />
         </Header>
-        <Content className="overflow-auto py-[24px] px-[16px] flex justify-center items-start max-h-pagesHeight">
-          <div className="w-full p-[24px] text-center bg-white rounded-xl max-w-[1600px]">
+        <Content className="overflow-auto py-[24px] px-[16px] flex justify-center items-start max-h-pagesHeight min-h-pagesHeight">
+          <div className="w-full h-full bg-white rounded-lg max-w-[1600px]">
             <AllRoutes />
           </div>
         </Content>
-        <Footer className="text-center py-5">
+        <Footer className="text-center py-5 min-h-footer max-h-footer font-bold">
           توسعه و طراحی توسط تیم شرکت فرتاک آراد راهور ایمن
         </Footer>
       </Layout>

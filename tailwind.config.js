@@ -55,10 +55,12 @@ export default {
     },
     minHeight: {
       header: "var(--header-height)",
+      footer: "var(--footer-height)",
       pagesHeight: "var(--pages-height)",
     },
     maxHeight: {
       header: "var(--header-height)",
+      footer: "var(--footer-height)",
       pagesHeight: "var(--pages-height)",
     },
     extend: {

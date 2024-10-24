@@ -6,9 +6,11 @@
   :root,
   :root[data-theme="light"] {
     --header-height: 80px;
-    --pages-height: calc(100dvh - var(--header-height));
+    --footer-height: 50px;
+    --pages-height: calc(100dvh - 130px);
     --pages-width: calc(100vw - var(--sidebar-width));
     --sidebar-width: 15%;
+
     --accent-color: #3498db;
     --text-color: #111;
     --secondary-text-color: #fff;

@@ -66,7 +66,7 @@ const Projects = () => {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full min-h-pagesHeight overflow-auto p-5">
+      <div className="w-full h-full overflow-auto p-5">
         {/* page title */}
         <div className="w-full flex justify-between py-5">
           <div className="flex items-center gap-4">

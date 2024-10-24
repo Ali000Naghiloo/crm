@@ -105,13 +105,13 @@ export default function Workflows({ boardId, workflows }) {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-ful h-full overflow-x-auto flex gap-4 p-5">
+      <div className="w-full max-h-[100%] overflow-x-auto flex gap-4 p-5">
         {workflowList && taskList ? (
           workflowList?.length !== 0 ? (
             workflowList.map((wf) => (
               <div
                 key={wf.id}
-                className="w-[300px] max-h-[100%] overflow-y-auto flex flex-col gap-2 relative"
+                className="min-w-[300px] max-h-[100%] overflow-y-auto flex flex-col gap-2 relative"
               >
                 {workFlowHeader(wf)}
                 {taskList && workflowBody(wf)}
@@ -128,10 +128,10 @@ export default function Workflows({ boardId, workflows }) {
         )}
 
         {/* add new workflow */}
-        <div className="max-h-pagesHeight overflow-x-auto flex gap-4">
+        <div className="min-w-[300px]  h-full overflow-x-auto flex gap-4">
           <div
             onClick={() => onWfClick(null)}
-            className={`w-[300px] min-h-[30px] h-fit text-center p-2 rounded-md text-white text-lg text-bold cursor-pointer bg-gray-700 hover:bg-gray-500`}
+            className={`w-full min-h-[30px] h-fit text-center p-2 rounded-md text-white text-lg text-bold cursor-pointer bg-gray-700 hover:bg-gray-500`}
           >
             افزودن کانبان جدید +
           </div>

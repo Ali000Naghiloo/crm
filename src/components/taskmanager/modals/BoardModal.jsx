@@ -35,7 +35,7 @@ export default function BoardModal({
       sprintNumber: 0,
       color: "",
       projectId: projectId,
-      // projectType: 0,
+      projectType: 0,
       boardWorkFlowsCreateViewModels: [],
       boardUsersId: [],
       attachmentsCreateViewModel: [],
@@ -217,9 +217,8 @@ export default function BoardModal({
     if (!allUsers) {
       handleGetAllUsers();
     }
-    if (!workflows) {
-      handleGetAllWorkflows();
-    }
+
+    handleGetAllWorkflows();
   }, []);
 
   useEffect(() => {

@@ -27,7 +27,7 @@ export default function Task({ data, getNewList, onClick }) {
     <>
       <div
         onClick={onClick}
-        className="w-full flex justify-between items-center rounded-lg p-5 cursor-pointer hover:bg-gray-100 bg-[#e6e8ec]"
+        className="w-full h-full flex justify-between items-center rounded-lg p-5 cursor-pointer hover:bg-gray-100 bg-[#e6e8ec]"
       >
         <div className="flex items-center gap-5">
           <Checkbox

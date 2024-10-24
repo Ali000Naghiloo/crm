@@ -422,7 +422,7 @@ export default function CreateFactor() {
 
   return (
     <>
-      <div className="w-full flex p-1 md:p-3">
+      <div className="w-full h-full flex p-1 md:p-3">
         <Form
           onFinish={validation.handleSubmit}
           className="w-full flex flex-col gap-10"
