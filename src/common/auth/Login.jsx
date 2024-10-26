@@ -72,13 +72,13 @@ export default function Login() {
   if (showData)
     return (
       <>
-        <div className="flex justify-center items-center w-full h-screen relative">
+        <div className="flex justify-center items-center w-full min-h-contentHeight relative overflow-hidden">
           {/* form container */}
           <section className="min-w-[40%] h-full flex justify-center items-center p-5">
             {/* form */}
             <Form
               onFinish={validations.handleSubmit}
-              className="flex flex-col bg-loginForm text-white rounded-[15px] max-w-full p-4 lg:gap-6 lg:p-10 z-20"
+              className="flex flex-col h-full bg-loginForm text-white rounded-[15px] max-w-full p-4 lg:gap-6 lg:p-10 z-20"
             >
               {/* header */}
               <div className="w-full flex justify-between items-center gap-6 text-white text-2xl font-extrabold">
@@ -166,7 +166,7 @@ export default function Login() {
           </section>
 
           {/* background */}
-          <section className="w-full h-full flex justify-center items-start mt-[100px] blur-sm fixed -z-10 sm:z-10 lg:relative lg:items-center lg:blur-0 lg:mt-0">
+          <section className="w-full h-full flex justify-center items-start overflow-hidden mt-[100px] blur-sm fixed -z-10 sm:z-10 lg:relative lg:items-center lg:blur-0 lg:mt-0">
             <Image
               preview={false}
               src={background}

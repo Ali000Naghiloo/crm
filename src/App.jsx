@@ -18,12 +18,22 @@ function App() {
         direction="rtl"
         theme={{
           components: {
-            Menu: { itemSelectedBg: "#2ecc71" },
+            Menu: {
+              itemSelectedBg: "#2ecc71",
+              darkItemBg: "#222831",
+              popupBg: "#222831",
+              darkPopupBg: "#222831",
+            },
             Table: {
               rowHoverBg: "rgba(0,0,0,0.1)",
             },
             Tree: {
               titleHeight: "70px",
+            },
+            Layout: {
+              colorBgBase: "#222831",
+              siderBg: "#222831",
+              triggerBg: "#393E46",
             },
           },
           token: {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PageRoutes from "../../../common/PageRoutes";
 import { setPageRoutes } from "../../../store/reducers/pageRoutes";
@@ -7,8 +7,6 @@ import { Button, Popconfirm, Skeleton, Table, Tag, Tree } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
-import CreateGroup from "./CreateGroup";
-import UpdateGroup from "./UpdateGroup";
 import { BsPerson } from "react-icons/bs";
 
 const compareChildrens = (groups) => {
@@ -50,6 +48,10 @@ export default function Groups() {
     open: false,
     id: null,
   });
+
+  // components
+  const UpdateGroup = lazy(() => import("./UpdateGroup"));
+  const CreateGroup = lazy(() => import("./CreateGroup"));
 
   // const allEnum = useSelector((state) => state.allEnum.allEnum);
 
@@ -151,23 +153,6 @@ export default function Groups() {
     });
   };
 
-  const handleDelete = async (id) => {
-    setLoading(true);
-
-    await httpService
-      .get("/CustomerGroup/DeleteCustomerGroup", {
-        params: { customerGroupId: id },
-      })
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1)
-          toast.success("با موفقیت حذف شد");
-      })
-      .catch(() => {});
-
-    handleGetList();
-    setLoading(false);
-  };
-
   const handleGetList = async () => {
     setLoading(true);
 
@@ -183,8 +168,8 @@ export default function Groups() {
               icon: <BsPerson />,
             });
           });
-          console.log(formattedArray);
-          setPageList(formattedArray);
+          const datas = compareChildrens(formattedArray);
+          setPageList(datas);
         }
       })
       .catch(() => {});
@@ -201,7 +186,7 @@ export default function Groups() {
   }, []);
 
   return (
-    <>
+    <Suspense fallback={<></>}>
       <div className="w-full h-full p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
@@ -307,6 +292,6 @@ export default function Groups() {
         getNewList={handleGetList}
         list={pageList}
       />
-    </>
+    </Suspense>
   );
 }

@@ -176,7 +176,7 @@ export default function Categories() {
         </div>
 
         {/* content */}
-        <div className="w-full py-5 overflow-x-auto">
+        <div className="w-full h-full">
           {!loading ? (
             <Tree
               treeData={pageList}

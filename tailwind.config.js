@@ -57,11 +57,13 @@ export default {
       header: "var(--header-height)",
       footer: "var(--footer-height)",
       pagesHeight: "var(--pages-height)",
+      contentHeight: "var(--content-height)",
     },
     maxHeight: {
       header: "var(--header-height)",
       footer: "var(--footer-height)",
       pagesHeight: "var(--pages-height)",
+      contentHeight: "var(--content-height)",
     },
     extend: {
       transitionProperty: {

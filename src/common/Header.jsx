@@ -13,7 +13,7 @@ import { setAllEnum } from "../store/reducers/enumReducer";
 import logo from "../assets/images/logo.svg";
 
 export default function AppHeader() {
-  const { httpService } = useHttp();
+  // const { httpService } = useHttp();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const size = useWindowSize();
@@ -21,57 +21,9 @@ export default function AppHeader() {
   const sideMenu = useSelector((state) => state.sideMenu.isOpen);
   const userRole = useSelector((state) => state.userData.userRole);
 
-  const handleGetUserData = () => {
-    httpService
-      .get("Account/UserDetailsByToken")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          if (res.data?.data.isAdmin === 1) {
-            dispatch(setUserRole("admin"));
-          } else {
-            dispatch(setUserRole("user"));
-          }
-          dispatch(setUserData(res.data.data));
-        } else {
-          toast.warn(res.data.msg);
-          navigate("/login");
-        }
-      })
-      .catch(() => {
-        setTimeout(() => {
-          handleGetUserData();
-        }, 10000);
-      });
-  };
-
-  const handleGetEnum = () => {
-    httpService
-      .get("Enum/AllEnums")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          dispatch(setAllEnum(res.data.data));
-        } else {
-          // toast(res.data.msg);
-        }
-      })
-      .catch(() => {});
-  };
-
   const handleToggleSideMenu = () => {
     dispatch(setSideMenuIsOpen(!sideMenu));
   };
-
-  useEffect(() => {
-    // get project enums
-    handleGetEnum();
-
-    if (token) {
-      // dispatch(setUserRole("user"));
-      handleGetUserData();
-    } else {
-      navigate("/login");
-    }
-  }, [token]);
 
   if (window.location.pathname !== "/login" && token && userRole) {
     return (
@@ -105,6 +57,10 @@ export default function AppHeader() {
           </div>
         </div>
       </>
+    );
+  } else {
+    return (
+      <div className="min-h-header max-h-header bg-backgroundColor z-0"></div>
     );
   }
 }

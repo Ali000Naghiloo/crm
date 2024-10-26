@@ -104,7 +104,7 @@ export default function Board() {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full h-full flex flex-col gap-0 overflow-y-auto">
+      <div className="w-full h-full min-h-contentHeight max-h-contentHeight flex flex-col gap-0 overflow-y-auto">
         {/* board data */}
         <div className="w-full h-[90px] flex justify-between p-5 border-gray-300 border-b-2 relative">
           <div
@@ -156,7 +156,11 @@ export default function Board() {
 
         {/* board tabs  */}
         <div className="w-full h-full overflow-x-auto">
-          <Tabs items={boardTabs} className="w-full p-0 pt-5 h-full" />
+          <Tabs
+            defaultActiveKey="workflows"
+            items={boardTabs}
+            className="w-full p-0 pt-5 h-full"
+          />
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Modal, Select } from "antd";
+import { Button, Checkbox, Form, Input, Modal, Select, TreeSelect } from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
@@ -6,28 +6,25 @@ import useHttp from "../../../hooks/useHttps";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-export default function CreateGroup({ open, setOpen, getNewList, list }) {
+export default function CreateGroup({ open, setOpen, getNewList, data }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState(null);
+  const [groupList, setGroupList] = useState(null);
   const [selectAll, setSelectAll] = useState(false);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
-    customerGroupType: yup.string().required("این فیلد را پر کنید"),
-    title: yup.string().required("این فیلد را پر کنید"),
+    groupName: yup.string().required("این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
     initialValues: {
+      id: 0,
       groupName: "",
       description: "",
-      parentGroupId: 0,
-      customersGroups: [
-        {
-          customerId: 0,
-        },
-      ],
+      parentGroupId: null,
+      customersGroups: [],
     },
     validationSchema,
     onSubmit: (values) => {
@@ -45,21 +42,22 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
   const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
-      customerGroupType: values?.customerGroupType,
-      title: values?.title,
-      description: values?.description,
-      customerGroupCustomers: values?.customerGroupCustomers
-        ? values.customerGroupCustomers?.map((cu) => {
-            return { customerId: cu };
-          })
-        : [],
+      ...values,
+      customersGroups:
+        values?.customersGroups && values?.customersGroups?.length !== 0
+          ? values?.customersGroups?.map((i) => {
+              return {
+                customerId: i,
+              };
+            })
+          : [],
     };
 
     await httpService
       .post("/CustomerGroup/CreateCustomerGroup", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت تعریف شد");
+          toast.success("با موفقیت ویرایش شد");
           handleClose();
         }
       })
@@ -88,10 +86,28 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
     setLoading(false);
   };
 
+  const handleGetGroupList = async () => {
+    setLoading(true);
+    let datas = [];
+
+    await httpService
+      .post("/CustomerGroup/CustomerGroups")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code == 1) {
+          datas = res.data?.customerGroupViewModelList;
+        }
+      })
+      .catch(() => {});
+
+    console.log(datas);
+    setGroupList(datas);
+    setLoading(false);
+  };
+
   const handleSelectAll = (e) => {
     if (e?.target?.checked) {
       validation.setFieldValue(
-        "customerGroupCustomers",
+        "customersGroups",
         customerList?.map((cu) => cu?.value)
       );
       setSelectAll(true);
@@ -99,22 +115,11 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
   };
 
   useEffect(() => {
-    handleGetCustomerList();
-  }, []);
-
-  useEffect(() => {
-    if (
-      customerList &&
-      validation.values.customerGroupCustomers?.length === customerList?.length
-    ) {
-      setSelectAll(true);
+    if (open) {
+      handleGetCustomerList();
+      handleGetGroupList();
     }
-    if (
-      validation.values.customerGroupCustomers?.length !== customerList?.length
-    ) {
-      setSelectAll(false);
-    }
-  }, [validation.values.customerGroupCustomers]);
+  }, [open]);
 
   return (
     <>
@@ -122,7 +127,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
         open={open}
         onCancel={handleClose}
         onClose={handleClose}
-        title="تعریف گروه جدید"
+        title={`تعریف گروه جدید`}
         footer={
           <div className="w-full flex gap-3 justify-end pt-5">
             <Button type="primary" danger onClick={handleClose}>
@@ -134,7 +139,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
               disabled={loading}
               loading={loading}
             >
-              تعریف گروه
+              تایید
             </Button>
           </div>
         }
@@ -144,38 +149,17 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
           className="w-full flex flex-wrap gap-4"
         >
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>نوع گروه اشخاص</span>
-            <Select
-              options={allEnum?.CustomerGroupType?.map((type, index) => {
-                return { label: type, value: index };
-              })}
-              value={validation.values.customerGroupType}
-              onChange={(e) => {
-                validation.setFieldValue("customerGroupType", e);
-              }}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.customerGroupType &&
-              validation.errors.customerGroupType && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.customerGroupType}
-                </span>
-              )}
-          </div>
-
-          <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>نام گروه اشخاص</span>
             <Input
-              value={validation.values.title}
-              name="title"
+              value={validation.values.groupName}
+              name="groupName"
               onChange={validation.handleChange}
               className="w-full"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.title && validation.errors.title && (
+            {validation.touched.groupName && validation.errors.groupName && (
               <span className="text-red-300 text-xs">
-                {validation.errors.title}
+                {validation.errors.groupName}
               </span>
             )}
           </div>
@@ -187,27 +171,54 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
               mode="multiple"
               maxTagCount={3}
               options={customerList}
-              value={validation.values.customerGroupCustomers}
+              value={validation.values.customersGroups}
               onChange={(e) => {
-                validation.setFieldValue("customerGroupCustomers", e);
+                validation.setFieldValue("customersGroups", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.customerGroupCustomers &&
-              validation.errors.customerGroupCustomers && (
+            {validation.touched.customersGroups &&
+              validation.errors.customersGroups && (
                 <span className="text-red-300 text-xs">
-                  {validation.errors.customerGroupCustomers}
+                  {validation.errors.customersGroups}
                 </span>
               )}
             <div>
               <span>انتخاب همه اشخاص : </span>
               <Checkbox
                 checked={selectAll}
-                defaultChecked={selectAll}
                 onChange={handleSelectAll}
               ></Checkbox>
             </div>
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-full mx-auto">
+            <span>گروه والد</span>
+            <TreeSelect
+              fieldNames={{
+                label: "groupName",
+                value: "id",
+                children: "subGroup",
+              }}
+              allowClear
+              mode="multiple"
+              maxTagCount={3}
+              treeData={groupList}
+              treeDefaultExpandAll
+              value={validation.values.parentGroupId}
+              onChange={(e) => {
+                validation.setFieldValue("parentGroupId", e);
+              }}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.parentGroupId &&
+              validation.errors.parentGroupId && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.parentGroupId}
+                </span>
+              )}
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">

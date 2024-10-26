@@ -6,15 +6,17 @@
   :root,
   :root[data-theme="light"] {
     --header-height: 80px;
-    --footer-height: 50px;
-    --pages-height: calc(100dvh - 130px);
+    --footer-height: 48px;
+    --pages-height: calc(100dvh - 128px);
+    /* footer + header + content paddint (20px) = 148px */
+    --content-height: calc(100vh - 168px);
     --pages-width: calc(100vw - var(--sidebar-width));
     --sidebar-width: 15%;
-
-    --accent-color: #3498db;
-    --text-color: #111;
+    /*  */
+    --accent-color: #00adb5;
+    --text-color: #fff;
     --secondary-text-color: #fff;
-    --bg-color: #fff;
+    --bg-color: #222831;
     --secondary-bg-color: #fff;
     --error-color: #ed4337;
   }
@@ -23,7 +25,7 @@
     --accent-color: #2ecc71;
     --text-color: #fff;
     --secondary-text-color: #111;
-    --bg-color: #001529;
+    --bg-color: #222831;
     --bg-color-secondary: rgb(41, 41, 41);
   }
 }

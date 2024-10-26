@@ -64,27 +64,6 @@ export default function UpdateRole({ open, setOpen, getNewList, data }) {
     setLoading(false);
   };
 
-  const handleDelete = async () => {
-    setLoading(true);
-
-    await httpService
-      .get("/CustomerRole/DeleteCustomerRole", {
-        params: { customerRoleId: data?.customerRoleId },
-      })
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت حذف شد");
-          handleClose();
-          getNewList();
-        } else {
-          toast.warn(res.data?.msg);
-        }
-      })
-      .catch(() => {});
-
-    setLoading(false);
-  };
-
   useEffect(() => {
     if (data) {
       validation.setFieldValue("customerRoleId", data.customerRoleId);

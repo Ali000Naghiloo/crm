@@ -1,4 +1,13 @@
-import { Button, Checkbox, Form, Input, Modal, Select, TreeSelect } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  TreeSelect,
+} from "antd";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
@@ -10,6 +19,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState(null);
+  const [groupList, setGroupList] = useState(null);
   const [selectAll, setSelectAll] = useState(false);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
@@ -86,10 +96,60 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
     setLoading(false);
   };
 
+  const handleGetGroupList = async () => {
+    setLoading(true);
+    let datas = [];
+
+    const pushData = (data) => {
+      datas.push({
+        label: cu.groupName,
+        value: cu.id,
+        children: data?.subGroup ? pushData(data?.subGroup) : [],
+      });
+    };
+
+    await httpService
+      .post("/CustomerGroup/CustomerGroups")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code == 1) {
+          res.data?.customerGroupViewModelList?.map((cu) => {
+            datas.push({
+              label: cu.groupName,
+              value: cu.id,
+              children: data?.subGroup ? pushData(data?.subGroup) : [],
+            });
+          });
+        }
+      })
+      .catch(() => {});
+
+    console.log(datas);
+    setGroupList(datas);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+
+    await httpService
+      .get("/CustomerGroup/DeleteCustomerGroup", {
+        params: { customerGroupId: data?.id },
+      })
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1)
+          toast.success("با موفقیت حذف شد");
+      })
+      .catch(() => {});
+
+    setLoading(false);
+    handleClose();
+    getNewList();
+  };
+
   const handleSelectAll = (e) => {
     if (e?.target?.checked) {
       validation.setFieldValue(
-        "customerGroupCustomers",
+        "customersGroups",
         customerList?.map((cu) => cu?.value)
       );
       setSelectAll(true);
@@ -97,8 +157,11 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
   };
 
   useEffect(() => {
-    handleGetCustomerList();
-  }, []);
+    if (open) {
+      handleGetCustomerList();
+      handleGetGroupList();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (data) {
@@ -119,20 +182,32 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
         open={open}
         onCancel={handleClose}
         onClose={handleClose}
-        title={`ویرایش گروه : ${data ? data?.title : ""}`}
+        title={`ویرایش گروه : ${data ? data?.groupName : ""}`}
         footer={
-          <div className="w-full flex gap-3 justify-end pt-5">
-            <Button type="primary" danger onClick={handleClose}>
-              لغو
-            </Button>
-            <Button
-              onClick={validation.submitForm}
-              type="primary"
-              disabled={loading}
-              loading={loading}
+          <div className="w-full flex gap-3 justify-between pt-5">
+            <Popconfirm
+              title="آیا از حذف این گروه اطمینان دارید؟"
+              okText="بله"
+              cancelText="خیر"
+              onConfirm={handleDelete}
             >
-              ویرایش گروه
-            </Button>
+              <Button type="primary" danger>
+                حذف
+              </Button>
+            </Popconfirm>
+            <div className="flex items-center justify-center gap-2">
+              <Button type="primary" danger onClick={handleClose}>
+                لغو
+              </Button>
+              <Button
+                onClick={validation.submitForm}
+                type="primary"
+                disabled={loading}
+                loading={loading}
+              >
+                تایید
+              </Button>
+            </div>
           </div>
         }
       >
@@ -191,27 +266,20 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
               allowClear
               mode="multiple"
               maxTagCount={3}
-              options={customerList}
-              value={validation.values.customersGroups}
+              options={groupList}
+              value={validation.values.parentGroupId}
               onChange={(e) => {
-                validation.setFieldValue("customersGroups", e);
+                validation.setFieldValue("parentGroupId", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.customersGroups &&
-              validation.errors.customersGroups && (
+            {validation.touched.parentGroupId &&
+              validation.errors.parentGroupId && (
                 <span className="text-red-300 text-xs">
-                  {validation.errors.customersGroups}
+                  {validation.errors.parentGroupId}
                 </span>
               )}
-            <div>
-              <span>انتخاب همه اشخاص : </span>
-              <Checkbox
-                checked={selectAll}
-                onChange={handleSelectAll}
-              ></Checkbox>
-            </div>
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">

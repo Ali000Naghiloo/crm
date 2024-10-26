@@ -71,22 +71,22 @@ export default defineConfig({
             sizes: "512x512",
           },
         ],
-        // screenshots: [
-        //   {
-        //     src: "/icons/in-out-wide.gif",
-        //     sizes: "664x448",
-        //     type: "image/gif",
-        //     form_factor: "wide",
-        //     label: "Wonder Widgets",
-        //   },
-        //   {
-        //     src: "/icons/in-out.gif",
-        //     sizes: "440x824",
-        //     type: "image/gif",
-        //     form_factor: "narrow",
-        //     label: "Wonder Widgets",
-        //   },
-        // ],
+        screenshots: [
+          {
+            src: "/icons/in-out-wide.gif",
+            sizes: "664x448",
+            type: "image/gif",
+            form_factor: "wide",
+            label: "Wonder Widgets",
+          },
+          {
+            src: "/icons/in-out.gif",
+            sizes: "440x824",
+            type: "image/gif",
+            form_factor: "narrow",
+            label: "Wonder Widgets",
+          },
+        ],
         start_url: "/login",
         id: "/",
         display: "standalone",

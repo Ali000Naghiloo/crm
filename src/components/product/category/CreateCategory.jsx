@@ -9,6 +9,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [categoryList, setCategoryList] = useState(null);
+  const [productList, setProductList] = useState(null);
   const [isParent, setIsParent] = useState(false);
 
   const validationSchema = yup.object().shape({
@@ -59,10 +60,36 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
     setLoading(false);
   };
 
+  const handleGetProductList = async () => {
+    setLoading(true);
+    const datas = [];
+
+    await httpService
+      .get("/Product/GetAllProducts")
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          res.data?.productViewModelList?.map((pr, index) => {
+            datas.push({
+              label: pr?.productName,
+              value: pr?.productId,
+              key: index,
+            });
+          });
+        }
+      })
+      .catch(() => {});
+
+    setProductList(datas);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    console.log(list);
     setCategoryList(list);
   }, [list]);
+
+  useEffect(() => {
+    // handleGetProductList()
+  }, [open]);
 
   useEffect(() => {
     if (validation.values.parentCategoryId) {
@@ -117,7 +144,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
               )}
           </div>
 
-          <div className="flex items-center gap-1 w-full mx-auto">
+          {/* <div className="flex items-center gap-1 w-full mx-auto">
             <span className="text-nowrap">دسته بندی سر گروه است؟</span>
             <Checkbox
               checked={isParent}
@@ -130,19 +157,43 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
               }}
               className="w-full"
             />
-          </div>
+          </div> */}
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>نام سر گروه</span>
             <TreeSelect
               treeData={categoryList}
-              // treeDefaultExpandAll
+              treeDefaultExpandAll
               fieldNames={{
                 label: "categoryName",
                 value: "productCategoryId",
                 children: "children",
               }}
               value={validation.values.parentCategoryId}
+              onChange={(e) => {
+                validation.setFieldValue("parentCategoryId", e);
+              }}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.parentCategoryId &&
+              validation.errors.parentCategoryId && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.parentCategoryId}
+                </span>
+              )}
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-full mx-auto">
+            <span>محصولات گروه </span>
+            <Select
+              options={[]}
+              fieldNames={{
+                label: "categoryName",
+                value: "productCategoryId",
+                children: "children",
+              }}
+              // value={validation.values.parentCategoryId}
               onChange={(e) => {
                 validation.setFieldValue("parentCategoryId", e);
               }}

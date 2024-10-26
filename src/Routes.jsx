@@ -33,6 +33,8 @@ import CreateNotePage from "./pages/user/taskmanager/CreateNotePage";
 import ProjectsPage from "./pages/user/taskmanager/projects/ProjectsPage";
 import BoardsPage from "./pages/user/taskmanager/projects/BoardsPage";
 import BoardPage from "./pages/user/taskmanager/projects/BoardPage";
+// auth checker
+import Checker from "./common/Checker";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -40,6 +42,8 @@ export default function AllRoutes() {
   if (userRole === "user") {
     return (
       <div className="w-full flex">
+        <Checker />
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<DashboardPage />} />
@@ -97,6 +101,8 @@ export default function AllRoutes() {
   } else if (userRole === "admin") {
     return (
       <div className="w-full flex">
+        <Checker />
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<AdminDashboard />} />
@@ -110,7 +116,7 @@ export default function AllRoutes() {
   } else {
     return (
       <>
-        <Header />
+        <Checker />
 
         <div className="w-full">
           <Routes>
