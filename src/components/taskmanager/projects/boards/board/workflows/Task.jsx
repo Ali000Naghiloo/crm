@@ -1,3 +1,4 @@
+import { useDraggable } from "@dnd-kit/core";
 import { Checkbox, Tag } from "antd";
 import moment from "jalali-moment";
 import { useState } from "react";
@@ -5,14 +6,29 @@ import { useState } from "react";
 export default function Task({ data, onClick }) {
   const [loading, setLoading] = useState(false);
 
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: data?.id,
+    data: data,
+  });
+  const draggableStyle = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: "10",
+      }
+    : undefined;
+
   const handleChangeTaskStatus = async (e) => {};
   const handleChangeSubTaskStatus = async (e) => {};
 
   return (
     <>
       <div
+        {...attributes}
+        {...listeners}
+        ref={setNodeRef}
+        style={draggableStyle}
         onClick={onClick}
-        className={`w-full flex flex-col gap-3 max-h-[275px] hover:bg-gray-100 cursor-pointer p-2 rounded-md  bg-[#e6e8ec] ${
+        className={`w-full flex flex-col gap-3 max-h-[275px] hover:bg-gray-100 cursor-pointer p-2 rounded-md  bg-[#e6e8ec] border-2 border-gray-300 shadow ${
           data?.isDelayed ? "border-red-500 border-4" : ""
         }`}
       >

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData, setUserRole } from "../store/reducers/userDataReducer";
+import { setAllEnum } from "../store/reducers/enumReducer";
 
 export default function Checker() {
   const { httpService } = useHttp();

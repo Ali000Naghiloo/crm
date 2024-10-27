@@ -1,8 +1,10 @@
 import { Button } from "antd";
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import Task from "./Task";
 import { useDroppable } from "@dnd-kit/core";
+import TaskModal from "../../../../modals/TaskModal";
+import WorkflowModal from "../../../../modals/WorkflowModal";
 
 export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
   const [showTaskModal, setShowTaskModal] = useState({
@@ -15,15 +17,14 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
     id: null,
   });
 
-  const { attributes, listeners, setNodeRef, transform } = useDroppable({
+  const { setNodeRef, isOver } = useDroppable({
     id: `droppable ${wf?.id}`,
     data: wf,
   });
-  const droppableStyle = {};
 
   // imports
-  const TaskModal = lazy(() => import("../../../../modals/TaskModal"));
-  const WorkflowModal = lazy(() => import("../../../../modals/WorkflowModal"));
+  // const TaskModal = lazy(() => import("../../../../modals/TaskModal"));
+  // const WorkflowModal = lazy(() => import("../../../../modals/WorkflowModal"));
 
   const onTaskClick = async (id, workFlowId) => {
     setShowTaskModal({ open: true, id: id, workflowId: workFlowId });
@@ -57,12 +58,10 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
     </div>
   );
   const workflowBody = () => {
-    let filteredTasks = tasks && tasks?.length !== 0 ? tasks : [];
-
     return (
       <>
-        {filteredTasks &&
-          filteredTasks.map((task, index) => (
+        {tasks &&
+          tasks.map((task, index) => (
             <Task
               key={index}
               data={task}
@@ -73,18 +72,15 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
     );
   };
 
-  useEffect(() => {
-    console.log(wf);
-  }, [wf]);
+  useEffect(() => {}, [wf]);
 
   return (
     <>
       <div
-        // ref={setNodeRef}
-        // style={droppableStyle}
-        // {...attributes}
-        // {...listeners}
-        className="min-w-[300px] h-full overflow-y-auto flex flex-col gap-2 relative bg-red-500"
+        ref={setNodeRef}
+        className={`min-w-[300px] h-full overflow-y-auto flex flex-col gap-2 overflow-visible min-h-[700px] rounded-lg ${
+          isOver ? "bg-accent" : ""
+        }`}
       >
         {workFlowHeader()}
         {tasks && workflowBody()}

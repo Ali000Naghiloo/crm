@@ -90,11 +90,11 @@ export default function ProductModal({ open, setOpen, id, getNewList }) {
     //   label: "وزن",
     //   children: handleRenderTabContent("weight", data),
     // },
-    // {
-    //   key: "unit",
-    //   label: "واحد",
-    //   children: handleRenderTabContent("unit", data),
-    // },
+    {
+      key: "unit",
+      label: "واحد",
+      children: handleRenderTabContent("unit", data),
+    },
     {
       key: "price",
       label: "قیمت بر حسب واحد",

@@ -8,7 +8,7 @@ import { BsFillBagCheckFill } from "react-icons/bs";
 import { MdFactCheck, MdPriceChange } from "react-icons/md";
 import { GoDot } from "react-icons/go";
 import { AiFillProduct } from "react-icons/ai";
-import { FaListCheck } from "react-icons/fa6";
+import { FaListCheck, FaWeightScale } from "react-icons/fa6";
 import { HiDocumentReport } from "react-icons/hi";
 import { MdManageSearch } from "react-icons/md";
 import { FaWarehouse } from "react-icons/fa";
@@ -97,6 +97,11 @@ export default function useSideMenuItems() {
             ],
           },
           {
+            key: "/units",
+            icon: <FaWeightScale size={"1.5em"} className="" />,
+            label: "واحد ها",
+          },
+          {
             key: "/products",
             icon: <AiFillProduct size={"1.5em"} className="" />,
             label: "کالا و خدمات",
@@ -166,6 +171,18 @@ export default function useSideMenuItems() {
             key: "/requests",
             icon: <MdFactCheck size={"1.5em"} className="" />,
             label: "درخواست ها",
+            children: [
+              {
+                key: "/requests/product",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "کالا",
+              },
+              {
+                key: "/requests/contact",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "تماس اولیه",
+              },
+            ],
           },
           {
             key: "/reports",

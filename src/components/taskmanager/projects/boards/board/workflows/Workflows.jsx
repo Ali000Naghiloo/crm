@@ -51,9 +51,14 @@ export default function Workflows({ boardId, workflows }) {
 
   return (
     <Suspense fallback={<></>}>
-      <div collisionDetection={closestCenter}>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={(e) => {
+          console.log(e);
+        }}
+      >
         <div className="w-full h-full bg-white overflow-x-auto flex gap-4 p-5">
-          {workflowList && taskList ? (
+          {workflowList ? (
             workflowList?.length !== 0 ? (
               workflowList.map((wf, index) => (
                 <Workflow
@@ -88,7 +93,7 @@ export default function Workflows({ boardId, workflows }) {
             </div>
           </div>
         </div>
-      </div>
+      </DndContext>
 
       <WorkflowModal
         open={showWfModal.open}

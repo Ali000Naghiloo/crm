@@ -344,6 +344,12 @@ export default function CreateFactor() {
         validation.values.factorItemCreateViewModels &&
         Object.keys(validation.errors).length === 0
       ) {
+        validation.setFieldValue(
+          "factorItemCreateViewModels",
+          validation.values.factorItemCreateViewModels?.filter(
+            (i) => i.productId !== null
+          )
+        );
         setCurrentStep(currentStep + 1);
         setPrevStepDisabled(false);
       } else {

@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
+// auth checker
+import Checker from "./common/Checker";
 // common
 import LoginPage from "./pages/Login";
 import Loading from "./common/Loading";
-import Header from "./common/Header";
 // admin
 import AdminDashboard from "./admin components/dashboard/Dashboard";
 import FactorSettingsPage from "./pages/admin/factor setting/FactorSettingsPage";
@@ -23,7 +24,6 @@ import WarehousesPage from "./pages/user/warehouse/WarehousesPage";
 import CommissionsPage from "./pages/user/commissions/CommissionsPage";
 import RejectedFactorsPage from "./pages/user/factors/RejectedFactorsPage";
 import PreFactorsPage from "./pages/user/factors/PreFactorsPage";
-import InitialRequestPage from "./pages/user/factors/InitialRequestPage";
 import ConditionsPage from "./pages/user/conditions/ConditionsPage";
 import CreateFactorPage from "./pages/user/factors/CreateFactorPage";
 import ReportFactorsPage from "./pages/user/reports/ReportFactorsPage";
@@ -33,8 +33,9 @@ import CreateNotePage from "./pages/user/taskmanager/CreateNotePage";
 import ProjectsPage from "./pages/user/taskmanager/projects/ProjectsPage";
 import BoardsPage from "./pages/user/taskmanager/projects/BoardsPage";
 import BoardPage from "./pages/user/taskmanager/projects/BoardPage";
-// auth checker
-import Checker from "./common/Checker";
+import RequestProductPage from "./pages/user/requests/RequestProductPage";
+import RequestContactPage from "./pages/user/requests/RequestContactPage";
+import UnitsPage from "./pages/user/units/UnitsPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -52,6 +53,8 @@ export default function AllRoutes() {
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/customers/groups" element={<CustomerGroups />} />
           <Route path="/customers/roles" element={<CustomerRoles />} />
+          {/* units */}
+          <Route path="/units" element={<UnitsPage />} />
           {/* products */}
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/categories" element={<ProductCategories />} />
@@ -61,9 +64,6 @@ export default function AllRoutes() {
           <Route path="/prices/groups" element={<PriceGroups />} />
           {/* commissions */}
           <Route path="/commissions" element={<CommissionsPage />} />
-          {/* requests */}
-          <Route path="/requests/request" element={<InitialRequestPage />} />
-          <Route path="/requests/initial" element={<InitialRequestPage />} />
           {/* factors */}
           <Route path="/factors/preFactors" element={<PreFactorsPage />} />
           <Route path="/factors/sell-factors" element={<FactorsPage />} />
@@ -83,6 +83,8 @@ export default function AllRoutes() {
           {/* reports */}
           <Route path="/reports/factors" element={<ReportFactorsPage />} />
           {/* requests */}
+          <Route path="/requests/product" element={<RequestProductPage />} />
+          <Route path="/requests/contact" element={<RequestContactPage />} />
           {/* warehouses */}
           <Route path="/warehouses" element={<WarehousesPage />} />
           {/* taskmanager */}

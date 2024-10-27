@@ -39,7 +39,7 @@ export default function UnitTab({ data }) {
           <Popconfirm
             cancelText="لغو"
             okText="حذف"
-            title="آیا از حذف این وزن اطمینان دارید؟"
+            title="آیا از حذف این واحد اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.weightId)}
           >
@@ -61,9 +61,12 @@ export default function UnitTab({ data }) {
   const getNewList = async () => {
     setLoading(true);
     let datas = [];
+    const formData = {
+      productId: data?.productId,
+    };
 
     await httpService
-      .get("/Unit/Units", {})
+      .get("/ProductUnitPrice/ProductUnitPrices", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code === 1) {
           res.data.unitViewModelList.map((data, index) => {
@@ -79,10 +82,15 @@ export default function UnitTab({ data }) {
 
   const handleDelete = async (id) => {
     setLoading(true);
+    const formData = {
+      productId: data?.productId,
+      unitId: id,
+      productPricId: null,
+    };
 
     await httpService
-      .get("/ProductWeight/DeleteProductWeight", {
-        params: { productWeightId: id },
+      .get("/ProductUnitPrice/DeleteProductUnitPrice", {
+        params: { formData },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)
