@@ -9,28 +9,35 @@ import { toast } from "react-toastify";
 export default function UnitModal({
   open,
   setOpen,
-  mode,
   data,
   productId,
   getNewList,
 }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
+  const [unitList, setUnitList] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
+  // for having the selected unit data localy
+  const [selectedUnit, setSelectedUnit] = useState({ label: "", type: 0 });
 
   const validationSchema = yup.object().shape({
-    weight: yup.string().required("لطفا این فیلد را پر کنید"),
-    weightUnit: yup.string().required("لطفا این فیلد را پر کنید"),
+    unit: yup.string().required("لطفا این فیلد را پر کنید"),
+    unitId: yup.string().required("لطفا این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
     initialValues: {
-      unitName: "",
+      product: "",
+      unit: "",
+      productId: null,
+      unitId: null,
+      quantityInUnit: null, // needed if other options is selected
     },
+
     validationSchema,
 
     onSubmit: (values) => {
-      if (mode === "create") {
+      if (!data) {
         handleCreate(values);
       }
     },
@@ -44,11 +51,12 @@ export default function UnitModal({
   const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
-      unitName: values?.unitName,
+      ...values,
+      productId: productId,
     };
 
     await httpService
-      .post("/Unit/CreateUnit", formData)
+      .post("/ProductUnit/CreateProductUnit", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
@@ -61,11 +69,34 @@ export default function UnitModal({
     setLoading(false);
   };
 
+  const handleGetUnitList = async () => {
+    setLoading(true);
+    const datas = [];
+
+    await httpService
+      .get("/Unit/Units")
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          res.data?.unitViewModelList?.map((un) => {
+            datas.push({ label: un?.unitName, value: un?.unitId, data: un });
+          });
+        }
+      })
+      .catch(() => {});
+
+    setUnitList(datas);
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (productId) {
       validation.setFieldValue("productId", productId);
     }
   }, [productId]);
+
+  useEffect(() => {
+    handleGetUnitList();
+  }, []);
 
   return (
     <div>
@@ -73,7 +104,7 @@ export default function UnitModal({
         centered
         open={open}
         onCancel={handleClose}
-        title={<>تعریف واحد</>}
+        title={data ? `ویرایش واحد کالا` : "تعریف واحد برای کالا"}
         footer={
           <div>
             <Button type="primary" danger onClick={handleClose}>
@@ -87,19 +118,18 @@ export default function UnitModal({
           className="w-full flex flex-wrap gap-3 pt-4"
         >
           <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
-            <span>وزن :</span>
+            <span>عنوان واحد :</span>
             <Input
-              type="number"
               min={0}
-              value={validation.values.weight}
-              name="weight"
+              value={validation.values.unit}
+              name="unit"
               onChange={validation.handleChange}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.weight && validation.errors.weight && (
+            {validation.touched.unit && validation.errors.unit && (
               <span className="text-red-300 text-xs">
-                {validation.errors.weight}
+                {validation.errors.unit}
               </span>
             )}
           </div>
@@ -107,23 +137,45 @@ export default function UnitModal({
           <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
             <span>واحد :</span>
             <Select
-              options={allEnum?.WeightUnit?.map((un, index) => {
-                return { label: un, value: index };
-              })}
-              value={validation.values.weightUnit}
-              name="weightUnit"
-              onChange={(e) => {
-                validation.setFieldValue("weightUnit", e);
+              options={unitList}
+              value={validation.values.unitId}
+              name="unitId"
+              onChange={(e, event) => {
+                const v = event.data;
+                setSelectedUnit({ label: v.unitName, type: v.unitType });
+                validation.setFieldValue("quantityInUnit", null);
+                validation.setFieldValue("unitId", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.weightUnit && validation.errors.weightUnit && (
+            {validation.touched.unitId && validation.errors.unitId && (
               <span className="text-red-300 text-xs">
-                {validation.errors.weightUnit}
+                {validation.errors.unitId}
               </span>
             )}
           </div>
+
+          {selectedUnit.type == 2 && (
+            <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
+              <span>تعداد در هر {selectedUnit.label} :</span>
+              <Input
+                type="number"
+                min={0}
+                value={validation.values.quantityInUnit}
+                name="quantityInUnit"
+                onChange={validation.handleChange}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.quantityInUnit &&
+                validation.errors.quantityInUnit && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.quantityInUnit}
+                  </span>
+                )}
+            </div>
+          )}
 
           {/* submit button */}
           <div className="w-full flex justify-center py-10">

@@ -72,7 +72,7 @@ export default function Login() {
   if (showData)
     return (
       <>
-        <div className="flex justify-center items-center w-full min-h-contentHeight relative overflow-hidden">
+        <div className="flex justify-center items-center w-full min-h-contentHeight relative overflow-hidden bg-white">
           {/* form container */}
           <section className="min-w-[40%] h-full flex justify-center items-center p-5">
             {/* form */}

@@ -2,8 +2,8 @@ import { Button, Popconfirm, Select, Table } from "antd";
 import useHttp from "../../../hooks/useHttps";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { MdDelete } from "react-icons/md";
-import WeightModal from "./create-edit/WeightModal";
+import { MdDelete, MdEdit } from "react-icons/md";
+import UnitModal from "./create-edit/UnitModal";
 import { HiRefresh } from "react-icons/hi";
 
 export default function UnitTab({ data }) {
@@ -15,7 +15,6 @@ export default function UnitTab({ data }) {
   const [productUnits, setProuctUnits] = useState([]);
   const [showModal, setShowModal] = useState({
     open: false,
-    mode: "",
     data: null,
     id: null,
   });
@@ -29,19 +28,32 @@ export default function UnitTab({ data }) {
     },
     {
       title: "واحد",
-      dataIndex: "unitName",
-      key: "unitName",
+      dataIndex: "unit",
+      key: "unit",
+    },
+    {
+      title: "تعداد در واحد",
+      dataIndex: "quantityInUnit",
+      key: "quantityInUnit",
     },
     {
       title: "عملیات",
       render: (data) => (
         <div className="flex gap-2">
+          <Button
+            type="primary"
+            onClick={() => {
+              setShowModal({ id: data?.unitId, open: true, data: data });
+            }}
+          >
+            <MdEdit />
+          </Button>
           <Popconfirm
             cancelText="لغو"
             okText="حذف"
             title="آیا از حذف این واحد اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.weightId)}
+            onConfirm={() => handleDelete(data?.unitId)}
           >
             <Button size="middle" type="primary" danger>
               <MdDelete />
@@ -66,10 +78,10 @@ export default function UnitTab({ data }) {
     };
 
     await httpService
-      .get("/ProductUnitPrice/ProductUnitPrices", { params: formData })
+      .get("/ProductUnit/ProductUnit", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code === 1) {
-          res.data.unitViewModelList.map((data, index) => {
+          res.data.productUnitViewModelList.map((data, index) => {
             datas.push({ ...data, index: index + 1 });
           });
         }
@@ -85,12 +97,11 @@ export default function UnitTab({ data }) {
     const formData = {
       productId: data?.productId,
       unitId: id,
-      productPricId: null,
     };
 
     await httpService
-      .get("/ProductUnitPrice/DeleteProductUnitPrice", {
-        params: { formData },
+      .get("/ProductUnit/DeleteProductUnit", {
+        params: formData,
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)
@@ -99,17 +110,6 @@ export default function UnitTab({ data }) {
       .catch(() => {});
 
     getNewList();
-    setLoading(false);
-  };
-
-  const handleAddUnitToProduct = async (e) => {
-    setLoading(true);
-
-    await httpService
-      .post("")
-      .then((res) => {})
-      .catch(() => {});
-
     setLoading(false);
   };
 
@@ -129,19 +129,19 @@ export default function UnitTab({ data }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="w-full flex flex-col gap-2">
-        <span>فهرست واحد ها</span>
-        <Select
-          mode="multiple"
-          options={pageList?.map((un) => {
-            return { label: un?.unitName, value: un?.unitId };
-          })}
-          value={productUnits}
-          onChange={(e) => {
-            handleAddUnitToProduct(e);
+        <Button
+          className="w-full"
+          type="primary"
+          onClick={() => {
+            setShowModal({
+              open: true,
+              data: null,
+              id: null,
+            });
           }}
-          className="w-[100%]"
-          placeholder="لطفا اینجا وارد کنید..."
-        />
+        >
+          ثبت واحد برای این کالا و خدمات
+        </Button>
       </div>
 
       <div className="w-full flex flex-col gap-1">
@@ -174,14 +174,13 @@ export default function UnitTab({ data }) {
         </div>
       </div>
 
-      <WeightModal
+      <UnitModal
         open={showModal.open}
         setOpen={(e) => {
           setShowModal({ open: e });
         }}
-        mode={showModal.mode}
         data={showModal.data}
-        productId={showModal.id}
+        productId={data?.productId}
         getNewList={getNewList}
       />
     </div>

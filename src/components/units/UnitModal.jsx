@@ -1,7 +1,7 @@
 import { Button, Input, Modal, Select } from "antd";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttps";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 export default function UnitModal({ open, setOpen, data, getNewList }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
+  const [unitList, setUnitList] = useState(false);
 
   const validationSchema = yup.object().shape({
     unitName: yup.string().required("این فیلد اجباری است"),
@@ -19,6 +20,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
       abbreviation: "",
       unitType: 0,
       printName: "",
+      childrenUnit: null,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -55,6 +57,33 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
     setLoading(false);
   };
   const handleEdit = async (values) => {};
+
+  const handleGetUnitList = async () => {
+    setLoading(true);
+    let datas = [];
+
+    await httpService
+      .get("/Unit/Units")
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          res.data?.unitViewModelList?.map((un) => {
+            if (
+              un.unitType !== 2 // others type
+            ) {
+              datas.push({ label: un.unitName, value: un?.unitId });
+            }
+          });
+        }
+      })
+      .catch(() => {});
+
+    setUnitList(datas);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    handleGetUnitList();
+  }, []);
 
   return (
     <Suspense>
@@ -114,6 +143,26 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
               </span>
             )}
           </div>
+
+          {validation.values.unitType == 2 && (
+            <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+              <span>نوع شمارش مقادیر در این واحد </span>
+              <Select
+                value={validation.values.childrenUnit}
+                name="childrenUnit"
+                options={unitList}
+                onChange={(e) => validation.setFieldValue("childrenUnit", e)}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.childrenUnit &&
+                validation.errors.childrenUnit && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.childrenUnit}
+                  </span>
+                )}
+            </div>
+          )}
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>عنوان در پرینت </span>

@@ -76,7 +76,7 @@ export default function Factors({ pageType }) {
       key: "factorResponsibles",
     },
     {
-      title: "قیمت کل فاکتور",
+      title: "مبلغ کل فاکتور",
       dataIndex: "totalFactorPrice",
       render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
       key: "totalFactorPrice",
@@ -92,7 +92,7 @@ export default function Factors({ pageType }) {
             size="middle"
             type="primary"
           >
-            اطلاعات تکمیلی
+            مشاهده
           </Button>
           <Button
             onClick={() => {

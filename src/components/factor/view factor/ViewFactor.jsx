@@ -87,7 +87,7 @@ export default function ViewFactor({ open, setOpen, factorId }) {
       <Modal
         open={open}
         onCancel={handleClose}
-        title={`فاکتور شماره : ${factorData ? factorData?.factorNumber : ""}`}
+        // title={`فاکتور شماره : ${factorData ? factorData?.factorNumber : ""}`}
         className="w-fit lg:min-w-[900px]"
         footer={<></>}
       >

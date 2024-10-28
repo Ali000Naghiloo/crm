@@ -1,9 +1,9 @@
-import RequestContact from "../../../components/requests/contact/RequestContact";
+import RequestProduct from "../../../components/requests/product/RequestProduct";
 
 export default function RequestProductPage() {
   return (
     <>
-      <RequestContact />
+      <RequestProduct />
     </>
   );
 }
