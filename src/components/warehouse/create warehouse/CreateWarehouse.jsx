@@ -17,7 +17,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
     warehouseName: yup.string().required("این فیلد را پر کنید"),
     capacity: yup.number().required("این فیلد را پر کنید"),
     warehouseType: yup.string().required("این فیلد را پر کنید"),
-    establishedDate: yup.string().required("این فیلد را پر کنید"),
+    // establishedDate: yup.string().required("این فیلد را پر کنید"),
     warehouseStatus: yup.string().required("این فیلد را پر کنید"),
   });
 
@@ -25,7 +25,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
     initialValues: {
       warehouseName: "",
       warehouseCode: "",
-      warehouseManualCode: "",
+      warehouseManualCode: null,
       capacity: 0,
       isActive: true,
       warehouseType: 0,

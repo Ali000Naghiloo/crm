@@ -23,7 +23,7 @@ const Chat = () => {
 
   return (
     <>
-      <div className="w-full h-full ">
+      <div className="w-full flex-col min-h-contentHeight max-h-contentHeight overflow-hidden">
         {/* page title */}
         <div className="w-full h-[10%] flex justify-between items-center text-4xl p-3 font-bold">
           <h1>گفتگو</h1>
@@ -41,7 +41,7 @@ const Chat = () => {
         </div>
 
         {/* content */}
-        <div className="w-full h-[90%] flex items-start overflow-auto">
+        <div className="w-full h-[90%] flex items-start justify-start">
           <UsersList
             setSelectedChat={setSelectedChat}
             selectedChat={selectedChat}

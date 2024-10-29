@@ -61,15 +61,9 @@ const UsersList = ({ selectedChat, setSelectedChat }) => {
 
   return (
     <div
-      id="scrollableDiv"
-      style={{
-        width: 350,
-        overflow: "auto",
-        padding: "0",
-        border: "1px solid rgba(140, 140, 140, 0.35)",
-      }}
+      // id="scrollableDiv"
       //   onScroll={handleScroll}
-      className="max-h-[100%] h-full overflow-auto"
+      className="w-[300px] border-y border-l border-[rgba(140, 140, 140, 0.35)] h-full overflow-y-auto"
     >
       <List
         dataSource={userData}

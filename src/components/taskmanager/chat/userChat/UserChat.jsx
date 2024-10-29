@@ -145,14 +145,14 @@ const UserChat = ({ selectedChat }) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-between h-full bg-gradient-to-br from-blue-50 to-purple-50 border rounded-md">
+    <div className="w-full h-full flex flex-col justify-between bg-gradient-to-br from-blue-50 to-purple-50 border rounded-md">
       {/* selected chat datas */}
-      <div className="w-full flex">
+      <div className="w-full flex h-fit">
         <ChatHeader />
       </div>
 
       <div
-        className="w-full h-full flex flex-col-reverse flex-1 p-4 sm:p-6 overflow-y-auto"
+        className="w-full h-fit flex flex-col-reverse flex-1 p-4 sm:p-6 overflow-y-auto my-auto"
         ref={chatContainerRef}
       >
         {selectedChat ? (
@@ -166,10 +166,10 @@ const UserChat = ({ selectedChat }) => {
         )}
       </div>
 
-      <div className="bg-white border-t border-gray-200 p-4 pb-16">
+      <div className="h-fit bg-white border-t border-gray-200 p-4 flex justify-center items-center">
         <Form
           onFinish={handleSubmit}
-          className="max-w-3xl mx-auto flex items-center h-full"
+          className="max-w-3xl mx-auto flex items-center h-full w-full"
         >
           <Input
             type="text"
@@ -177,7 +177,7 @@ const UserChat = ({ selectedChat }) => {
             onChange={handleInputChange}
             placeholder="پیام خود را در اینجا وارد نمایید ..."
             aria-label="Message input"
-            className="flex-1 border border-gray-300 rounded-l-none rounded-r-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="h-full w-full flex-1 border border-gray-300 rounded-l-none rounded-r-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {/* upload */}
           {/* <input type="file" hidden name="upload" /> */}
@@ -189,10 +189,7 @@ const UserChat = ({ selectedChat }) => {
             <MdSettingsVoice size={"1.5em"} />
           </Button>
           {/* submit */}
-          <Button
-            className="!h-full rounded-l rounded-r-none"
-            htmlType="submit"
-          >
+          <Button className="h-full rounded-l rounded-r-none" htmlType="submit">
             <BsSendFill />
           </Button>
         </Form>

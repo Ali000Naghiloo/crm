@@ -9,28 +9,23 @@ import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import { BsPerson } from "react-icons/bs";
 
-const compareChildrens = (groups) => {
-  const groupMap = {};
+function compareChildrens(data) {
+  // Create a map to quickly lookup groups by ID
+  const groupMap = new Map();
+  data.forEach((group) => groupMap.set(group.id, group));
 
-  // Create a map of groups by their ID
-  groups.forEach((group) => {
-    groupMap[group.id] = { ...group, children: [] };
-  });
-
-  // Iterate through the groups and assign children to their respective parents
-  groups.forEach((group) => {
-    if (group.parentGroupId !== null) {
-      groupMap[group.parentGroupId].children.push(groupMap[group.id]);
+  // Iterate over the data, creating the child relationships
+  data.forEach((group) => {
+    const parentGroup = groupMap.get(group.parentGroupId);
+    if (parentGroup) {
+      parentGroup.children = parentGroup.children || [];
+      parentGroup.children.push(group);
     }
   });
 
-  // Extract the top-level groups (those without a parent)
-  const organizedGroups = groups
-    .filter((group) => group.parentGroupId === null)
-    .map((group) => groupMap[group.id]);
-
-  return organizedGroups;
-};
+  // Return the root groups (those without parents)
+  return data.filter((group) => !group.parentGroupId);
+}
 const skeleton = [{}, {}, {}, {}, {}, {}, {}];
 
 export default function Groups() {
@@ -157,15 +152,15 @@ export default function Groups() {
     setLoading(true);
 
     await httpService
-      .post("/CustomerGroup/CustomerGroups")
+      .get("/CustomerGroup/CustomerGroups")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           const formattedArray = [];
           res.data.customerGroupViewModelList?.map((group, index) => {
             formattedArray.push({
               ...group,
-              key: group?.id,
-              icon: <BsPerson />,
+              key: index + 1,
+              // icon: <BsPerson />,
             });
           });
           const datas = compareChildrens(formattedArray);
@@ -250,7 +245,7 @@ export default function Groups() {
               fieldNames={{
                 title: "groupName",
                 value: "id",
-                children: "subGroups",
+                children: "children",
               }}
               showLine
               className="text-2xl"

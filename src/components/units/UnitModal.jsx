@@ -20,7 +20,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
       abbreviation: "",
       unitType: 0,
       printName: "",
-      childrenUnit: null,
+      parentUnitId: null,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -83,7 +83,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
 
   useEffect(() => {
     handleGetUnitList();
-  }, []);
+  }, [open]);
 
   return (
     <Suspense>
@@ -148,17 +148,17 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
             <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
               <span>نوع شمارش مقادیر در این واحد </span>
               <Select
-                value={validation.values.childrenUnit}
-                name="childrenUnit"
+                value={validation.values.parentUnitId}
+                name="parentUnitId"
                 options={unitList}
-                onChange={(e) => validation.setFieldValue("childrenUnit", e)}
+                onChange={(e) => validation.setFieldValue("parentUnitId", e)}
                 className="w-[100%]"
                 placeholder="لطفا اینجا وارد کنید..."
               />
-              {validation.touched.childrenUnit &&
-                validation.errors.childrenUnit && (
+              {validation.touched.parentUnitId &&
+                validation.errors.parentUnitId && (
                   <span className="text-red-300 text-xs">
-                    {validation.errors.childrenUnit}
+                    {validation.errors.parentUnitId}
                   </span>
                 )}
             </div>

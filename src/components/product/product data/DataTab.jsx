@@ -255,7 +255,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>کد کالا :</span>
+            <span>کد دستی کالا :</span>
             <Input
               value={validation.values.productManualCode}
               name="productManualCode"
@@ -267,6 +267,23 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               validation.errors.productManualCode && (
                 <span className="text-red-300 text-xs">
                   {validation.errors.productManualCode}
+                </span>
+              )}
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+            <span>کد کالا :</span>
+            <Input
+              value={validation.values.productCode}
+              name="productCode"
+              onChange={validation.handleChange}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.productCode &&
+              validation.errors.productCode && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.productCode}
                 </span>
               )}
           </div>

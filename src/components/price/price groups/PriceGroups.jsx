@@ -70,7 +70,7 @@ export default function Groups() {
             okText="حذف"
             title="آیا از حذف این قیمت اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.priceId)}
+            onConfirm={() => handleDelete(data?.pricingMethodGroupId)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -86,8 +86,8 @@ export default function Groups() {
     setLoading(true);
 
     await httpService
-      .get("/Price/DeletePrice", {
-        params: { priceId: id },
+      .get("/PricingMethodGroup/DeletePricingMethodGroup", {
+        params: { pricingMethodGroupId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)

@@ -82,10 +82,9 @@ export default function Roles() {
             اطلاعات تکمیلی
           </Button>
           <Popconfirm
-            cancelText="لغو"
-            okText="حذف"
+            cancelText="خیر"
+            okText="بله"
             title="آیا از حذف این نقش اطمینان دارید؟"
-            placement="topRight"
             onConfirm={() => handleDelete(data?.customerRoleId)}
           >
             <Button size="middle" type="primary" danger>
@@ -101,6 +100,23 @@ export default function Roles() {
   const handleTableChange = (pagination) => {
     setCurrentPage(pagination.current);
     setPerPage(pagination.pageSize);
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+
+    await httpService
+      .get("/CustomerRole/DeleteCustomerRole", {
+        params: { customerRoleId: id },
+      })
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1)
+          toast.success("با موفقیت حذف شد");
+      })
+      .catch(() => {});
+
+    handleGetList();
+    setLoading(false);
   };
 
   const handleGetList = async () => {

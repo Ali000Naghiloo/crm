@@ -18,7 +18,11 @@ export default function UnitModal({
   const [unitList, setUnitList] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
   // for having the selected unit data localy
-  const [selectedUnit, setSelectedUnit] = useState({ label: "", type: 0 });
+  const [selectedUnit, setSelectedUnit] = useState({
+    label: "",
+    type: 0,
+    parent: "",
+  });
 
   const validationSchema = yup.object().shape({
     unit: yup.string().required("لطفا این فیلد را پر کنید"),
@@ -142,7 +146,11 @@ export default function UnitModal({
               name="unitId"
               onChange={(e, event) => {
                 const v = event.data;
-                setSelectedUnit({ label: v.unitName, type: v.unitType });
+                setSelectedUnit({
+                  label: v.unitName,
+                  type: v.unitType,
+                  parent: v.parentUnit,
+                });
                 validation.setFieldValue("quantityInUnit", null);
                 validation.setFieldValue("unitId", e);
               }}
@@ -158,7 +166,9 @@ export default function UnitModal({
 
           {selectedUnit.type == 2 && (
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
-              <span>تعداد در هر {selectedUnit.label} :</span>
+              <span>
+                {selectedUnit.parent} در هر {selectedUnit.label} :
+              </span>
               <Input
                 type="number"
                 min={0}

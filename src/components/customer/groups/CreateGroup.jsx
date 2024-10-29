@@ -6,6 +6,24 @@ import useHttp from "../../../hooks/useHttps";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
+function compareChildrens(data) {
+  // Create a map to quickly lookup groups by ID
+  const groupMap = new Map();
+  data.forEach((group) => groupMap.set(group.id, group));
+
+  // Iterate over the data, creating the child relationships
+  data.forEach((group) => {
+    const parentGroup = groupMap.get(group.parentGroupId);
+    if (parentGroup) {
+      parentGroup.children = parentGroup.children || [];
+      parentGroup.children.push(group);
+    }
+  });
+
+  // Return the root groups (those without parents)
+  return data.filter((group) => !group.parentGroupId);
+}
+
 export default function CreateGroup({ open, setOpen, getNewList, data }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
@@ -90,17 +108,29 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
     setLoading(true);
     let datas = [];
 
+    const pushData = (data) => {
+      datas.push({
+        label: cu.groupName,
+        value: cu.id,
+        children: data?.subGroup ? pushData(data?.subGroup) : [],
+      });
+    };
+
     await httpService
-      .post("/CustomerGroup/CustomerGroups")
+      .get("/CustomerGroup/CustomerGroups")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
-          datas = res.data?.customerGroupViewModelList;
+          res.data?.customerGroupViewModelList?.map((cu, index) => {
+            datas.push({
+              ...cu,
+              key: index,
+            });
+          });
         }
       })
       .catch(() => {});
 
-    console.log(datas);
-    setGroupList(datas);
+    setGroupList(compareChildrens(datas));
     setLoading(false);
   };
 
@@ -196,11 +226,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>گروه والد</span>
             <TreeSelect
-              fieldNames={{
-                label: "groupName",
-                value: "id",
-                children: "subGroup",
-              }}
+              fieldNames={{ label: "groupName", value: "id" }}
               allowClear
               mode="multiple"
               maxTagCount={3}

@@ -78,7 +78,7 @@ export default function SelectItems({ validation, factorType }) {
       editable: true,
     },
     {
-      title: "تعداد",
+      title: "مقدار",
       dataIndex: "quantity",
       editable: true,
     },
@@ -338,13 +338,13 @@ export default function SelectItems({ validation, factorType }) {
     if (editable && id === "quantity") {
       return (
         <div className="flex gap-1">
-          <Button
+          {/* <Button
             onClick={() => {
               if (value - 1 >= 0) handleQuantityChange(value - 1);
             }}
           >
             -
-          </Button>
+          </Button> */}
           <Input
             type="number"
             min={0}
@@ -353,7 +353,7 @@ export default function SelectItems({ validation, factorType }) {
             onChange={(e) => handleQuantityChange(e.target.value)}
             onBlur={onBlur}
           />
-          <Button onClick={() => handleQuantityChange(value + 1)}>+</Button>
+          {/* <Button onClick={() => handleQuantityChange(value + 1)}>+</Button> */}
         </div>
       );
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table, Tag } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 // import CreateCondition from "./create factor/CreateCondition";
@@ -41,7 +41,7 @@ export default function Units() {
     {
       title: "نوع",
       dataIndex: "unitType",
-      render: (value) => <>{allEnum ? allEnum?.UnitType[value] : "-"}</>,
+      render: (value) => <Tag>{allEnum ? allEnum?.UnitType[value] : "-"}</Tag>,
       key: "unitType",
     },
     {

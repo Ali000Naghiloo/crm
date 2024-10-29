@@ -19,10 +19,8 @@ export default function ConnectorModal({
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
-    // connectorId: 0,
     connectorName: yup.string().required("لطفا این فیلد را پر کنید"),
-    position: yup.string().required("لطفا این فیلد را پر کنید"),
-    // customerId: null,
+    // position: yup.string().required("لطفا این فیلد را پر کنید"),
   });
 
   const validation = useFormik({

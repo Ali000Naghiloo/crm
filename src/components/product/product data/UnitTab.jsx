@@ -1,9 +1,8 @@
 import { Button, Popconfirm, Select, Table } from "antd";
 import useHttp from "../../../hooks/useHttps";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdDelete, MdEdit } from "react-icons/md";
-import UnitModal from "./create-edit/UnitModal";
 import { HiRefresh } from "react-icons/hi";
 
 export default function UnitTab({ data }) {
@@ -18,6 +17,8 @@ export default function UnitTab({ data }) {
     data: null,
     id: null,
   });
+
+  const UnitModal = lazy(() => import("./create-edit/UnitModal"));
 
   const columns = [
     {
@@ -72,7 +73,6 @@ export default function UnitTab({ data }) {
 
   const getNewList = async () => {
     setLoading(true);
-    let datas = [];
     const formData = {
       productId: data?.productId,
     };
@@ -81,14 +81,13 @@ export default function UnitTab({ data }) {
       .get("/ProductUnit/ProductUnit", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code === 1) {
-          res.data.productUnitViewModelList.map((data, index) => {
-            datas.push({ ...data, index: index + 1 });
-          });
+          res.data.productUnitViewModelList[0]
+            ? setPageList(res.data.productUnitViewModelList[0])
+            : null;
         }
       })
       .catch(() => {});
 
-    setPageList(datas);
     setLoading(false);
   };
 
@@ -127,36 +126,27 @@ export default function UnitTab({ data }) {
   }, [data]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="w-full flex flex-col gap-2">
-        <Button
-          className="w-full"
-          type="primary"
-          onClick={() => {
-            setShowModal({
-              open: true,
-              data: null,
-              id: null,
-            });
-          }}
-        >
-          ثبت واحد برای این کالا و خدمات
-        </Button>
-      </div>
-
-      <div className="w-full flex flex-col gap-1">
-        <div className="w-full flex justify-between font-bold">
-          <h1 className="text-lg">فهرست واحد های این کالا و خدمات</h1>
-
-          <div className="flex items-center justify-center pl-5">
-            <Button className="p-1" type="text" onClick={getNewList}>
-              <HiRefresh size={"2em"} />
-            </Button>
-          </div>
+    <Suspense>
+      <div className="flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-2">
+          <Button
+            className="w-full"
+            type="primary"
+            onClick={() => {
+              setShowModal({
+                open: true,
+                data: null,
+                id: null,
+              });
+            }}
+          >
+            تغییر واحد برای این کالا و خدمات
+          </Button>
         </div>
 
-        <div className="w-full overflow-x-auto">
-          <Table
+        <div className="w-full flex flex-col gap-1">
+          <div className="w-full overflow-x-auto">
+            {/* <Table
             size="small"
             loading={loading}
             columns={columns}
@@ -170,19 +160,31 @@ export default function UnitTab({ data }) {
               pageSizeOptions: ["10", "20", "30", "50"],
             }}
             onChange={handleTableChange}
-          />
-        </div>
-      </div>
+          /> */}
 
-      <UnitModal
-        open={showModal.open}
-        setOpen={(e) => {
-          setShowModal({ open: e });
-        }}
-        data={showModal.data}
-        productId={data?.productId}
-        getNewList={getNewList}
-      />
-    </div>
+            <div className="w-full h-fit flex flex-col items-center justify-center gap-5 font-bold text-xl my-10">
+              <span>
+                واحد فعلی کالا :{" "}
+                {pageList?.unit?.unitName ? pageList?.unit.unitName : "-"}
+              </span>
+              <span>
+                مقدار در واحد :{" "}
+                {pageList?.quantityInUnit ? pageList?.quantityInUnit : "-"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <UnitModal
+          open={showModal.open}
+          setOpen={(e) => {
+            setShowModal({ open: e });
+          }}
+          data={showModal.data}
+          productId={data?.productId}
+          getNewList={getNewList}
+        />
+      </div>
+    </Suspense>
   );
 }

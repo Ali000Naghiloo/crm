@@ -64,6 +64,7 @@ export default function PriceModal({
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
           validation.setFieldValue("unitId", null);
+          handleClose();
           getNewList();
         }
       })
@@ -97,9 +98,12 @@ export default function PriceModal({
 
   const handleGetPriceList = async () => {
     let datas = [];
+    const formData = {
+      productId: productId,
+    };
 
     await httpService
-      .post("/Price/Prices")
+      .get("/ProductUnitPrice/GetUnassignedProductPrices", { params: formData })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           res.data?.priceViewModelList?.map((pr) => {
@@ -145,7 +149,7 @@ export default function PriceModal({
   useEffect(() => {
     handleGetPriceList();
     handleGetUnitList();
-  }, []);
+  }, [open]);
 
   return (
     <div>
