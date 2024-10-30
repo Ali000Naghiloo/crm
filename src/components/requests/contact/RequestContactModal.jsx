@@ -5,6 +5,8 @@ import * as yup from "yup";
 import useHttp from "../../../hooks/useHttps";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import moment from "jalali-moment";
+import MyDatePicker from "../../../common/MyDatePicker";
 
 export default function RequestContactModal({
   open,
@@ -15,18 +17,26 @@ export default function RequestContactModal({
 }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
+  const [customerList, setCustomerList] = useState(null);
+  const [usersList, setUsersList] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required("لطفا این فیلد را پر کنید"),
+    customer: yup.string().required("لطفا این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
     initialValues: {
       code: 0,
-      name: "",
+      date: moment().utc().locale("fa"),
+      customerId: null,
+      customer: "",
+      initialRequestItems: null,
+      customerInitialRequestResponsibles: null,
+      customeRequestStatus: 0,
       description: "",
     },
+
     validationSchema,
 
     onSubmit: (values) => {
@@ -47,10 +57,25 @@ export default function RequestContactModal({
     setLoading(true);
     const formData = {
       ...values,
+      customerInitialRequestResponsibles:
+        values?.customerInitialRequestResponsibles
+          ? values?.customerInitialRequestResponsibles.map((res) => {
+              return { userId: res };
+            })
+          : [],
+      initialRequestItems: values?.initialRequestItems
+        ? values?.initialRequestItems.map((i) => {
+            return {
+              itemRow: 0,
+              initialRequestId: 0,
+              description: "",
+            };
+          })
+        : [],
     };
 
     await httpService
-      .post("/InitialRequest/CreateInitialRequest", formData)
+      .post("/CustomerInitialRequest/CreateInitialRequest", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
@@ -60,8 +85,6 @@ export default function RequestContactModal({
       })
       .catch(() => {});
 
-    handleClose();
-    getNewList();
     setLoading(false);
   };
 
@@ -83,9 +106,57 @@ export default function RequestContactModal({
       })
       .catch(() => {});
 
-    handleClose();
-    getNewList();
     setLoading(false);
+  };
+
+  // get lists
+  const handleGetCustomerList = async () => {
+    setLoading(true);
+    let datas = [];
+
+    await httpService
+      .get("/Customer/GetAllCustomers")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          res.data?.customerList?.map((cu) => {
+            datas.push({ label: cu.customerName, value: cu.customerId });
+          });
+        }
+      })
+      .catch(() => {});
+
+    setCustomerList(datas);
+    setLoading(false);
+  };
+  const handleGetEmployeesList = async () => {
+    let datas = [];
+
+    await httpService
+      .get("/Account/GetAllUsers")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          res.data?.data?.map((pr) => {
+            datas.push({
+              value: pr?.id,
+              label: pr?.fullName,
+            });
+          });
+        }
+      })
+      .catch(() => {});
+
+    setUsersList(datas);
+  };
+
+  const handleGetCode = async () => {
+    await httpService
+      .get("/CustomerInitialRequest/InitialRequestCode")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          validation.setFieldValue("code", res.data?.initialRequestNumber);
+        }
+      })
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -94,6 +165,15 @@ export default function RequestContactModal({
     }
   }, [data]);
 
+  useEffect(() => {
+    handleGetCode();
+  }, [open]);
+
+  useEffect(() => {
+    handleGetCustomerList();
+    handleGetEmployeesList();
+  }, []);
+
   return (
     <div>
       <Modal
@@ -101,7 +181,7 @@ export default function RequestContactModal({
         onCancel={handleClose}
         title={
           !data ? (
-            <>ثبت درخواست تماس اولیه</>
+            <>فرم ثبت درخواست تماس اولیه</>
           ) : (
             <>ویرایش درخواست تماس اولیه {data?.name}</>
           )
@@ -113,6 +193,7 @@ export default function RequestContactModal({
             </Button>
           </div>
         }
+        className=""
       >
         <Form
           onFinish={validation.handleSubmit}
@@ -120,19 +201,67 @@ export default function RequestContactModal({
         >
           <div className="flex flex-wrap gap-5">
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
-              <span>عنوان درخواست :</span>
-              <Input
-                value={validation.values.name}
-                name="name"
-                onChange={validation.handleChange}
+              <span>تاریخ :</span>
+              <MyDatePicker
+                value={validation.values.date}
+                setValue={(e) => {
+                  validation.setFieldValue("date", e);
+                }}
+                className="w-[400px]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.date && validation.errors.date && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.date}
+                </span>
+              )}
+            </div>
+
+            <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
+              <span>شخص :</span>
+              <Select
+                options={customerList}
+                value={validation.values.customerId}
+                name="customerId"
+                onChange={(e, event) => {
+                  console.log(event);
+                  validation.setFieldValue("customerId", event?.value);
+                  validation.setFieldValue("customer", event?.label);
+                }}
                 className="w-[100%]"
                 placeholder="لطفا اینجا وارد کنید..."
               />
-              {validation.touched.name && validation.errors.name && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.name}
-                </span>
-              )}
+              {validation.touched.customerId &&
+                validation.errors.customerId && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.customerId}
+                  </span>
+                )}
+            </div>
+
+            <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
+              <span>مسئول پیگیری درخواست :</span>
+              <Select
+                mode="multiple"
+                optionFilterProp="label"
+                options={usersList}
+                value={validation.values.customerInitialRequestResponsibles}
+                name="customerInitialRequestResponsibles"
+                onChange={(e, event) => {
+                  validation.setFieldValue(
+                    "customerInitialRequestResponsibles",
+                    e
+                  );
+                }}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.customerInitialRequestResponsibles &&
+                validation.errors.customerInitialRequestResponsibles && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.customerInitialRequestResponsibles}
+                  </span>
+                )}
             </div>
 
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">

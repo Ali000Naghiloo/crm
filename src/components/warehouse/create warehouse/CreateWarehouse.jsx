@@ -41,10 +41,8 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
   });
 
   const handleClose = () => {
-    if (!loading) {
-      validation.resetForm();
-      setOpen(false);
-    }
+    setOpen(false);
+    validation.resetForm();
   };
 
   const handleGetWarehouseCode = async () => {
@@ -64,7 +62,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
     setLoading(true);
     const formData = {
       warehouseName: values?.warehouseName,
-      warehouseCode: warehouseCode,
+      warehouseCode: `${warehouseCode}`,
       warehouseManualCode: values?.warehouseManualCode,
       capacity: values?.capacity,
       isActive: true,
@@ -89,7 +87,7 @@ export default function CreateWarehouseModal({ open, setOpen, getNewList }) {
 
   useEffect(() => {
     handleGetWarehouseCode();
-  }, []);
+  }, [open]);
 
   return (
     <>

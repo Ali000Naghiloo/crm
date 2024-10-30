@@ -263,6 +263,9 @@ export default function CreateFactor() {
     const formData = {
       ...values,
       factorId: pageData?.id,
+      factorItemEditViewModels: values?.factorItemCreateViewModels
+        ? values?.factorItemCreateViewModels
+        : [],
     };
 
     if (pageData?.type === 2) {

@@ -7,6 +7,7 @@ import LoginPage from "./pages/Login";
 import Loading from "./common/Loading";
 // admin
 import AdminDashboard from "./admin components/dashboard/Dashboard";
+import AdminRequestContactPage from "./pages/admin/initial request/RequestContactPage";
 import FactorSettingsPage from "./pages/admin/factor setting/FactorSettingsPage";
 // user
 import DashboardPage from "./pages/user/DashboardPage";
@@ -110,6 +111,11 @@ export default function AllRoutes() {
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/employees" element={<EmployeesPage />} />
+          {/* initial request */}
+          <Route
+            path="/requests/contact"
+            element={<AdminRequestContactPage />}
+          />
           {/* factor settings */}
           <Route path="/factor-settings" element={<FactorSettingsPage />} />
         </Routes>

@@ -55,7 +55,7 @@ export default function Commissions() {
         <div className="flex gap-2">
           <Button
             onClick={() =>
-              setDataModal({ data: data, open: true, id: data?.productId })
+              setDataModal({ data: data, open: true, id: data?.id })
             }
             size="middle"
             type="primary"
@@ -67,7 +67,7 @@ export default function Commissions() {
             okText="حذف"
             title="آیا از حذف این پورسانت اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.priceId)}
+            onConfirm={() => handleDelete(data?.id)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -83,8 +83,8 @@ export default function Commissions() {
     setLoading(true);
 
     await httpService
-      .get("/Factor/Delete", {
-        params: { priceId: id },
+      .get("/CommissionRate/DeleteCommissionRate", {
+        params: { commissionRateId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)

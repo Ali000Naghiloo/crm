@@ -233,7 +233,7 @@ export default function Warehouses() {
         setOpen={(e) => {
           setCreateModal({
             ...createModal,
-            open: e?.target?.value,
+            open: e,
           });
         }}
         getNewList={handleGetList}

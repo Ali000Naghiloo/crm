@@ -46,12 +46,6 @@ export default function RequestContact({ pageType }) {
       key: "code",
     },
     {
-      title: "توضیحات",
-      dataIndex: "description",
-      render: (value) => <>{value ? formatHelper.cutString(value, 20) : "-"}</>,
-      key: "description",
-    },
-    {
       title: "عملیات",
       render: (data) => (
         <div className="flex gap-2">
@@ -69,7 +63,7 @@ export default function RequestContact({ pageType }) {
             okText="بله"
             title="آیا از حذف این فاکتور اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.factorId)}
+            onConfirm={() => handleDelete(data?.id)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -107,11 +101,11 @@ export default function RequestContact({ pageType }) {
     setLoading(true);
 
     await httpService
-      .get("/CustomerInitialRequest/GetAllCustomersInitialRequests")
+      .get("/InitialRequest/GetAllInitialRequest")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
-          res.data.customerInitialRequestViewModelList.map((data, index) => {
+          res.data.initialRequestViewModelList.map((data, index) => {
             datas.push({ ...data, index: index + 1, key: data?.id });
           });
           setPageList(datas);
@@ -137,8 +131,8 @@ export default function RequestContact({ pageType }) {
     <Suspense>
       <div className="w-full h-full p-2 md:p-5">
         {/* page title */}
-        <div className="w-full flex justify-between text-2xl lg:text-4xl py-5 font-bold">
-          <h1>فهرست تمام درخواست های تماس اولیه اشخاص</h1>
+        <div className="w-full flex justify-between text-4xl py-5 font-bold">
+          <h1>درخواست های تماس اولیه</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={handleGetList}>

@@ -35,7 +35,7 @@ export default function UnitModal({
       unit: "",
       productId: null,
       unitId: null,
-      quantityInUnit: null, // needed if other options is selected
+      quantityInUnit: 1, // needed if other options is selected
     },
 
     validationSchema,
@@ -151,7 +151,7 @@ export default function UnitModal({
                   type: v.unitType,
                   parent: v.parentUnit,
                 });
-                validation.setFieldValue("quantityInUnit", null);
+                validation.setFieldValue("quantityInUnit", 1);
                 validation.setFieldValue("unitId", e);
               }}
               className="w-[100%]"

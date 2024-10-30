@@ -130,13 +130,6 @@ export default function SelectItems({ validation, factorType }) {
     };
   });
 
-  const updateMyData = (rowIndex, columnId, value) => {
-    validation.setFieldValue(
-      `factorItemCreateViewModels[${rowIndex}][${columnId}]`,
-      value
-    );
-  };
-
   // get select list items
   const handleGetProductList = async () => {
     let datas = [];
@@ -232,22 +225,40 @@ export default function SelectItems({ validation, factorType }) {
     setLoading(false);
   };
 
+  const updateMyData = (rowIndex, columnId, value) => {
+    validation.setFieldValue(
+      `factorItemCreateViewModels[${rowIndex}][${columnId}]`,
+      value
+    );
+  };
+
   // components
   const EditableCell = ({
     value: initialValue,
     row: { index },
     column: { id },
-    updateMyData,
+    // updateMyData,
     editable,
   }) => {
     const [value, setValue] = useState(initialValue);
 
-    const onChange = (e) => {
-      setValue(e.target.value);
+    const onChange = (value) => {
+      setValue(value);
+    };
+
+    const onBlur = () => {
+      updateMyData(index, id, value);
+
+      if (id === "quantity") {
+        handleQuantityChange(value);
+      }
+      if (id === "productUnitPrice") {
+        handleProductUnitPriceChange(value);
+      }
     };
 
     const handleQuantityChange = (value, unitPrice) => {
-      // const value = e.target.value;
+      onChange(value);
 
       updateMyData(index, "quantity", value);
       updateMyData(
@@ -290,15 +301,11 @@ export default function SelectItems({ validation, factorType }) {
         .post("/Factor/GetFactorItemProductUnitPrice", priceFormData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
-            handleProductUnitPriceChange(res.data?.finalPrice);
-            handleQuantityChange(1, res.data?.finalPrice);
+            // handleProductUnitPriceChange(res.data?.finalPrice);
+            // handleQuantityChange(1, res.data?.finalPrice);
           }
         })
         .catch(() => {});
-    };
-
-    const onBlur = () => {
-      updateMyData(index, id, value);
     };
 
     useEffect(() => {
@@ -318,7 +325,7 @@ export default function SelectItems({ validation, factorType }) {
           min={0}
           className="w-[100px]"
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
         />
       );
@@ -330,7 +337,7 @@ export default function SelectItems({ validation, factorType }) {
           min={0}
           className="w-[100px]"
           value={value}
-          onChange={(e) => handleProductUnitPriceChange(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
         />
       );
@@ -348,9 +355,9 @@ export default function SelectItems({ validation, factorType }) {
           <Input
             type="number"
             min={0}
-            className="w-[60px]"
+            className="w-[80px]"
             value={value}
-            onChange={(e) => handleQuantityChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
           />
           {/* <Button onClick={() => handleQuantityChange(value + 1)}>+</Button> */}
@@ -362,7 +369,7 @@ export default function SelectItems({ validation, factorType }) {
         <Input
           className="w-[100px]"
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
         />
       );
@@ -546,45 +553,37 @@ export default function SelectItems({ validation, factorType }) {
         </div>
       )}
 
-      <div className="w-full max-w-[100%] flex flex-col gap-2 py-5">
-        <div className="w-ful flex justify-between px-8 mt-8">
-          <span className="text-2xl font-bold">کالا و خدمات ها این فاکتور</span>
+      {validation?.values?.customerId && (
+        <div className="w-full max-w-[100%] flex flex-col gap-2 py-5">
+          <div className="w-ful flex justify-between px-8 mt-8">
+            <span className="text-2xl font-bold">
+              کالا و خدمات ها این فاکتور
+            </span>
 
-          <Popconfirm
-            title="از پاک کردن تمامی موارد فاکتور مطمئن هستید؟"
-            onConfirm={() =>
-              validation.setFieldValue("factorItemCreateViewModels", [
-                defaultData,
-              ])
-            }
-          >
-            <Button danger type="primary">
-              <MdDelete />
-            </Button>
-          </Popconfirm>
-        </div>
+            <Popconfirm
+              title="از پاک کردن تمامی موارد فاکتور مطمئن هستید؟"
+              onConfirm={() =>
+                validation.setFieldValue("factorItemCreateViewModels", [
+                  defaultData,
+                ])
+              }
+            >
+              <Button danger type="primary">
+                <MdDelete />
+              </Button>
+            </Popconfirm>
+          </div>
 
-        {/* product list in factor */}
-        <div className="w-full overflow-x-auto flex lg:justify-center">
-          {/* <Table
-                bordered
-                components={components}
-                scroll={{ x: "100%" }}
-                rowClassName={() => "editable-row"}
-                dataSource={validation.values.factorItemCreateViewModels}
-                columns={columns}
-                pagination={{}}
-              /> */}
-
-          {validation?.values?.customerId && (
+          {/* product list in factor */}
+          <div className="w-full overflow-x-auto flex justify-start xl:justify-center">
             <Table
               columns={columns}
               data={validation.values.factorItemCreateViewModels}
-              updateMyData={updateMyData}
+              // updateMyData={updateMyData}
             />
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

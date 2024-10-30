@@ -32,6 +32,18 @@ export default function useSideMenuItems() {
             label: "کارمندان",
           },
           {
+            key: "/requests",
+            icon: <FaListCheck size={"1.5em"} />,
+            label: "درخواست ها",
+            children: [
+              {
+                key: "/requests/contact",
+                icon: <GoDot size={"1.5em"} />,
+                label: "تماس اولیه",
+              },
+            ],
+          },
+          {
             key: "/factor-settings",
             icon: <MdFactCheck size={"1.5em"} />,
             label: "تنظیمات فاکتور",
@@ -204,7 +216,7 @@ export default function useSideMenuItems() {
               {
                 key: "/warehouses",
                 icon: <GoDot size={"1em"} className="" />,
-                label: "فهرست انبار ها",
+                label: "فهرست",
               },
             ],
           },
