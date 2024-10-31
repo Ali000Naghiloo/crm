@@ -14,8 +14,9 @@ export default function SelectItems({ validation, factorType }) {
   const [productList, setProductList] = useState(null);
   const [productCatList, setProductCatList] = useState(null);
   const [customerList, setCustomerList] = useState(null);
-  const [unitList, setUnitList] = useState(null);
   // const [employeeList, setEmployeeList] = useState(null);
+  const [unitList, setUnitList] = useState([]);
+  const [priceList, setPriceList] = useState([]);
 
   // row counter
   const [count, setCount] = useState(1);
@@ -98,7 +99,7 @@ export default function SelectItems({ validation, factorType }) {
       editable: true,
     },
     {
-      title: "فی کل",
+      title: "مبلغ کل",
       dataIndex: "totalPrice",
       editable: true,
     },
@@ -189,26 +190,26 @@ export default function SelectItems({ validation, factorType }) {
 
     setCustomerList(datas);
   };
-  const handleGetUnitList = async () => {
-    let datas = [];
+  // const handleGetUnitList = async () => {
+  //   let datas = [];
 
-    await httpService
-      .get("/Unit/Units")
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          res.data?.unitViewModelList?.map((pr) => {
-            datas.push({
-              value: pr?.unitId,
-              label: pr?.unitName,
-            });
-          });
-        }
-      })
-      .catch(() => {});
+  //   await httpService
+  //     .get("/Unit/Units")
+  //     .then((res) => {
+  //       if (res.status === 200 && res.data?.code === 1) {
+  //         res.data?.unitViewModelList?.map((pr) => {
+  //           datas.push({
+  //             value: pr?.unitId,
+  //             label: pr?.unitName,
+  //           });
+  //         });
+  //       }
+  //     })
+  //     .catch(() => {});
 
-    setUnitList(datas);
-  };
-  const handleGetCustomerCode = async () => {
+  //   setUnitList(datas);
+  // };
+  const handleGetFactorCode = async () => {
     setLoading(true);
 
     await httpService
@@ -235,19 +236,21 @@ export default function SelectItems({ validation, factorType }) {
   // components
   const EditableCell = ({
     value: initialValue,
-    row: { index },
+    row,
     column: { id },
     // updateMyData,
     editable,
   }) => {
     const [value, setValue] = useState(initialValue);
+    const [units, setUnits] = useState([]);
+    const [prices, setPrices] = useState([]);
 
     const onChange = (value) => {
       setValue(value);
     };
 
     const onBlur = () => {
-      updateMyData(index, id, value);
+      updateMyData(row.index, id, value);
 
       if (id === "quantity") {
         handleQuantityChange(value);
@@ -260,26 +263,27 @@ export default function SelectItems({ validation, factorType }) {
     const handleQuantityChange = (value, unitPrice) => {
       onChange(value);
 
-      updateMyData(index, "quantity", value);
+      updateMyData(row.index, "quantity", value);
       updateMyData(
-        index,
+        row.index,
         "totalPrice",
         value *
           (unitPrice
             ? unitPrice
-            : validation.values.factorItemCreateViewModels[index][
+            : validation.values.factorItemCreateViewModels[row.index][
                 "productUnitPrice"
               ])
       );
     };
 
     const handleProductUnitPriceChange = (value) => {
-      // updateMyData(index, id, value);
-      updateMyData(index, "productUnitPrice", value);
+      // updateMyData(row.index, id, value);
+      updateMyData(row.index, "productUnitPrice", value);
       updateMyData(
-        index,
+        row.index,
         "totalPrice",
-        value * validation.values.factorItemCreateViewModels[index]["quantity"]
+        value *
+          validation.values.factorItemCreateViewModels[row.index]["quantity"]
       );
     };
 
@@ -292,15 +296,33 @@ export default function SelectItems({ validation, factorType }) {
         factorType: factorType,
       };
 
-      updateMyData(index, "productId", event.data?.productId);
-      updateMyData(index, "unitId", event.data["productUnitPrices"][0]?.unitId);
-      updateMyData(index, "productCategoryId", event.data?.productCategoryId);
-      // updateMyData(index, "quantity", 1);
-      updateMyData(index, "inventory", event.data?.stockQuantity);
+      updateMyData(row.index, "productId", event.data?.productId);
+      // updateMyData(row.index, "unitId", event.data["productUnitPrices"][0]?.unitId);
+      updateMyData(
+        row.index,
+        "productCategoryId",
+        event.data?.productCategoryId
+      );
+      updateMyData(row.index, "quantity", 1);
+      updateMyData(row.index, "inventory", event.data?.stockQuantity);
       await httpService
         .post("/Factor/GetFactorItemProductUnitPrice", priceFormData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
+            setUnitList([
+              ...unitList,
+              {
+                product: res.data?.productViewModel?.productId,
+                list: res.data?.productViewModel?.productUnits,
+              },
+            ]);
+            setPriceList([
+              ...priceList,
+              {
+                product: res.data?.productViewModel?.productId,
+                list: res.data?.productViewModel?.productUnitPrices,
+              },
+            ]);
             // handleProductUnitPriceChange(res.data?.finalPrice);
             // handleQuantityChange(1, res.data?.finalPrice);
           }
@@ -323,50 +345,6 @@ export default function SelectItems({ validation, factorType }) {
         <Input
           type="number"
           min={0}
-          className="w-[100px]"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onBlur={onBlur}
-        />
-      );
-    }
-    if (editable && id === "productUnitPrice") {
-      return (
-        <Input
-          type="number"
-          min={0}
-          className="w-[100px]"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onBlur={onBlur}
-        />
-      );
-    }
-    if (editable && id === "quantity") {
-      return (
-        <div className="flex gap-1">
-          {/* <Button
-            onClick={() => {
-              if (value - 1 >= 0) handleQuantityChange(value - 1);
-            }}
-          >
-            -
-          </Button> */}
-          <Input
-            type="number"
-            min={0}
-            className="w-[80px]"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={onBlur}
-          />
-          {/* <Button onClick={() => handleQuantityChange(value + 1)}>+</Button> */}
-        </div>
-      );
-    }
-    if (editable && id === "description") {
-      return (
-        <Input
           className="w-[100px]"
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -397,18 +375,71 @@ export default function SelectItems({ validation, factorType }) {
       return (
         <div className="flex gap-1">
           <Select
-            optionFilterProp="label"
+            optionFilterProp="unit"
             showSearch
             onKeyDown={() => {}}
             className="min-w-[120px]"
             value={value}
-            options={unitList}
-            onChange={(e) => {
+            // set the list with units of that product
+            onClick={() => {
+              unitList.filter((u) => {
+                u?.product == row.values?.productId ? setUnits(u?.list) : null;
+              });
+            }}
+            fieldNames={{ label: "unit", value: "unit" }}
+            options={units}
+            onChange={(e, event) => {
               setValue(e);
-              updateMyData(index, id, e);
+              updateMyData(row.index, id, event.unitId);
             }}
           />
         </div>
+      );
+    }
+    if (editable && id === "quantity") {
+      return (
+        <div className="flex gap-1">
+          <Input
+            type="number"
+            min={0}
+            className="w-[80px]"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
+          />
+        </div>
+      );
+    }
+    if (editable && id === "productUnitPrice") {
+      return (
+        <Select
+          optionFilterProp="prodcut"
+          showSearch
+          options={prices}
+          onClick={() => {
+            priceList.filter((p) => {
+              p?.product == row.values?.productId ? setPrices(p?.list) : null;
+            });
+          }}
+          fieldNames={{ label: "productPrice", value: "price" }}
+          className="w-[150px]"
+          value={value}
+          onChange={(e) => {
+            setValue(e);
+            updateMyData(row.index, id, e);
+          }}
+          onBlur={onBlur}
+        />
+      );
+    }
+    if (editable && id === "description") {
+      return (
+        <Input
+          className="w-[100px]"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+        />
       );
     }
     if (editable && id === "actions") {
@@ -416,12 +447,12 @@ export default function SelectItems({ validation, factorType }) {
         <div className="flex gap-1">
           <Button
             onClick={() => {
-              if (index > 0) {
-                handleDelete(index);
+              if (row.index > 0) {
+                handleDelete(row.index);
               }
             }}
             danger
-            disabled={index == 0}
+            disabled={row.index == 0}
           >
             حذف
           </Button>
@@ -505,12 +536,12 @@ export default function SelectItems({ validation, factorType }) {
 
   // get lists request
   useEffect(() => {
-    handleGetCustomerCode();
+    handleGetFactorCode();
 
     handleGetProductList();
     handleGetProductCatList();
     handleGetCustomerList();
-    handleGetUnitList();
+    // handleGetUnitList();
     // handleGetEmployeesList();
   }, []);
 
@@ -575,7 +606,7 @@ export default function SelectItems({ validation, factorType }) {
           </div>
 
           {/* product list in factor */}
-          <div className="w-full overflow-x-auto flex justify-start xl:justify-center">
+          <div className="w-full overflow-x-auto flex justify-start xl:justify-center mt-5">
             <Table
               columns={columns}
               data={validation.values.factorItemCreateViewModels}

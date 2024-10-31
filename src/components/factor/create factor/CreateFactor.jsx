@@ -196,6 +196,7 @@ export default function CreateFactor() {
               subtitle: "",
             });
           } else {
+            toast.error(res.data?.msg);
             setResult({
               status: "error",
               title: "در ثبت فاکتور شما خطا بوجود آمد",
