@@ -18,6 +18,7 @@ export default function RequestContactModal({
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState(null);
+  const [titleList, setTitleList] = useState(null);
   const [usersList, setUsersList] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
@@ -64,13 +65,13 @@ export default function RequestContactModal({
             })
           : [],
       initialRequestItems: values?.initialRequestItems
-        ? values?.initialRequestItems.map((i) => {
-            return {
+        ? [
+            {
               itemRow: 0,
-              initialRequestId: 0,
+              initialRequestId: values?.initialRequestItems,
               description: "",
-            };
-          })
+            },
+          ]
         : [],
     };
 
@@ -92,6 +93,21 @@ export default function RequestContactModal({
     setLoading(true);
     const formData = {
       ...values,
+      customerInitialRequestResponsibles:
+        values?.customerInitialRequestResponsibles
+          ? values?.customerInitialRequestResponsibles.map((res) => {
+              return { userId: res };
+            })
+          : [],
+      initialRequestItems: values?.initialRequestItems
+        ? [
+            {
+              itemRow: 0,
+              initialRequestId: values?.initialRequestItems,
+              description: "",
+            },
+          ]
+        : [],
       id: data?.id,
     };
 
@@ -147,6 +163,25 @@ export default function RequestContactModal({
 
     setUsersList(datas);
   };
+  const handleGetTitleList = async () => {
+    let datas = [];
+
+    await httpService
+      .get("/InitialRequest/GetAllInitialRequest")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code == 1) {
+          res.data?.initialRequestViewModelList?.map((i) => {
+            datas.push({
+              value: i?.id,
+              label: i?.name,
+            });
+          });
+        }
+      })
+      .catch(() => {});
+
+    setTitleList(datas);
+  };
 
   const handleGetCode = async () => {
     await httpService
@@ -162,6 +197,11 @@ export default function RequestContactModal({
   useEffect(() => {
     if (data) {
       validation.setFieldValue("id", data?.id);
+      validation.setFieldValue("customerId", data?.customerId);
+      validation.setFieldValue(
+        "customerInitialRequestResponsibles",
+        data?.customerInitialRequestResponsibles
+      );
     }
   }, [data]);
 
@@ -172,6 +212,7 @@ export default function RequestContactModal({
   useEffect(() => {
     handleGetCustomerList();
     handleGetEmployeesList();
+    handleGetTitleList();
   }, []);
 
   return (
@@ -235,6 +276,28 @@ export default function RequestContactModal({
                 validation.errors.customerId && (
                   <span className="text-red-300 text-xs">
                     {validation.errors.customerId}
+                  </span>
+                )}
+            </div>
+
+            <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
+              <span>عنوان درخواست :</span>
+              <Select
+                options={titleList}
+                value={validation.values.initialRequestItems}
+                name="initialRequestItems"
+                onChange={(e, event) => {
+                  console.log(event);
+                  validation.setFieldValue("initialRequestItems", event?.value);
+                  validation.setFieldValue("customer", event?.label);
+                }}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.initialRequestItems &&
+                validation.errors.initialRequestItems && (
+                  <span className="text-red-300 text-xs">
+                    {validation.errors.initialRequestItems}
                   </span>
                 )}
             </div>

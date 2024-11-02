@@ -164,23 +164,6 @@ export default function CreateFactor() {
   const handleCreateFactor = async (values) => {
     setLoading(true);
     const formData = {
-      // factorNumber: values?.factorNumber,
-      // factorDate: values?.factorDate,
-      // customerId: values?.customerId,
-      // totalFactorQuantity: values?.totalFactorQuantity,
-      // totalFactorDiscount: values?.totalFactorDiscount,
-      // totalFactorPrice: values?.totalFactorPrice,
-      // factorDescription: values?.factorDescription,
-      // factorResponsibleId: values?.factorResponsibleId,
-      // factorItemCreateViewModels:
-      //   values?.factorItemCreateViewModels &&
-      //   values?.factorItemCreateViewModels?.length !== 0
-      //     ? values?.factorItemCreateViewModels?.map((item) => {
-      //         return {
-      //           ...item,
-      //         };
-      //       })
-      //     : null,
       ...values,
     };
 
@@ -236,6 +219,48 @@ export default function CreateFactor() {
     if (pageData?.type === 4) {
       await httpService
         .post("/Factor/CreateReturnFactor", formData)
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            toast.success("با موفقیت تعریف شد");
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ثبت شد",
+              subtitle: "",
+            });
+          }
+        })
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ثبت فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
+    }
+    if (pageData?.type === 5) {
+      await httpService
+        .post("/Factor/CreatePurchaseFactor", formData)
+        .then((res) => {
+          if (res.status === 200 && res.data?.code === 1) {
+            toast.success("با موفقیت تعریف شد");
+            setResult({
+              status: "success",
+              title: "فاکتور شما با موفقیت ثبت شد",
+              subtitle: "",
+            });
+          }
+        })
+        .catch(() => {
+          setResult({
+            status: "error",
+            title: "در ثبت فاکتور شما خطا بوجود آمد",
+            subtitle: "",
+          });
+        });
+    }
+    if (pageData?.type === 6) {
+      await httpService
+        .post("/Factor/CreateReturnPurchaseFactor", formData)
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             toast.success("با موفقیت تعریف شد");
@@ -351,7 +376,7 @@ export default function CreateFactor() {
         validation.setFieldValue(
           "factorItemCreateViewModels",
           validation.values.factorItemCreateViewModels?.filter(
-            (i) => i.productId !== null
+            (i) => i.productId !== null && i.unitId !== null
           )
         );
         setCurrentStep(currentStep + 1);
@@ -366,7 +391,7 @@ export default function CreateFactor() {
     }
   };
 
-  const handleModalTitle = () => {
+  const handlePageTitle = () => {
     // if (pageData?.type == 0) {
     //   setFactorTitle("ثبت درخواست اولیه جدید");
     // }
@@ -379,17 +404,25 @@ export default function CreateFactor() {
     if (pageData?.type == 4) {
       setFactorTitle("ثبت فاکتور برگشت از فروش جدید");
     }
+    if (pageData?.type == 5) {
+      setFactorTitle("ثبت فاکتور خرید جدید");
+    }
+    if (pageData?.type == 6) {
+      setFactorTitle("ثبت فاکتور برگشت از خرید جدید");
+    }
   };
 
-  // count factor price
   useEffect(() => {
-    // console.log(validation.values);
     if (validation.values.factorItemCreateViewModels.length !== 0) {
+      // count factor totals
       let prices = 0;
+      let quantity = 0;
       validation.values.factorItemCreateViewModels.map((value) => {
         prices += value.totalPrice;
+        quantity += parseInt(value.quantity);
       });
       validation.setFieldValue("totalFactorPrice", prices);
+      validation.setFieldValue("totalFactorQuantity", quantity);
     }
   }, [validation.values]);
 
@@ -408,7 +441,7 @@ export default function CreateFactor() {
       setFactorTitle(`ویرایش فاکتور : ${pageData?.data?.factorNumber}`);
       handleGetFactorData(pageData?.id);
     } else {
-      handleModalTitle();
+      handlePageTitle();
     }
   }, [pageData]);
 

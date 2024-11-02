@@ -161,21 +161,6 @@ export default function NoteTab({ data }) {
               navigate("/factors/create", {
                 state: {
                   data: data,
-                  type: 0,
-                },
-              });
-            }}
-            className="min-w-[300px] mx-auto"
-            size="middle"
-            type="primary"
-          >
-            ثبت درخواست کالا
-          </Button>{" "}
-          <Button
-            onClick={() => {
-              navigate("/factors/create", {
-                state: {
-                  data: data,
                   type: 2,
                   customerId: data?.customerId,
                 },

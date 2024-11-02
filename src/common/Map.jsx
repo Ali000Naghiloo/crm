@@ -37,7 +37,7 @@ export default function Map({ position, setPosition }) {
       iconSize: [30, 30],
     });
 
-    return position.length !== 0 ? (
+    return position && position.length !== 0 ? (
       <Marker position={{ lat: position[0], lng: position[1] }} icon={Icon}>
         <Popup className="">موقعیت انتخاب شده</Popup>
       </Marker>
@@ -60,14 +60,17 @@ export default function Map({ position, setPosition }) {
       {showMapIfOnline ? (
         <MapContainer
           className="rounded-lg h-[250px]"
-          center={position}
+          center={position ? position : [35, 51]}
           zoom={10}
           scrollWheelZoom={true}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
           <LocateOnClick />
-          <RecenterAutomatically lat={position[0]} lng={position[1]} />
+          <RecenterAutomatically
+            lat={position ? position[0] : 35}
+            lng={position ? position[1] : 51}
+          />
         </MapContainer>
       ) : (
         <div className="w-full flex justify-center items-center p-2">

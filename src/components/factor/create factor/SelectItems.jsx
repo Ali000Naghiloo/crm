@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import useHttp from "../../../hooks/useHttps";
 import { BsPlusLg } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
+import formatHelper from "../../../helper/formatHelper";
 
 export default function SelectItems({ validation, factorType }) {
   const { httpService } = useHttp();
@@ -226,6 +227,24 @@ export default function SelectItems({ validation, factorType }) {
     setLoading(false);
   };
 
+  const handleRenderProductUnitList = ({ value, onChange, productId }) => {
+    let options = unitList.filter((u) => {
+      if (u?.product == productId) {
+        return u?.list;
+      }
+    });
+
+    return (
+      <Select
+        className="w-[90px]"
+        value={value}
+        options={options[0]?.list ? options[0].list : []}
+        onChange={onChange}
+        fieldNames={{ label: "unit", value: "unitId" }}
+      />
+    );
+  };
+
   const updateMyData = (rowIndex, columnId, value) => {
     validation.setFieldValue(
       `factorItemCreateViewModels[${rowIndex}][${columnId}]`,
@@ -297,13 +316,11 @@ export default function SelectItems({ validation, factorType }) {
       };
 
       updateMyData(row.index, "productId", event.data?.productId);
-      // updateMyData(row.index, "unitId", event.data["productUnitPrices"][0]?.unitId);
       updateMyData(
         row.index,
         "productCategoryId",
         event.data?.productCategoryId
       );
-      updateMyData(row.index, "quantity", 1);
       updateMyData(row.index, "inventory", event.data?.stockQuantity);
       await httpService
         .post("/Factor/GetFactorItemProductUnitPrice", priceFormData)
@@ -323,8 +340,18 @@ export default function SelectItems({ validation, factorType }) {
                 list: res.data?.productViewModel?.productUnitPrices,
               },
             ]);
-            // handleProductUnitPriceChange(res.data?.finalPrice);
-            // handleQuantityChange(1, res.data?.finalPrice);
+            updateMyData(
+              row.index,
+              "unitId",
+              res.data.productViewModel.productUnits[0].unitId
+            );
+            handleProductUnitPriceChange(
+              res.data.productViewModel.productUnitPrices[0].price
+            );
+            handleQuantityChange(
+              1,
+              res.data.productViewModel.productUnitPrices[0].price
+            );
           }
         })
         .catch(() => {});
@@ -374,25 +401,14 @@ export default function SelectItems({ validation, factorType }) {
     if (editable && id === "unitId") {
       return (
         <div className="flex gap-1">
-          <Select
-            optionFilterProp="unit"
-            showSearch
-            onKeyDown={() => {}}
-            className="min-w-[120px]"
-            value={value}
-            // set the list with units of that product
-            onClick={() => {
-              unitList.filter((u) => {
-                u?.product == row.values?.productId ? setUnits(u?.list) : null;
-              });
-            }}
-            fieldNames={{ label: "unit", value: "unit" }}
-            options={units}
-            onChange={(e, event) => {
+          {handleRenderProductUnitList({
+            value: row.values?.unitId,
+            onChange: (e, event) => {
               setValue(e);
               updateMyData(row.index, id, event.unitId);
-            }}
-          />
+            },
+            productId: row.values.productId,
+          })}
         </div>
       );
     }
@@ -426,7 +442,8 @@ export default function SelectItems({ validation, factorType }) {
           value={value}
           onChange={(e) => {
             setValue(e);
-            updateMyData(row.index, id, e);
+            handleProductUnitPriceChange(e);
+            handleQuantityChange(row.values?.quantity, e);
           }}
           onBlur={onBlur}
         />
@@ -567,6 +584,7 @@ export default function SelectItems({ validation, factorType }) {
         <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
           <span>شخص :</span>
           <Select
+            showSearch
             optionFilterProp="label"
             options={customerList}
             value={validation.values.customerId}
@@ -606,12 +624,29 @@ export default function SelectItems({ validation, factorType }) {
           </div>
 
           {/* product list in factor */}
-          <div className="w-full overflow-x-auto flex justify-start xl:justify-center mt-5">
+          <div className="w-full overflow-x-auto flex flex-col justify-start xl:justify-center mt-5">
             <Table
               columns={columns}
               data={validation.values.factorItemCreateViewModels}
               // updateMyData={updateMyData}
             />
+
+            <div className="w-full flex gap-2 flex-col items-center justify-center p-10">
+              <div className="flex gap-2">
+                <span>مقدار کل:</span>
+                <span className="font-bold text-lg">
+                  {validation.values.totalFactorQuantity}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <span>مبلغ کل:</span>
+                <span className="font-bold text-lg">
+                  {formatHelper.numberSeperator(
+                    validation.values.totalFactorPrice
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}

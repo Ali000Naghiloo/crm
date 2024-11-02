@@ -70,18 +70,7 @@ export default function AddressModal({
   const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
-      customerId: values.customerId,
-      customerConnectorId: values.customerConnectorId,
-      priority: values.priority,
-      addressName: values.addressName,
-      country: values.country,
-      province: values.province,
-      city: values.city,
-      address: values.address,
-      postalCode: values.postalCode,
-      lat: values.lat,
-      lng: values.lng,
-      description: values.description,
+      ...values,
     };
 
     await httpService
@@ -89,12 +78,12 @@ export default function AddressModal({
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
+          handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
 
-    handleClose();
-    getNewList();
     setLoading(false);
   };
 
@@ -130,18 +119,8 @@ export default function AddressModal({
   const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
-      customerId: values.customerId,
-      customerConnectorId: values.customerConnectorId,
-      priority: values.priority,
-      addressName: values.addressName,
-      country: values.country,
-      province: values.province,
-      city: values.city,
-      address: values.address,
-      postalCode: values.postalCode,
-      lat: values.lat,
-      lng: values.lng,
-      description: values.description,
+      ...values,
+      id: data?.id,
     };
 
     await httpService
@@ -149,37 +128,38 @@ export default function AddressModal({
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ویرایش شد");
+          handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
 
-    handleClose();
-    getNewList();
     setLoading(false);
   };
 
   useEffect(() => {
     if (mode === "edit" && data) {
       validation.setFieldValue("customerId", customerId);
-      validation.setFieldValue("customerConnectorId", data.customerConnectorId);
-      validation.setFieldValue("priority", data.priority);
-      validation.setFieldValue("addressName", data.addressName);
-      validation.setFieldValue("country", data.country);
-      validation.setFieldValue("province", data.province);
-      validation.setFieldValue("province", data.province);
-      validation.setFieldValue("city", data.city);
-      validation.setFieldValue("address", data.address);
-      validation.setFieldValue("postalCode", data.postalCode);
-      validation.setFieldValue("lat", data.lat);
-      validation.setFieldValue("lng", data.lng);
-      validation.setFieldValue("description", data.description);
+      validation.setFieldValue(
+        "customerConnectorId",
+        data?.customerConnectorId
+      );
+      validation.setFieldValue("priority", data?.priority);
+      validation.setFieldValue("addressName", data?.addressName);
+      validation.setFieldValue("country", data?.country);
+      validation.setFieldValue("province", data?.province);
+      validation.setFieldValue("province", data?.province);
+      validation.setFieldValue("city", data?.city);
+      validation.setFieldValue("address", data?.address);
+      validation.setFieldValue("postalCode", data?.postalCode);
+      validation.setFieldValue("lat", data?.lat);
+      validation.setFieldValue("lng", data?.lng);
+      validation.setFieldValue("description", data?.description);
     }
 
     if (mode === "create" && customerId) {
       validation.setFieldValue("customerId", customerId);
     }
-
-    console.log(customerId);
   }, [data, customerId]);
 
   return (
@@ -307,7 +287,11 @@ export default function AddressModal({
             <span>موقعیت بر روی نقشه :</span>
             <div className="w-full flex flex-col">
               <Map
-                position={[validation.values.lat, validation.values.lng]}
+                position={
+                  validation.values.lat
+                    ? [validation.values.lat, validation.values.lng]
+                    : null
+                }
                 setPosition={(e) => {
                   validation.setFieldValue("lat", e[0]);
                   validation.setFieldValue("lng", e[1]);

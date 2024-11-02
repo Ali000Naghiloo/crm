@@ -168,7 +168,7 @@ export default function useSideMenuItems() {
                 label: "فاکتور برگشت از فروش",
               },
               {
-                key: "/factors/but-factors",
+                key: "/factors/buy-factors",
                 icon: <GoDot size={"1em"} className="" />,
                 label: "فاکتور خرید",
               },

@@ -11,7 +11,12 @@ import ProductLimit from "./ProductLimit";
 import { FaTableList } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-export default function CreateLimit({ conditionId, limitId }) {
+export default function CreateLimit({
+  conditionId,
+  limitId,
+  handleClose,
+  getNewList,
+}) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
@@ -22,7 +27,7 @@ export default function CreateLimit({ conditionId, limitId }) {
   const validation = useFormik({
     initialValues: {
       priority: 0,
-      additionsAndDeductionsId: 0,
+      additionsAndDeductionsId: conditionId,
       condition: {
         conditionTitle: "",
         conditionsType: 0,
@@ -100,6 +105,9 @@ export default function CreateLimit({ conditionId, limitId }) {
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           toast.success(`شروط شما با موفقیت به اضافه کسری نسبت داده شد`);
+          validation.resetForm();
+          handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
@@ -111,8 +119,10 @@ export default function CreateLimit({ conditionId, limitId }) {
     setCreateLoading(true);
     const postData = {
       ...values,
+      additionsAndDeductionsId: conditionId,
       additionsAndDeductionsAllConditionsId: limitId,
     };
+    navigator.clipboard.writeText(JSON.stringify(postData, null, 2));
 
     await httpService
       .post(
@@ -122,6 +132,9 @@ export default function CreateLimit({ conditionId, limitId }) {
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           toast.success(`شروط شما با موفقیت به اضافه کسری نسبت داده شد`);
+          validation.resetForm();
+          handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
@@ -245,10 +258,6 @@ export default function CreateLimit({ conditionId, limitId }) {
       handleGetLimitData();
     }
   }, [limitId]);
-
-  useEffect(() => {
-    console.log(validation.values);
-  }, [validation.values]);
 
   return (
     <>

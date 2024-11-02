@@ -9,16 +9,31 @@ import UsersList from "./usersList/UsersList";
 import UserChat from "./userChat/UserChat";
 
 const Chat = () => {
+  const { httpService } = useHttp();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const { httpService } = useHttp();
-  const [usersList, setUsersList] = useState(null);
+  const [usersList, setUsersList] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
 
-  // const handleGetUsers = () => {};
+  const handleGetUsersList = async () => {
+    let datas = [];
+
+    await httpService
+      .get("/Account/GetAllUsers")
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          datas = res.data.data;
+        }
+      })
+      .catch(() => {});
+
+    setUsersList(datas);
+  };
 
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "مدیریت پروژه" }, { label: "گفتگو" }]));
+
+    handleGetUsersList();
   }, []);
 
   return (
@@ -45,6 +60,7 @@ const Chat = () => {
           <UsersList
             setSelectedChat={setSelectedChat}
             selectedChat={selectedChat}
+            usersData={usersList}
           />
           <UserChat selectedChat={selectedChat} />
         </div>

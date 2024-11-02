@@ -56,6 +56,21 @@ export default function LimitData({ values, setField }) {
       },
     },
     {
+      title: "اولویت شرط",
+      dataIndex: "priority",
+      key: "priority",
+      render: (value, record) => {
+        return (
+          <Input
+            type="number"
+            className="w-[150px]"
+            value={value}
+            onChange={(e) => handleCellChange(`priority`, e.target.value)}
+          />
+        );
+      },
+    },
+    {
       title: "مقدار شرط",
       dataIndex: "conditionsValue",
       key: "conditionsValue",

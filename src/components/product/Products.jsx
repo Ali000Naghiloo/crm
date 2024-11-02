@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PageRoutes from "../../common/PageRoutes";
 import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Input, Popconfirm, Table } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 import CreateProduct from "./create product/CreateProduct";
@@ -27,6 +27,7 @@ export default function Products() {
     open: false,
     id: null,
   });
+  const [filters, setFilters] = useState({ keyword: "" });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   // imports
@@ -166,6 +167,28 @@ export default function Products() {
     setLoading(false);
   };
 
+  const handleGetListByKeyword = async () => {
+    setLoading(true);
+    const formData = {
+      keyword: filters.keyword,
+    };
+
+    await httpService
+      .get("/Product/SearchProducts", { params: formData })
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          let datas = [];
+          res.data.productViewModelList.map((data, index) => {
+            datas.push({ ...data, index: index + 1, key: index });
+          });
+          setPageList(datas);
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     dispatch(
       setPageRoutes([
@@ -176,6 +199,19 @@ export default function Products() {
 
     handleGetList();
   }, []);
+
+  useEffect(() => {
+    if (filters.keyword.length !== 0) {
+      const timeoutId = setTimeout(() => {
+        handleGetListByKeyword();
+      }, 1000);
+      setFilters({ ...filters, loading: false });
+      return () => clearTimeout(timeoutId);
+    } else {
+      handleGetList();
+      setFilters({ ...filters, loading: false });
+    }
+  }, [filters.keyword]);
 
   return (
     <Suspense fallback={<></>}>
@@ -209,6 +245,22 @@ export default function Products() {
           >
             تعریف کالا/خدمات جدید
           </Button>
+        </div>
+
+        {/* filter bar */}
+        <div className="w-full mt-10">
+          <Input.Search
+            className="w-full"
+            size="large"
+            variant="filled"
+            placeholder="برای جستجو در مشخصات کالا و خدمات شروع به نوشتن کنید..."
+            loading={filters.loading}
+            value={filters.keyword}
+            onChange={(e) =>
+              setFilters({ loading: true, keyword: e.target.value })
+            }
+            allowClear
+          />
         </div>
 
         {/* content */}

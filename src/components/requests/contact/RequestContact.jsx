@@ -36,20 +36,34 @@ export default function RequestContact({ pageType }) {
     },
     {
       title: "عنوان",
-      dataIndex: "name",
-      sorter: (a, b) => a.name - b.name,
-      key: "name",
+      dataIndex: "initialRequestItems",
+      render: (values) =>
+        values && values?.length !== 0 ? (
+          <Tag>{values[0]?.initialRequest}</Tag>
+        ) : (
+          "---"
+        ),
+      key: "initialRequestItems",
+    },
+    {
+      title: "عنوان",
+      dataIndex: "customer",
+      render: (value) => (value ? <div>{value}</div> : "---"),
+      key: "customer",
+    },
+    {
+      title: "مسئول رسیدگی",
+      dataIndex: "customerInitialRequestResponsibles",
+      render: (values) =>
+        values && values?.length !== 0
+          ? values?.map((i) => <Tag>{i.user}</Tag>)
+          : "---",
+      key: "customerInitialRequestResponsibles",
     },
     {
       title: "کد درخواست",
       dataIndex: "code",
       key: "code",
-    },
-    {
-      title: "توضیحات",
-      dataIndex: "description",
-      render: (value) => <>{value ? formatHelper.cutString(value, 20) : "-"}</>,
-      key: "description",
     },
     {
       title: "عملیات",

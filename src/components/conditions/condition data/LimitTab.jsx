@@ -17,7 +17,7 @@ export default function LimitTab({ data }) {
     id: null,
   });
 
-  const handleGetLimitList = async () => {
+  const handleGetList = async () => {
     setLoading(true);
     const formData = {
       factorAdditionsAndDeductionsId: data?.additionsAndDeductionsId,
@@ -59,7 +59,8 @@ export default function LimitTab({ data }) {
     )
       .then((res) => {
         if (res.status === 200) {
-          handleGetLimitList();
+          handleGetList();
+          setSelectedLimit(null);
         }
       })
       .catch(() => {});
@@ -68,7 +69,7 @@ export default function LimitTab({ data }) {
   };
 
   useEffect(() => {
-    handleGetLimitList();
+    handleGetList();
   }, [data]);
 
   return (
@@ -133,13 +134,20 @@ export default function LimitTab({ data }) {
           )}
         </div>
 
-        {selectedLimit && <CreateLimit limitId={selectedLimit} />}
+        {selectedLimit && (
+          <CreateLimit
+            conditionId={data?.additionsAndDeductionsId}
+            limitId={selectedLimit}
+            getNewList={handleGetList}
+          />
+        )}
         {createModal.open && (
           <CreateLimitModal
             open={createModal.open}
             setOpen={(e) => {
               setCreateModal({ open: e });
             }}
+            getNewList={handleGetList}
             conditionId={data?.additionsAndDeductionsId}
           />
         )}

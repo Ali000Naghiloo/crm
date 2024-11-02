@@ -10,13 +10,18 @@ import { setPageRoutes } from "../../store/reducers/pageRoutes";
 import PageRoutes from "../../common/PageRoutes";
 import { useNavigate } from "react-router-dom";
 import formatHelper from "../../helper/formatHelper";
+import moment from "jalali-moment";
 // import ViewFactor from "./view factor/ViewFactor";
 
+// #region pageTypes
 // pageType {
-//   0 : "فاکتور",
-//   1 : "پیش فاکتور",
-//   2 : "فاکتور برگشت از فروش",
+//   2 : "پیش فاکتور",
+//   3 : "فاکتور فروش",
+//   4 : "فاکتور برگشت از فروش",
+//   5 : "فاکتور خرید"
+//   6 : "برگشت از خرید"
 // }
+// #endregion
 
 export default function Factors({ pageType }) {
   const dispatch = useDispatch();
@@ -47,6 +52,16 @@ export default function Factors({ pageType }) {
       dataIndex: "factorNumber",
       sorter: (a, b) => a.factorNumber - b.factorNumber,
       key: "factorNumber",
+    },
+    {
+      title: "تاریخ فاکتور",
+      dataIndex: "factorDate",
+      render: (value) => (
+        <div>
+          {value ? moment().utc().locale("fa").format("YYYY/MM/DD") : "-"}
+        </div>
+      ),
+      key: "factorDate",
     },
     {
       title: "شخص",
@@ -181,6 +196,12 @@ export default function Factors({ pageType }) {
     }
     if (pageType === 4) {
       return "فهرست فاکتور های برگشت از فروش";
+    }
+    if (pageType === 5) {
+      return "فهرست فاکتور های خرید";
+    }
+    if (pageType === 6) {
+      return "فهرست فاکتور های برگشت از خرید";
     }
   };
 

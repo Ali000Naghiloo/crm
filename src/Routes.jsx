@@ -37,6 +37,8 @@ import BoardPage from "./pages/user/taskmanager/projects/BoardPage";
 import RequestProductPage from "./pages/user/requests/RequestProductPage";
 import RequestContactPage from "./pages/user/requests/RequestContactPage";
 import UnitsPage from "./pages/user/units/UnitsPage";
+import RejectedBuyFactorPage from "./pages/user/factors/RejectedBuyFactorPage";
+import BuyFactorsPage from "./pages/user/factors/BuyFactorsPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -72,10 +74,10 @@ export default function AllRoutes() {
             path="/factors/sell-rejected"
             element={<RejectedFactorsPage />}
           />
-          <Route path="/buy-factors" element={<FactorsPage />} />
+          <Route path="/factors/buy-factors" element={<BuyFactorsPage />} />
           <Route
             path="/factors/buy-rejected"
-            element={<RejectedFactorsPage />}
+            element={<RejectedBuyFactorPage />}
           />
           <Route path="/factors/create" element={<CreateFactorPage />} />
           <Route path="/factors/edit" element={<CreateFactorPage />} />
