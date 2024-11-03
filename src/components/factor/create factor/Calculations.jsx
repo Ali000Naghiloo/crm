@@ -4,11 +4,15 @@ import { useSelector } from "react-redux";
 import useHttp from "../../../hooks/useHttps";
 import formatHelper from "../../../helper/formatHelper";
 
-export default function Calculations({ validation, factorItems }) {
+export default function Calculations({
+  validation,
+  factorItems,
+  factorTotalQuantity,
+}) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState();
   const [calculations, setCalculations] = useState({
-    allFactorPrice: 0,
+    allFactorPrice: 0, // before conditions
     allConditions: null,
     allConditionsValue: 0,
     paymentMethod: 0,
@@ -38,11 +42,6 @@ export default function Calculations({ validation, factorItems }) {
             allConditionsValue: allConditionsValue,
             allFactorPrice: validation.values.totalFactorPrice,
           });
-
-          validation.setFieldValue(
-            "factorAdditionsAndDeductionsMappings",
-            res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList
-          );
         }
       })
       .catch(() => {});
@@ -53,9 +52,22 @@ export default function Calculations({ validation, factorItems }) {
   useEffect(() => {
     if (factorItems) {
       handleCalculations();
-      console.log(validation.values);
     }
   }, [factorItems]);
+
+  useEffect(() => {
+    if (calculations.allFactorPrice) {
+      validation.setFieldValue(
+        "totalFactorPrice",
+        calculations.allFactorPrice + calculations.allConditionsValue
+      );
+      validation.setFieldValue("totalFactorQuantity", factorTotalQuantity);
+      validation.setFieldValue(
+        "factorAdditionsAndDeductionsMappings",
+        calculations.allConditions
+      );
+    }
+  }, [calculations]);
 
   return (
     <>

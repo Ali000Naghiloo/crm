@@ -287,11 +287,21 @@ export default function CreateFactor() {
   const handleEditFactor = async (values) => {
     setLoading(true);
     const formData = {
-      ...values,
       factorId: pageData?.id,
       factorItemEditViewModels: values?.factorItemCreateViewModels
         ? values?.factorItemCreateViewModels
         : [],
+      factorNumber: values?.factorNumber,
+      factorDate: values?.factorDate,
+      customerId: values?.customerId,
+      totalFactorQuantity: values?.totalFactorQuantity,
+      totalFactorDiscount: values?.totalFactorDiscount,
+      totalFactorPrice: values?.totalFactorPrice,
+      factorDescription: values?.factorDescription,
+      factorResponsibleId: values?.factorResponsibleId,
+      factorItemCreateViewModels: values?.factorItemCreateViewModels,
+      factorAdditionsAndDeductionsEditMappings:
+        values?.factorAdditionsAndDeductionsMappings,
     };
 
     if (pageData?.type === 2) {
@@ -412,20 +422,6 @@ export default function CreateFactor() {
     }
   };
 
-  useEffect(() => {
-    if (validation.values.factorItemCreateViewModels.length !== 0) {
-      // count factor totals
-      let prices = 0;
-      let quantity = 0;
-      validation.values.factorItemCreateViewModels.map((value) => {
-        prices += value.totalPrice;
-        quantity += parseInt(value.quantity);
-      });
-      validation.setFieldValue("totalFactorPrice", prices);
-      validation.setFieldValue("totalFactorQuantity", quantity);
-    }
-  }, [validation.values]);
-
   // set factor-responsible and customer
   useEffect(() => {
     if (userData) {
@@ -530,6 +526,7 @@ export default function CreateFactor() {
               <Calculations
                 validation={validation}
                 factorItems={validation.values.factorItemCreateViewModels}
+                factorTotalQuantity={validation.values.totalFactorQuantity}
                 setStep={setCurrentStep}
               />
             )}

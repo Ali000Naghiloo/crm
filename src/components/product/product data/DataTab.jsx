@@ -6,6 +6,7 @@ import * as yup from "yup";
 import useHttp from "../../../hooks/useHttps";
 import MyDatePicker from "../../../common/MyDatePicker";
 import { toast } from "react-toastify";
+import UnitTab from "./UnitTab";
 
 export default function DataTab({ open, setOpen, getNewList, data }) {
   const { httpService } = useHttp();
@@ -39,6 +40,12 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
       description: "",
       manufactureDate: null,
       expiryDate: null,
+      productUnits: [
+        {
+          unitId: 0,
+          quantityInUnit: 0,
+        },
+      ],
       sku: null,
       stockQuantity: 0,
       productCategoryId: null,
@@ -192,6 +199,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
       validation.setFieldValue("sku", data?.sku);
       validation.setFieldValue("stockQuantity", data?.stockQuantity);
       validation.setFieldValue("productCategoryId", data?.productCategoryId);
+      validation.setFieldValue("productUnits", data?.productUnits);
       validation.setFieldValue(
         "productManufacturerProducts",
         data?.productManufacturerProducts &&
@@ -303,6 +311,13 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               </span>
             )}
           </div>
+
+          <UnitTab
+            unit={validation.values.unitId}
+            setUnit={(e) =>
+              validation.setFieldValue("productUnits[0].unitId", e)
+            }
+          />
 
           {!validation.values.serviceProduct && (
             <>

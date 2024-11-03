@@ -16,6 +16,7 @@ export default function SelectItems({ validation, factorType }) {
   const [productCatList, setProductCatList] = useState(null);
   const [customerList, setCustomerList] = useState(null);
   // const [employeeList, setEmployeeList] = useState(null);
+  const [totals, setTotals] = useState({ quantity: 0, price: 0 });
   const [unitList, setUnitList] = useState([]);
   const [priceList, setPriceList] = useState([]);
 
@@ -562,6 +563,21 @@ export default function SelectItems({ validation, factorType }) {
     // handleGetEmployeesList();
   }, []);
 
+  useEffect(() => {
+    if (validation.values.factorItemCreateViewModels.length !== 0) {
+      // count factor totals
+      let prices = 0;
+      let quantity = 0;
+      validation.values.factorItemCreateViewModels.map((value) => {
+        prices += parseInt(value.totalPrice);
+        quantity += parseInt(value.quantity);
+      });
+      validation.setFieldValue("totalFactorPrice", prices);
+      validation.setFieldValue("totalFactorQuantity", quantity);
+      setTotals({ quantity: quantity, price: prices });
+    }
+  }, [validation.values]);
+
   return (
     <div className="w-full flex flex-wrap">
       <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
@@ -586,6 +602,7 @@ export default function SelectItems({ validation, factorType }) {
           <Select
             showSearch
             optionFilterProp="label"
+            loading={!customerList ? true : false}
             options={customerList}
             value={validation.values.customerId}
             onChange={(e) => {
@@ -634,16 +651,12 @@ export default function SelectItems({ validation, factorType }) {
             <div className="w-full flex gap-2 flex-col items-center justify-center p-10">
               <div className="flex gap-2">
                 <span>مقدار کل:</span>
-                <span className="font-bold text-lg">
-                  {validation.values.totalFactorQuantity}
-                </span>
+                <span className="font-bold text-lg">{totals.quantity}</span>
               </div>
               <div className="flex gap-2">
                 <span>مبلغ کل:</span>
                 <span className="font-bold text-lg">
-                  {formatHelper.numberSeperator(
-                    validation.values.totalFactorPrice
-                  )}
+                  {formatHelper.numberSeperator(totals.price)}
                 </span>
               </div>
             </div>

@@ -25,7 +25,6 @@ export default function UnitModal({
   });
 
   const validationSchema = yup.object().shape({
-    unit: yup.string().required("لطفا این فیلد را پر کنید"),
     unitId: yup.string().required("لطفا این فیلد را پر کنید"),
   });
 
@@ -43,6 +42,8 @@ export default function UnitModal({
     onSubmit: (values) => {
       if (!data) {
         handleCreate(values);
+      } else {
+        handleEdit(values);
       }
     },
   });
@@ -61,6 +62,28 @@ export default function UnitModal({
 
     await httpService
       .post("/ProductUnit/CreateProductUnit", formData)
+      .then((res) => {
+        if (res.status === 200 && res.data?.code === 1) {
+          toast.success("با موفقیت ایجاد شد");
+          handleClose();
+          getNewList();
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
+  const handleEdit = async (values) => {
+    setLoading(true);
+    const formData = {
+      ...values,
+      unitId: data,
+      productId: productId,
+    };
+
+    await httpService
+      .post("/ProductUnit/EditProductUnit", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
@@ -121,7 +144,7 @@ export default function UnitModal({
           onFinish={validation.handleSubmit}
           className="w-full flex flex-wrap gap-3 pt-4"
         >
-          <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
+          {/* <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
             <span>عنوان واحد :</span>
             <Input
               min={0}
@@ -136,7 +159,7 @@ export default function UnitModal({
                 {validation.errors.unit}
               </span>
             )}
-          </div>
+          </div> */}
 
           <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
             <span>واحد :</span>

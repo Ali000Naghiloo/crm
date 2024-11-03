@@ -58,7 +58,7 @@ export default function Factors({ pageType }) {
       dataIndex: "factorDate",
       render: (value) => (
         <div>
-          {value ? moment().utc().locale("fa").format("YYYY/MM/DD") : "-"}
+          {value ? moment(value).utc().locale("fa").format("YYYY/MM/DD") : "-"}
         </div>
       ),
       key: "factorDate",
@@ -173,7 +173,7 @@ export default function Factors({ pageType }) {
           let datas = [];
           res.data.factorViewModelList.map((data, index) => {
             if (data?.factorType === pageType) {
-              datas.push({ ...data, index: index + 1, key: data?.id });
+              datas.push({ ...data, index: index + 1, key: index });
             }
           });
           setPageList(datas);

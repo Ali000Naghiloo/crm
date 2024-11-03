@@ -118,13 +118,16 @@ export default function PriceModal({
 
   const handleGetUnitList = async () => {
     let datas = [];
+    const formData = {
+      productId: productId,
+    };
 
     await httpService
-      .get("/Unit/Units")
+      .get("/ProductUnit/ProductUnit", { params: formData })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          res.data?.unitViewModelList?.map((pr) => {
-            datas.push({ value: pr?.unitId, label: pr?.unitName });
+          res.data?.productUnitViewModelList?.map((pr) => {
+            datas.push({ value: pr?.unit.unitId, label: pr?.unit.unitName });
           });
         }
       })
