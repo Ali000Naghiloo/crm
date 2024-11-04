@@ -60,24 +60,14 @@ export default function DataTab({ data, getNewList, handleClose }) {
   const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
-      additionsAndDeductionsId: data?.additionsAndDeductionsId,
-      code: values?.code,
-      title: values?.title,
-      amountCanBeChangedByUser: values?.amountCanBeChangedByUser,
-      inSetOfConditionsTheHighestAmountOrPercentageShouldBeConsidered:
-        values?.inSetOfConditionsTheHighestAmountOrPercentageShouldBeConsidered,
-      procedureForApplyingOnFactor: values?.procedureForApplyingOnFactor,
-      displayInTheFactor: values?.displayInTheFactor,
-      additionsAndDeductionsType: values?.additionsAndDeductionsType,
-      displayInFactorPrinting: values?.displayInFactorPrinting,
-      description: values?.description,
+      ...values,
       additionsAndDeductionsBannedUsers:
         values?.additionsAndDeductionsBannedUsers &&
         values?.additionsAndDeductionsBannedUsers
-          ? values?.additionsAndDeductionsBannedUsers?.map((id) => {
-              return { usersId: id };
+          ? values?.additionsAndDeductionsBannedUsers?.map((u) => {
+              return { usersId: u };
             })
-          : null,
+          : [],
     };
 
     await httpService
@@ -86,12 +76,11 @@ export default function DataTab({ data, getNewList, handleClose }) {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت تعریف شد");
           handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
 
-    navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
-    getNewList();
     setLoading(false);
   };
 
@@ -137,7 +126,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           ? data?.additionsAndDeductionsBannedUsers?.map((user) => {
               return user?.usersId;
             })
-          : null
+          : []
       );
     }
   }, [data]);

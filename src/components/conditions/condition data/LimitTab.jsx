@@ -6,7 +6,7 @@ import CreateLimit from "./limits/CreateLimit";
 import CreateLimitModal from "./limits/CreateLimitModal";
 import { MdDelete } from "react-icons/md";
 
-export default function LimitTab({ data }) {
+export default function LimitTab({ data, getNewList }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(true);
   const [limitList, setLimitList] = useState(null);

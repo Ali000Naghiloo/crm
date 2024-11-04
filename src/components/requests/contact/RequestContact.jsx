@@ -46,7 +46,7 @@ export default function RequestContact({ pageType }) {
       key: "initialRequestItems",
     },
     {
-      title: "عنوان",
+      title: "شخص درخواست کننده",
       dataIndex: "customer",
       render: (value) => (value ? <div>{value}</div> : "---"),
       key: "customer",
@@ -83,7 +83,7 @@ export default function RequestContact({ pageType }) {
             okText="بله"
             title="آیا از حذف این فاکتور اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.factorId)}
+            onConfirm={() => handleDelete(data?.id)}
           >
             <Button size="middle" type="primary" danger>
               حذف

@@ -19,6 +19,7 @@ export default function SelectItems({ validation, factorType }) {
   const [totals, setTotals] = useState({ quantity: 0, price: 0 });
   const [unitList, setUnitList] = useState([]);
   const [priceList, setPriceList] = useState([]);
+  const [roleList, setRoleList] = useState(null);
 
   // row counter
   const [count, setCount] = useState(1);
@@ -180,12 +181,7 @@ export default function SelectItems({ validation, factorType }) {
       .get("/Customer/GetAllCustomers")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          res.data?.customerList?.map((pr) => {
-            datas.push({
-              value: pr?.customerId,
-              label: pr?.customerName,
-            });
-          });
+          datas = res.data?.customerList;
         }
       })
       .catch(() => {});
@@ -601,12 +597,20 @@ export default function SelectItems({ validation, factorType }) {
           <span>شخص :</span>
           <Select
             showSearch
-            optionFilterProp="label"
+            optionFilterProp="customerName"
+            fieldNames={{ label: "customerName", value: "customerId" }}
             loading={!customerList ? true : false}
             options={customerList}
             value={validation.values.customerId}
-            onChange={(e) => {
+            onChange={(e, event) => {
+              setRoleList(event?.roleMappings);
               validation.setFieldValue("customerId", e);
+              event?.roleMappings
+                ? validation.setFieldValue(
+                    "customerRoleId",
+                    event.roleMappings[0]?.customerRoleId
+                  )
+                : null;
             }}
             className="w-full"
             placeholder="انتخاب کنید..."
@@ -616,6 +620,31 @@ export default function SelectItems({ validation, factorType }) {
               {validation.errors.customerId}
             </span>
           )}
+        </div>
+      )}
+
+      {validation.values?.customerId && roleList && (
+        <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+          <span>نقش شخص :</span>
+          <Select
+            showSearch
+            optionFilterProp="customerRole"
+            fieldNames={{ label: "customerRole", value: "customerRoleId" }}
+            loading={!roleList ? true : false}
+            options={roleList}
+            value={validation.values.customerRoleId}
+            onChange={(e) => {
+              validation.setFieldValue("customerRoleId", e);
+            }}
+            className="w-full"
+            placeholder="انتخاب کنید..."
+          />
+          {validation.touched.customerRoleId &&
+            validation.errors.customerRoleId && (
+              <span className="text-red-300 text-xs">
+                {validation.errors.customerRoleId}
+              </span>
+            )}
         </div>
       )}
 

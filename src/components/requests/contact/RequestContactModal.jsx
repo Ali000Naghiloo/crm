@@ -170,12 +170,7 @@ export default function RequestContactModal({
       .get("/InitialRequest/GetAllInitialRequest")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
-          res.data?.initialRequestViewModelList?.map((i) => {
-            datas.push({
-              value: i?.id,
-              label: i?.name,
-            });
-          });
+          datas = res.data?.initialRequestViewModelList;
         }
       })
       .catch(() => {});
@@ -196,11 +191,18 @@ export default function RequestContactModal({
 
   useEffect(() => {
     if (data) {
+      console.log(data?.initialRequestItems);
       validation.setFieldValue("id", data?.id);
       validation.setFieldValue("customerId", data?.customerId);
       validation.setFieldValue(
         "customerInitialRequestResponsibles",
         data?.customerInitialRequestResponsibles
+      );
+      validation.setFieldValue(
+        "initialRequestItems",
+        data?.initialRequestItems
+          ? data?.initialRequestItems[0]?.initialRequestId
+          : null
       );
     }
   }, [data]);
@@ -248,7 +250,7 @@ export default function RequestContactModal({
                 setValue={(e) => {
                   validation.setFieldValue("date", e);
                 }}
-                className="w-[400px]"
+                className="w-[420px]"
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.date && validation.errors.date && (
@@ -261,6 +263,7 @@ export default function RequestContactModal({
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
               <span>شخص :</span>
               <Select
+                loading={customerList ? false : true}
                 options={customerList}
                 value={validation.values.customerId}
                 name="customerId"
@@ -283,13 +286,14 @@ export default function RequestContactModal({
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
               <span>عنوان درخواست :</span>
               <Select
+                fieldNames={{ label: "name", value: "id" }}
                 options={titleList}
                 value={validation.values.initialRequestItems}
                 name="initialRequestItems"
                 onChange={(e, event) => {
                   console.log(event);
-                  validation.setFieldValue("initialRequestItems", event?.value);
-                  validation.setFieldValue("customer", event?.label);
+                  validation.setFieldValue("initialRequestItems", event?.id);
+                  validation.setFieldValue("customer", event?.name);
                 }}
                 className="w-[100%]"
                 placeholder="لطفا اینجا وارد کنید..."

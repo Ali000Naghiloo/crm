@@ -6,6 +6,7 @@ import * as yup from "yup";
 import useHttp from "../../../hooks/useHttps";
 import MyDatePicker from "../../../common/MyDatePicker";
 import { toast } from "react-toastify";
+import UnitTab from "../product data/UnitTab";
 
 export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   const { httpService } = useHttp();
@@ -38,6 +39,12 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       manufactureDate: null,
       expiryDate: null,
       sku: null,
+      productUnits: [
+        {
+          unitId: null,
+          quantityInUnit: null,
+        },
+      ],
       stockQuantity: 0,
       productCategoryId: null,
       productManufacturerProducts: [],
@@ -74,21 +81,17 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   const handleCreateProduct = async (values) => {
     setLoading(true);
     const formData = {
-      productCode: values?.productCode,
-      productManualCode: values?.productManualCode,
-      productName: values?.productName,
-      latinName: values?.latinName,
-      serviceProduct: values?.serviceProduct,
-      isActive: values?.isActive,
-      natureOfProduct: values?.natureOfProduct,
-      storageConditions: values?.storageConditions,
-      productIsAllowedToUseSerial: values?.productIsAllowedToUseSerial,
-      productSerialNumber: values?.productSerialNumber,
-      manufactureDate: values?.manufactureDate,
-      expiryDate: values?.expiryDate,
-      sku: values?.sku,
-      stockQuantity: values?.stockQuantity,
-      productCategoryId: values?.productCategoryId,
+      ...values,
+      productUnits: [
+        {
+          unitId: values?.productUnits[0]?.unitId
+            ? values?.productUnits[0].unitId
+            : null,
+          quantityInUnit: values?.productUnits[0]?.quantityInUnit
+            ? values?.productUnits[0].quantityInUnit
+            : 1,
+        },
+      ],
       productManufacturerProducts:
         values?.productManufacturerProducts &&
         values?.productManufacturerProducts?.length !== 0
@@ -96,8 +99,6 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               return { productId: 0, manufacturerId: cr };
             })
           : [],
-      pricingMethodGroupId: values?.pricingMethodGroupId,
-      description: values?.description,
     };
 
     await httpService
@@ -119,7 +120,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     setCategoryList(null);
 
     await httpService
-      .get("/ProductCategory/GetAllCategories")
+      .get("/ProductCategory/GetCategoriesForCreateProduct")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           res.data?.categoryViewModelList?.map((pr) => {
@@ -375,6 +376,17 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                 </span>
               )}
           </div>
+
+          <UnitTab
+            unit={validation.values.productUnits[0]?.unitId}
+            setUnit={(e) =>
+              validation.setFieldValue("productUnits[0].unitId", e)
+            }
+            quantity={validation.values.productUnits[0]?.quantityInUnit}
+            setQuantity={(e) =>
+              validation.setFieldValue("productUnits[0].quantityInUnit", e)
+            }
+          />
 
           {/* {validation.values.productIsAllowedToUseSerial && (
             <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">

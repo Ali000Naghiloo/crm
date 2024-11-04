@@ -62,7 +62,7 @@ export default function CreateRequestProduct({
     await httpService
       .post("/Factor/CreateRequest", formData)
       .then((res) => {
-        if (res.status == 200 && res.data == 1) {
+        if (res.status == 200 && res.data.code == 1) {
           toast.success("با موفقیت ثبت شد");
           handleClose();
           getNewList();
@@ -80,6 +80,29 @@ export default function CreateRequestProduct({
     await httpService
       .post("/Factor/EditRequest", formData)
       .then((res) => {})
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
+  const handleGetDetails = async () => {
+    setLoading(true);
+    const formData = { factorId: id };
+
+    await httpService
+      .get("/Factor/GetFactorDetail", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          const datas = res.data?.factorDetailViewModel;
+          validation.setValues({
+            customerId: datas?.customerId,
+            factorDate: datas?.factorDate,
+            factorNumber: datas.factorNumber,
+            factorResponsibleId: datas?.factorItemResponsibleId,
+            factorItemCreateViewModels: datas?.factorItems,
+          });
+        }
+      })
       .catch(() => {});
 
     setLoading(false);
@@ -126,9 +149,17 @@ export default function CreateRequestProduct({
   };
 
   useEffect(() => {
-    handleGetFactorCod();
-    handleGetCustomerList();
+    if (open) {
+      handleGetFactorCod();
+      handleGetCustomerList();
+    }
   }, [open]);
+
+  useEffect(() => {
+    if (id) {
+      handleGetDetails();
+    }
+  }, [id]);
 
   return (
     <Modal
@@ -168,6 +199,7 @@ export default function CreateRequestProduct({
         <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
           <span>شخص </span>
           <Select
+            loading={customerList ? false : true}
             value={validation.values.customerId}
             name="customerId"
             options={customerList}

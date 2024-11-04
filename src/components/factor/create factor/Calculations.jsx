@@ -53,7 +53,7 @@ export default function Calculations({
     if (factorItems) {
       handleCalculations();
     }
-  }, [factorItems]);
+  }, []);
 
   useEffect(() => {
     if (calculations.allFactorPrice) {

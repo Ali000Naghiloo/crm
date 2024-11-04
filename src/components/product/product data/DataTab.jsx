@@ -42,8 +42,8 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
       expiryDate: null,
       productUnits: [
         {
-          unitId: 0,
-          quantityInUnit: 0,
+          unitId: null,
+          quantityInUnit: null,
         },
       ],
       sku: null,
@@ -56,7 +56,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
     validationSchema,
 
     onSubmit: (values) => {
-      handleEditCustomer(values);
+      handleEdit(values);
     },
   });
 
@@ -67,25 +67,20 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
     }
   };
 
-  const handleEditCustomer = async (values) => {
+  const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
-      productId: values?.productId,
-      productCode: values?.productCode,
-      productManualCode: values?.productManualCode,
-      productName: values?.productName,
-      latinName: values?.latinName,
-      serviceProduct: values?.serviceProduct,
-      isActive: values?.isActive,
-      natureOfProduct: values?.natureOfProduct,
-      storageConditions: values?.storageConditions,
-      productIsAllowedToUseSerial: values?.productIsAllowedToUseSerial,
-      productSerialNumber: values?.productSerialNumber,
-      manufactureDate: values?.manufactureDate,
-      expiryDate: values?.expiryDate,
-      sku: values?.sku,
-      stockQuantity: values?.stockQuantity,
-      productCategoryId: values?.productCategoryId,
+      ...values,
+      productUnits: [
+        {
+          unitId: values?.productUnits[0]?.unitId
+            ? values?.productUnits[0].unitId
+            : null,
+          quantityInUnit: values?.productUnits[0]?.quantityInUnit
+            ? values?.productUnits[0].quantityInUnit
+            : 1,
+        },
+      ],
       productManufacturerProducts:
         values?.productManufacturerProducts &&
         values?.productManufacturerProducts?.length !== 0
@@ -93,8 +88,6 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               return { productId: 0, manufacturerId: cr };
             })
           : [],
-      pricingMethodGroupId: values?.pricingMethodGroupId,
-      description: values?.description,
     };
 
     await httpService
@@ -116,7 +109,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
     setCategoryList(null);
 
     await httpService
-      .get("/ProductCategory/GetAllCategories")
+      .get("/ProductCategory/GetCategoriesForCreateProduct")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           res.data?.categoryViewModelList?.map((pr) => {
@@ -263,6 +256,24 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+            <span>کد کالا :</span>
+            <Input
+              type="number"
+              value={validation.values.productCode}
+              name="productCode"
+              onChange={validation.handleChange}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.productCode &&
+              validation.errors.productCode && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.productCode}
+                </span>
+              )}
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>کد دستی کالا :</span>
             <Input
               value={validation.values.productManualCode}
@@ -311,13 +322,6 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               </span>
             )}
           </div>
-
-          <UnitTab
-            unit={validation.values.unitId}
-            setUnit={(e) =>
-              validation.setFieldValue("productUnits[0].unitId", e)
-            }
-          />
 
           {!validation.values.serviceProduct && (
             <>
@@ -395,6 +399,17 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                 </span>
               )}
           </div>
+
+          <UnitTab
+            unit={validation.values.productUnits[0]?.unitId}
+            setUnit={(e) =>
+              validation.setFieldValue("productUnits[0].unitId", e)
+            }
+            quantity={validation.values.productUnits[0]?.quantityInUnit}
+            setQuantity={(e) =>
+              validation.setFieldValue("productUnits[0].quantityInUnit", e)
+            }
+          />
 
           {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
             <span>گروه قیمت گذاری :</span>

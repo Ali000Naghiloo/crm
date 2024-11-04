@@ -41,7 +41,7 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
       );
     }
     if (tabName === "limits") {
-      return <LimitTab data={data} />;
+      return <LimitTab data={data} getNewList={getNewList} />;
     }
   };
 
@@ -59,8 +59,8 @@ export default function ConditionModal({ open, setOpen, id, getNewList }) {
   ];
 
   useEffect(() => {
-    if (open) handleGetData();
-  }, [id]);
+    if (id && open) handleGetData();
+  }, [open]);
 
   if (id)
     return (

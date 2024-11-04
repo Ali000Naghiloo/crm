@@ -65,7 +65,9 @@ export default function LimitData({ values, setField }) {
             type="number"
             className="w-[150px]"
             value={value}
-            onChange={(e) => handleCellChange(`priority`, e.target.value)}
+            onChange={(e) =>
+              handleCellChange(`priority`, parseFloat(e.target.value))
+            }
           />
         );
       },

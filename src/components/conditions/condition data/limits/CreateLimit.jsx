@@ -122,7 +122,6 @@ export default function CreateLimit({
       additionsAndDeductionsId: conditionId,
       additionsAndDeductionsAllConditionsId: limitId,
     };
-    navigator.clipboard.writeText(JSON.stringify(postData, null, 2));
 
     await httpService
       .post(
@@ -132,8 +131,6 @@ export default function CreateLimit({
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           toast.success(`شروط شما با موفقیت به اضافه کسری نسبت داده شد`);
-          validation.resetForm();
-          handleClose();
           getNewList();
         }
       })

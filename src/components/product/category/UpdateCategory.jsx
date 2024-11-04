@@ -153,7 +153,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
           <div className="w-full flex gap-3 justify-between pt-5">
             <Popconfirm
               onConfirm={handleDelete}
-              title="ایا از حذف این نقش مطمئن هستید؟"
+              title="ایا از حذف این گروه مطمئن هستید؟"
             >
               <Button type="primary" danger disabled={loading}>
                 حذف

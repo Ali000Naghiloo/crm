@@ -66,6 +66,7 @@ export default function CreateFactor() {
       factorNumber: 0,
       factorDate: moment().utc().locale("fa"),
       customerId: null,
+      customerRoleId: null,
       totalFactorQuantity: 0,
       totalFactorDiscount: 0,
       totalFactorPrice: 0,
@@ -155,8 +156,8 @@ export default function CreateFactor() {
 
   const handleRedirect = () => {
     if (!loading) {
-      validation.resetForm();
       navigate(-1);
+      validation.resetForm();
     }
   };
 

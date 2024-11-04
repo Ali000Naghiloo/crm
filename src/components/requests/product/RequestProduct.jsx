@@ -76,7 +76,7 @@ export default function RequestProduct({ pageType }) {
       title: "عملیات",
       render: (data) => (
         <div className="flex gap-2">
-          <Button
+          {/* <Button
             onClick={() => {
               setShowFactor({ id: data?.factorId, open: true });
             }}
@@ -84,15 +84,13 @@ export default function RequestProduct({ pageType }) {
             type="primary"
           >
             مشاهده
-          </Button>
+          </Button> */}
           <Button
             onClick={() => {
-              navigate("/factors/create", {
-                state: {
-                  type: pageType,
-                  data: data,
-                  id: data?.factorId,
-                },
+              setShowModal({
+                open: true,
+                data: data,
+                id: data?.factorId,
               });
             }}
             size="middle"
@@ -248,6 +246,7 @@ export default function RequestProduct({ pageType }) {
           setShowModal({ open: e });
         }}
         id={showModal.id}
+        getNewList={handleGetList}
       />
     </Suspense>
   );
