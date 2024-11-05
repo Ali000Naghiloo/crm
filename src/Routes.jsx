@@ -36,6 +36,7 @@ import BoardsPage from "./pages/user/taskmanager/projects/BoardsPage";
 import BoardPage from "./pages/user/taskmanager/projects/BoardPage";
 import RequestProductPage from "./pages/user/requests/RequestProductPage";
 import RequestContactPage from "./pages/user/requests/RequestContactPage";
+import MyRequestsPage from "./pages/user/requests/MyRequestsPage";
 import UnitsPage from "./pages/user/units/UnitsPage";
 import RejectedBuyFactorPage from "./pages/user/factors/RejectedBuyFactorPage";
 import BuyFactorsPage from "./pages/user/factors/BuyFactorsPage";
@@ -88,6 +89,7 @@ export default function AllRoutes() {
           {/* requests */}
           <Route path="/requests/product" element={<RequestProductPage />} />
           <Route path="/requests/contact" element={<RequestContactPage />} />
+          <Route path="/requests/myRequests" element={<MyRequestsPage />} />
           {/* warehouses */}
           <Route path="/warehouses" element={<WarehousesPage />} />
           {/* taskmanager */}

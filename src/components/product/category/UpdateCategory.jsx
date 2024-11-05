@@ -21,6 +21,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [categoryList, setCategoryList] = useState(null);
+  const [productList, setProductList] = useState(null);
   const [isParent, setIsParent] = useState(false);
   const validationSchema = yup.object().shape({
     categoryName: yup.string().required("این فیلد را پر کنید"),
@@ -33,6 +34,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
       categoryName: "",
       description: "",
       parentCategoryId: null,
+      products: [],
     },
     validationSchema,
     onSubmit: (values) => {
@@ -42,19 +44,13 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
 
   const handleGetProductList = async () => {
     setLoading(true);
-    const datas = [];
+    let datas = [];
 
     await httpService
       .get("/Product/GetAllProducts")
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
-          res.data?.productViewModelList?.map((pr, index) => {
-            datas.push({
-              label: pr?.productName,
-              value: pr?.productId,
-              key: index,
-            });
-          });
+          datas = res.data?.productViewModelList;
         }
       })
       .catch(() => {});
@@ -73,14 +69,11 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
   const handleEdit = async (values) => {
     setLoading(true);
     const formData = {
-      productCategoryId: values?.productCategoryId,
-      categoryName: values?.categoryName,
-      description: values?.description,
-      parentCategoryId: values?.parentCategoryId,
+      ...values,
     };
 
     await httpService
-      .post("/CustomerGroup/EditCustomerGroup", formData)
+      .post("/ProductCategory/EditCategory", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ویرایش شد");
@@ -101,8 +94,13 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
         params: { categoryId: data?.productCategoryId },
       })
       .then((res) => {
-        if (res.status === 200 && res.data?.code === 1)
+        if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت حذف شد");
+          handleClose();
+          getNewList();
+        } else {
+          toast.info(res.data?.msg);
+        }
       })
       .catch(() => {});
 
@@ -115,7 +113,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
   }, [list]);
 
   useEffect(() => {
-    // handleGetProductList()
+    handleGetProductList();
   }, [open]);
 
   useEffect(() => {
@@ -240,25 +238,25 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>محصولات گروه </span>
             <Select
-              options={[]}
+              mode="multiple"
+              optionFilterProp="productName"
+              options={productList}
               fieldNames={{
-                label: "categoryName",
-                value: "productCategoryId",
-                children: "children",
+                label: "productName",
+                value: "productId",
               }}
-              // value={validation.values.parentCategoryId}
+              value={validation.values.products}
               onChange={(e) => {
-                validation.setFieldValue("parentCategoryId", e);
+                validation.setFieldValue("products", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.parentCategoryId &&
-              validation.errors.parentCategoryId && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.parentCategoryId}
-                </span>
-              )}
+            {validation.touched.products && validation.errors.products && (
+              <span className="text-red-300 text-xs">
+                {validation.errors.products}
+              </span>
+            )}
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">

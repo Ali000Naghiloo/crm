@@ -194,6 +194,11 @@ export default function useSideMenuItems() {
                 icon: <GoDot size={"1em"} className="" />,
                 label: "تماس اولیه",
               },
+              {
+                key: "/requests/myRequests",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "مدیریت درخواست ها",
+              },
             ],
           },
           {

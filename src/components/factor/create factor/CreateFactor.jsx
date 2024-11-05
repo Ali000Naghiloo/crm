@@ -63,6 +63,7 @@ export default function CreateFactor() {
 
   const validation = useFormik({
     initialValues: {
+      factorType: null,
       factorNumber: 0,
       factorDate: moment().utc().locale("fa"),
       customerId: null,
@@ -459,6 +460,10 @@ export default function CreateFactor() {
       setNextStepDisabled(true);
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    validation.setFieldValue("factorType", pageData?.type);
+  }, [pageData?.type]);
 
   return (
     <>

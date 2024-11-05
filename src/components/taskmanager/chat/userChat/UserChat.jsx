@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Form, Input } from "antd";
+import { Avatar, Button, Dropdown, Form, Input, Spin } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { imageUrl } from "../../../../hooks/useHttps";
 import { FaUser } from "react-icons/fa";
@@ -9,32 +9,56 @@ import { BsSendFill } from "react-icons/bs";
 import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
 import ChatForm from "./ChatForm";
+import useHttp from "../../httpConfig/useHttp";
 
 const UserChat = ({ selectedChat }) => {
-  const [messages, setMessages] = useState([]);
+  const { httpService } = useHttp();
+  const [messages, setMessages] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const chatContainerRef = useRef(null);
 
-  const handleInputChange = (e) => {
+  const handleGetMessages = async () => {
+    setMessages(null);
+    setLoading(true);
+    const formData = { receiverId: selectedChat.id };
+    let datas = [];
+
+    await httpService
+      .get("/ChatMessage/AllMessages", { params: formData })
+      .then((res) => {
+        if (res.data?.code == 1 && res.status == 200) {
+          datas = res.data.data;
+        }
+      });
+
+    setMessages(datas);
+    setLoading(false);
+  };
+
+  const handleInputChange = async (e) => {
     setInputMessage(e.target.value);
     setError("");
   };
 
-  const handleSubmit = (e) => {
-    if (inputMessage.trim() === "") {
-      setError("لطفا پیام خود را اینجا بنویسید");
-      return;
-    }
-    const newMessage = {
-      id: messages.length + 1,
-      text: inputMessage,
-      sender: "user",
-      timestamp: new Date(),
+  const handleSubmit = async () => {
+    const formData = {
+      receiverId: selectedChat.id,
+      messageText: inputMessage,
+      originalMessageId: null,
+      attachmentsCreateViewModel: [],
     };
-    setMessages([...messages, newMessage]);
-    setInputMessage("");
+
+    await httpService
+      .post("/ChatMessage/CreateMessages", formData)
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          setInputMessage("");
+          handleGetMessages();
+        }
+      })
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -44,6 +68,12 @@ const UserChat = ({ selectedChat }) => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (selectedChat) {
+      handleGetMessages();
+    }
+  }, [selectedChat]);
+
   return (
     <div className="w-full h-full flex flex-col justify-between bg-gradient-to-br from-blue-50 to-purple-50 border rounded-md">
       {/* selected chat datas */}
@@ -52,11 +82,23 @@ const UserChat = ({ selectedChat }) => {
       </div>
 
       <div
-        className="w-full h-fit flex flex-col-reverse flex-1 p-4 sm:p-6 overflow-y-auto my-auto"
+        className="w-full h-fit flex flex-col p-4 sm:p-6 overflow-y-auto my-auto"
         ref={chatContainerRef}
       >
         {selectedChat ? (
-          <ChatBody messages={messages} />
+          messages ? (
+            messages?.length !== 0 ? (
+              <ChatBody messages={messages} />
+            ) : (
+              <div className="w-full flex justify-center items-center text-gray-500">
+                پیامی وجود ندارد..
+              </div>
+            )
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              <Spin />
+            </div>
+          )
         ) : (
           <div className="w-full h-full flex justify-center items-center">
             <span className="text-sm text-gray-500">
@@ -67,12 +109,14 @@ const UserChat = ({ selectedChat }) => {
       </div>
 
       <div className="h-fit bg-white border-t border-gray-200 p-4 flex justify-center items-center">
-        <ChatForm
-          handleSubmit={handleSubmit}
-          handleChange={handleInputChange}
-          value={inputMessage}
-          loading={loading}
-        />
+        {selectedChat && (
+          <ChatForm
+            handleSubmit={handleSubmit}
+            handleChange={handleInputChange}
+            value={inputMessage}
+            loading={loading}
+          />
+        )}
       </div>
     </div>
   );

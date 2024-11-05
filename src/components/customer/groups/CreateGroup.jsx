@@ -117,7 +117,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
     };
 
     await httpService
-      .get("/CustomerGroup/CustomerGroups")
+      .get("/CustomerGroup/CustomerGroupsForCreate")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           res.data?.customerGroupViewModelList?.map((cu, index) => {
@@ -130,7 +130,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
       })
       .catch(() => {});
 
-    setGroupList(compareChildrens(datas));
+    setGroupList(datas);
     setLoading(false);
   };
 
@@ -198,6 +198,8 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
             <span>اشخاص این گروه</span>
             <Select
               allowClear
+              optionFilterProp="label"
+              loading={customerList ? false : true}
               mode="multiple"
               maxTagCount={3}
               options={customerList}
@@ -224,14 +226,13 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
-            <span>گروه والد</span>
-            <TreeSelect
+            <span>گروه والد (گروه های آخرین فرزند)</span>
+            <Select
               fieldNames={{ label: "groupName", value: "id" }}
               allowClear
               mode="multiple"
               maxTagCount={3}
-              treeData={groupList}
-              treeDefaultExpandAll
+              options={groupList}
               value={validation.values.parentGroupId}
               onChange={(e) => {
                 validation.setFieldValue("parentGroupId", e);

@@ -41,6 +41,7 @@ export default function RequestContactModal({
     validationSchema,
 
     onSubmit: (values) => {
+      console.log(data);
       if (!data) {
         handleCreate(values);
       } else {
@@ -193,10 +194,15 @@ export default function RequestContactModal({
     if (data) {
       console.log(data?.initialRequestItems);
       validation.setFieldValue("id", data?.id);
+      validation.setFieldValue("customer", data?.customer);
       validation.setFieldValue("customerId", data?.customerId);
       validation.setFieldValue(
         "customerInitialRequestResponsibles",
         data?.customerInitialRequestResponsibles
+          ? data?.customerInitialRequestResponsibles?.map((us) => {
+              return { label: us?.user, value: us?.userId };
+            })
+          : []
       );
       validation.setFieldValue(
         "initialRequestItems",

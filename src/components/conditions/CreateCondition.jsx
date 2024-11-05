@@ -28,6 +28,7 @@ export default function CreateCondition({ open, setOpen, getNewList, list }) {
       displayInTheFactor: 0,
       displayInFactorPrinting: 0,
       description: "",
+      factorTypes: [],
       additionsAndDeductionsBannedUsers: [],
     },
     validationSchema,
@@ -66,16 +67,8 @@ export default function CreateCondition({ open, setOpen, getNewList, list }) {
   const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
-      code: values?.code,
-      title: values?.title,
-      amountCanBeChangedByUser: values?.amountCanBeChangedByUser,
-      inSetOfConditionsTheHighestAmountOrPercentageShouldBeConsidered:
-        values?.inSetOfConditionsTheHighestAmountOrPercentageShouldBeConsidered,
-      procedureForApplyingOnFactor: values?.procedureForApplyingOnFactor,
-      displayInTheFactor: values?.displayInTheFactor,
-      additionsAndDeductionsType: values?.additionsAndDeductionsType,
-      displayInFactorPrinting: values?.displayInFactorPrinting,
-      description: values?.description,
+      ...values,
+      factorTypes: values?.factorTypes ? values?.factorTypes?.join(", ") : null,
       additionsAndDeductionsBannedUsers:
         values?.additionsAndDeductionsBannedUsers &&
         values?.additionsAndDeductionsBannedUsers
@@ -313,6 +306,30 @@ export default function CreateCondition({ open, setOpen, getNewList, list }) {
               validation.errors.additionsAndDeductionsBannedUsers && (
                 <span className="text-red-300 text-xs">
                   {validation.errors.additionsAndDeductionsBannedUsers}
+                </span>
+              )}
+          </div>
+
+          <div className="flex gap-1 flex-col items-start w-full mx-auto">
+            <span>انواع فاکتور که شامل این اضافه کسری میشوند</span>
+            <Select
+              optionFilterProp="label"
+              mode="multiple"
+              options={allEnum?.FactorType?.map((i, index) => {
+                return { label: i, value: index };
+              })}
+              value={validation.values.factorTypes}
+              name="factorTypes"
+              onChange={(e) => {
+                validation.setFieldValue("factorTypes", e);
+              }}
+              className="w-full"
+              placeholder="لطفا عدد وارد کنید..."
+            />
+            {validation.touched.factorTypes &&
+              validation.errors.factorTypes && (
+                <span className="text-red-300 text-xs">
+                  {validation.errors.factorTypes}
                 </span>
               )}
           </div>

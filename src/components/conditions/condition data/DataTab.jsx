@@ -30,6 +30,8 @@ export default function DataTab({ data, getNewList, handleClose }) {
       displayInFactorPrinting: 0,
       description: "",
       additionsAndDeductionsBannedUsers: [],
+      factorTypes: [],
+      isActive: true,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -61,6 +63,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
     setLoading(true);
     const formData = {
       ...values,
+      factorTypes: values?.factorTypes ? values?.factorTypes?.join(", ") : null,
       additionsAndDeductionsBannedUsers:
         values?.additionsAndDeductionsBannedUsers &&
         values?.additionsAndDeductionsBannedUsers
@@ -128,6 +131,16 @@ export default function DataTab({ data, getNewList, handleClose }) {
             })
           : []
       );
+      validation.setFieldValue(
+        "factorTypes",
+        data?.factorTypes
+          ? data?.factorTypes
+              ?.split(",")
+              ?.filter((ft) => ft !== " ")
+              .map((ft) => parseInt(ft))
+          : null
+      );
+      validation.setFieldValue("isActive", data?.isActive);
     }
   }, [data]);
 
@@ -320,6 +333,29 @@ export default function DataTab({ data, getNewList, handleClose }) {
         </div>
 
         <div className="flex gap-1 flex-col items-start w-full mx-auto">
+          <span>انواع فاکتور که شامل این اضافه کسری میشوند</span>
+          <Select
+            optionFilterProp="label"
+            mode="multiple"
+            options={allEnum?.FactorType?.map((i, index) => {
+              return { label: i, value: index };
+            })}
+            value={validation.values.factorTypes}
+            name="factorTypes"
+            onChange={(e) => {
+              validation.setFieldValue("factorTypes", e);
+            }}
+            className="w-full"
+            placeholder="لطفا عدد وارد کنید..."
+          />
+          {validation.touched.factorTypes && validation.errors.factorTypes && (
+            <span className="text-red-300 text-xs">
+              {validation.errors.factorTypes}
+            </span>
+          )}
+        </div>
+
+        <div className="flex gap-1 flex-col items-start w-full mx-auto">
           <span>توضیحات</span>
           <Input.TextArea
             value={validation.values.description}
@@ -333,6 +369,16 @@ export default function DataTab({ data, getNewList, handleClose }) {
               {validation.errors.description}
             </span>
           )}
+        </div>
+
+        <div className="w-full flex gap-2">
+          <span>اضافه کسری فعال باشد؟</span>
+          <Checkbox
+            checked={validation.values.isActive}
+            onChange={(e) => {
+              validation.setFieldValue("isActive", e.target.checked);
+            }}
+          />
         </div>
 
         {/* submit */}

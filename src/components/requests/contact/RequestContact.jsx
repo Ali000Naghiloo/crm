@@ -152,7 +152,7 @@ export default function RequestContact({ pageType }) {
       <div className="w-full h-full p-2 md:p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-2xl lg:text-4xl py-5 font-bold">
-          <h1>فهرست تمام درخواست های تماس اولیه اشخاص</h1>
+          <h1>فهرست درخواست های تماس اولیه اشخاص</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={handleGetList}>

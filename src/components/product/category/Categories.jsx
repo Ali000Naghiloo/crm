@@ -26,7 +26,6 @@ const compareChildrens = (roles) => {
       );
     }
   });
-  console.log(roleMap);
 
   // Extract the top-level roles (those without a parent)
   const organizedRoles = roles
@@ -186,7 +185,7 @@ export default function Categories() {
                 value: "productCategoryId",
                 children: "children",
               }}
-              showLine
+              showLine={{ showLeafIcon: true }}
               className="text-2xl"
               // switcherIcon={<GrDown />}
               onSelect={onSelect}

@@ -33,7 +33,13 @@ function compareChildrens(data) {
   return data.filter((group) => !group.parentGroupId);
 }
 
-export default function UpdateGroup({ open, setOpen, getNewList, data }) {
+export default function UpdateGroup({
+  open,
+  setOpen,
+  getNewList,
+  data,
+  hasChildren,
+}) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState(null);
@@ -133,7 +139,6 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
       .catch(() => {});
 
     setGroupList(compareChildrens(datas));
-    setLoading(false);
   };
 
   const handleDelete = async (id) => {
@@ -188,6 +193,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
     <>
       <Modal
         open={open}
+        loading={loading}
         onCancel={handleClose}
         onClose={handleClose}
         title={`ویرایش گروه : ${data ? data?.groupName : ""}`}
@@ -242,7 +248,9 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>اشخاص این گروه</span>
             <Select
+              disabled={hasChildren}
               allowClear
+              optionFilterProp="label"
               mode="multiple"
               maxTagCount={3}
               options={customerList}

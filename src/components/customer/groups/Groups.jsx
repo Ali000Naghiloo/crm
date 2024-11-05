@@ -38,6 +38,7 @@ export default function Groups() {
   const [dataModal, setDataModal] = useState({
     open: false,
     data: null,
+    hasChildren: null,
   });
   const [createModal, setCreateModal] = useState({
     open: false,
@@ -145,6 +146,7 @@ export default function Groups() {
     setDataModal({
       open: true,
       data: info?.node,
+      hasChildren: info?.node?.children ? true : false,
     });
   };
 
@@ -247,7 +249,7 @@ export default function Groups() {
                 value: "id",
                 children: "children",
               }}
-              showLine
+              showLine={{ showLeafIcon: true }}
               className="text-2xl"
               // switcherIcon={<GrDown />}
               onSelect={onSelect}
@@ -274,6 +276,7 @@ export default function Groups() {
         data={dataModal.data}
         list={pageList}
         getNewList={handleGetList}
+        hasChildren={dataModal.hasChildren}
       />
 
       <CreateGroup
