@@ -77,7 +77,7 @@ const Projects = () => {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full h-full overflow-auto p-5">
+      <div className="w-full h-full overflow-auto p-5 min-h-contentHeight max-h-contentHeight">
         {/* page title */}
         <div className="w-full flex justify-between py-5">
           <div className="flex flex-col lg:flex-row items-center gap-4">
@@ -122,14 +122,14 @@ const Projects = () => {
         </div>
 
         {/* list */}
-        <div className="w-full h-full overflow-y-auto flex flex-wrap gap-10 mt-5">
+        <div className="w-full h-full flex flex-wrap gap-10 mt-5">
           {!loading ? (
             boards && boards?.length !== 0 ? (
               <>
                 {boards.map((br, index) => (
                   <div
                     key={index}
-                    className="w-[220px] min-h-[220px] relative shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%]"
+                    className="w-[220px] min-h-[220px] relative shadow shadow-[rgba(0,0,0,0.5)] mx-auto md:mx-0 rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%]"
                   >
                     {/* options */}
                     <div className="flex gap-2 absolute left-[10px] top-[10px]">

@@ -36,7 +36,7 @@ export default function MyRequests({ pageType }) {
       key: "index",
     },
     {
-      title: "شماره فاکتور",
+      title: "شماره درخواست",
       dataIndex: "factorNumber",
       sorter: (a, b) => a.factorNumber - b.factorNumber,
       key: "factorNumber",
@@ -47,7 +47,7 @@ export default function MyRequests({ pageType }) {
       key: "customer",
     },
     {
-      title: "مسئولین فاکتور",
+      title: "مسئولین درخواست",
       dataIndex: "factorResponsibles",
       render: (value) => (
         <>
@@ -61,12 +61,6 @@ export default function MyRequests({ pageType }) {
         </>
       ),
       key: "factorResponsibles",
-    },
-    {
-      title: "مبلغ کل فاکتور",
-      dataIndex: "totalFactorPrice",
-      render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
-      key: "totalFactorPrice",
     },
     {
       title: "عملیات",
@@ -217,6 +211,7 @@ export default function MyRequests({ pageType }) {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
           res.data.customerInitialRequestViewModelList.map((data, index) => {
+            // console.log(data?.creator.includes(userData?.fullName));
             if (data?.creator?.includes(userData?.fullName))
               datas.push({ ...data, index: index + 1, key: data?.id });
           });

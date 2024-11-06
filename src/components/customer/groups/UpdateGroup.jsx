@@ -125,7 +125,7 @@ export default function UpdateGroup({
     let datas = [];
 
     await httpService
-      .get("/CustomerGroup/CustomerGroups")
+      .get("/CustomerGroup/CustomerGroupsForCreate")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           res.data?.customerGroupViewModelList?.map((cu, index) => {
@@ -138,7 +138,7 @@ export default function UpdateGroup({
       })
       .catch(() => {});
 
-    setGroupList(compareChildrens(datas));
+    setGroupList(datas);
   };
 
   const handleDelete = async (id) => {
@@ -270,6 +270,7 @@ export default function UpdateGroup({
             <div>
               <span>انتخاب همه اشخاص : </span>
               <Checkbox
+                disabled={hasChildren}
                 checked={selectAll}
                 onChange={handleSelectAll}
               ></Checkbox>
@@ -278,12 +279,10 @@ export default function UpdateGroup({
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>گروه والد</span>
-            <TreeSelect
+            <Select
               fieldNames={{ label: "groupName", value: "id" }}
               allowClear
-              mode="multiple"
-              maxTagCount={3}
-              treeData={groupList}
+              options={groupList}
               treeDefaultExpandAll
               value={validation.values.parentGroupId}
               onChange={(e) => {

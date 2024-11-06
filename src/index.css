@@ -58,6 +58,10 @@ img {
   transition: all ease 0.2s;
 }
 
+tbody {
+  background: #fff;
+}
+
 /* .ant-tabs-nav {
   margin: 0 !important;
 } */

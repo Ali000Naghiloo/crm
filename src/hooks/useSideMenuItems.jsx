@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { IoPersonSharp } from "react-icons/io5";
 //
-import { BsFillBagCheckFill } from "react-icons/bs";
-import { MdFactCheck, MdPriceChange } from "react-icons/md";
+import { MdFactCheck, MdPerson, MdPriceChange } from "react-icons/md";
 import { GoDot } from "react-icons/go";
 import { AiFillProduct } from "react-icons/ai";
 import { FaListCheck, FaWeightScale } from "react-icons/fa6";
@@ -58,8 +57,8 @@ export default function useSideMenuItems() {
             label: "داشبورد",
           },
           {
-            key: "/customers",
-            icon: <BsFillBagCheckFill size={"1.5em"} className="" />,
+            key: "customers",
+            icon: <MdPerson size={"1.5em"} className="" />,
             label: "اشخاص",
             children: [
               {

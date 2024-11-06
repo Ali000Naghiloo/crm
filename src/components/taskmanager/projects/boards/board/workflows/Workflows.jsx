@@ -57,7 +57,7 @@ export default function Workflows({ boardId, workflows }) {
           console.log(e);
         }}
       >
-        <div className="w-full h-full bg-white overflow-x-auto flex gap-4 p-5">
+        <div className="w-full h-[100%] bg-white overflow-x-auto flex gap-4 p-5">
           {workflowList ? (
             workflowList?.length !== 0 ? (
               workflowList.map((wf, index) => (

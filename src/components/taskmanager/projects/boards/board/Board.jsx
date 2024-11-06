@@ -103,7 +103,7 @@ export default function Board() {
   }, [boardId]);
 
   return (
-    <Suspense fallback={<></>}>
+    <Suspense>
       <div className="w-full h-full min-h-contentHeight max-h-contentHeight flex flex-col gap-0 overflow-y-auto">
         {/* board data */}
         <div className="w-full h-[90px] flex justify-between p-5 border-gray-300 border-b-2 relative">

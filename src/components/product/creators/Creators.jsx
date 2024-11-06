@@ -63,7 +63,7 @@ export default function Creators() {
             okText="حذف"
             title="آیا از حذف این شخص اطمینان دارید؟"
             placement="topRight"
-            onConfirm={() => handleDelete(data?.productManufacturerId)}
+            onConfirm={() => handleDelete(data?.manufacturerId)}
           >
             <Button size="middle" type="primary" danger>
               حذف
@@ -80,7 +80,7 @@ export default function Creators() {
 
     await httpService
       .get("/Manufacturer/DeleteManufacturer", {
-        params: { productManufacturerId: id },
+        params: { manufacturerId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)

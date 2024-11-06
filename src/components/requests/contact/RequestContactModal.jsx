@@ -269,6 +269,8 @@ export default function RequestContactModal({
             <div className="flex gap-1 flex-col items-start w-[420px] mx-auto">
               <span>شخص :</span>
               <Select
+                showSearch
+                optionFilterProp="label"
                 loading={customerList ? false : true}
                 options={customerList}
                 value={validation.values.customerId}

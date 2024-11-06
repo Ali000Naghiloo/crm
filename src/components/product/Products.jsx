@@ -266,7 +266,7 @@ export default function Products() {
         {/* content */}
         <div className="max-w-[100%] py-5 overflow-x-auto">
           <Table
-            className="max-w-full"
+            className="w-full bg-white"
             loading={loading}
             columns={columns}
             dataSource={pageList}

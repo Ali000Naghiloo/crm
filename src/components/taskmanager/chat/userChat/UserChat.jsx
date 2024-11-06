@@ -81,32 +81,30 @@ const UserChat = ({ selectedChat }) => {
         <ChatHeader selectedChat={selectedChat} />
       </div>
 
-      <div
-        className="w-full h-fit flex flex-col p-4 sm:p-6 overflow-y-auto my-auto"
-        ref={chatContainerRef}
-      >
-        {selectedChat ? (
-          messages ? (
-            messages?.length !== 0 ? (
+      {selectedChat ? (
+        messages ? (
+          messages?.length !== 0 ? (
+            <div
+              className="w-full h-fit flex flex-col p-4 sm:p-6 overflow-y-auto mt-auto"
+              ref={chatContainerRef}
+            >
               <ChatBody messages={messages} />
-            ) : (
-              <div className="w-full flex justify-center items-center text-gray-500">
-                پیامی وجود ندارد..
-              </div>
-            )
+            </div>
           ) : (
-            <div className="w-full flex justify-center items-center">
-              <Spin />
+            <div className="w-full flex justify-center items-center text-gray-500">
+              پیامی وجود ندارد..
             </div>
           )
         ) : (
-          <div className="w-full h-full flex justify-center items-center">
-            <span className="text-sm text-gray-500">
-              برای شروع به صحبت, گفتگو را انتخاب کنید...
-            </span>
+          <div className="w-full flex justify-center items-center">
+            <Spin />
           </div>
-        )}
-      </div>
+        )
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-sm text-gray-500">
+          برای شروع به صحبت, گفتگو را انتخاب کنید...
+        </div>
+      )}
 
       <div className="h-fit bg-white border-t border-gray-200 p-4 flex justify-center items-center">
         {selectedChat && (

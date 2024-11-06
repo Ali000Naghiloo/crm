@@ -16,6 +16,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
   });
   const validation = useFormik({
     initialValues: {
+      unitId: null,
       unitName: "",
       abbreviation: "",
       unitType: 0,
@@ -84,6 +85,19 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
   useEffect(() => {
     handleGetUnitList();
   }, [open]);
+
+  useEffect(() => {
+    if (data) {
+      validation.setValues({
+        unitId: data?.unitId,
+        unitName: data?.unitName,
+        unitType: data?.unitType,
+        abbreviation: data?.abbreviation,
+        printName: data?.printName,
+        parentUnitId: data?.parentUnitId,
+      });
+    }
+  }, [data]);
 
   return (
     <Suspense>

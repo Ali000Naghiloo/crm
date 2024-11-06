@@ -9,6 +9,8 @@ import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import CreateGroup from "./CreateCategory";
 import UpdateGroup from "./UpdateCategory";
+import { MdGroup } from "react-icons/md";
+import { AiFillProduct } from "react-icons/ai";
 
 const compareChildrens = (roles) => {
   const roleMap = {};
@@ -185,8 +187,15 @@ export default function Categories() {
                 value: "productCategoryId",
                 children: "children",
               }}
-              showLine={{ showLeafIcon: true }}
-              className="text-2xl"
+              autoExpandParent
+              showLine={{
+                showLeafIcon: (
+                  <div className="w-full h-full flex justify-center items-center">
+                    <AiFillProduct />
+                  </div>
+                ),
+              }}
+              className="text-lg p-5 px-10"
               // switcherIcon={<GrDown />}
               onSelect={onSelect}
               defaultExpandAll

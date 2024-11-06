@@ -14,6 +14,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   const [creatorsList, setCreatorsList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [pricingMethodGroupList, setPricingMethodGroupList] = useState([]);
+  const [unitData, setUnitData] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
@@ -386,6 +387,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             setQuantity={(e) =>
               validation.setFieldValue("productUnits[0].quantityInUnit", e)
             }
+            setUnitData={setUnitData}
           />
 
           {/* {validation.values.productIsAllowedToUseSerial && (

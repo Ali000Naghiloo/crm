@@ -14,6 +14,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
   const [creatorsList, setCreatorsList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [pricingMethodGroupList, setPricingMethodGroupList] = useState([]);
+  const [unitData, setUnitData] = useState(null);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
@@ -307,22 +308,6 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               )}
           </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>نام لاتین :</span>
-            <Input
-              value={validation.values.latinName}
-              name="latinName"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.latinName && validation.errors.latinName && (
-              <span className="text-red-300 text-xs">
-                {validation.errors.latinName}
-              </span>
-            )}
-          </div>
-
           {!validation.values.serviceProduct && (
             <>
               <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
@@ -409,6 +394,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             setQuantity={(e) =>
               validation.setFieldValue("productUnits[0].quantityInUnit", e)
             }
+            setUnitData={(e) => setUnitData(e)}
           />
 
           {/* <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
@@ -471,7 +457,9 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
           {!validation.values.serviceProduct &&
             validation.values.productIsAllowedToUseSerial && (
               <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-                <span>موجودی کالا در انبار :</span>
+                <span>
+                  موجودی کالا {unitData && unitData?.unitName} در انبار :
+                </span>
                 <Input
                   type="number"
                   min={0}
@@ -489,6 +477,33 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                   )}
               </div>
             )}
+
+          {/* {!validation.values.serviceProduct &&
+            unitData?.parentUnit &&
+            validation.values.productIsAllowedToUseSerial && (
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>
+                  موجودی کالا (
+                  {unitData && unitData.parentUnit && unitData?.parentUnit}) در
+                  انبار :
+                </span>
+                <Input
+                  type="number"
+                  min={0}
+                  value={validation.values.stockQuantity}
+                  name="stockQuantity"
+                  onChange={validation.handleChange}
+                  className="w-[100%]"
+                  placeholder="لطفا اینجا وارد کنید..."
+                />
+                {validation.touched.stockQuantity &&
+                  validation.errors.stockQuantity && (
+                    <span className="text-red-300 text-xs">
+                      {validation.errors.stockQuantity}
+                    </span>
+                  )}
+              </div>
+            )} */}
 
           {!validation.values.serviceProduct && (
             <div className="flex gap-1 flex-col items-start w-full mx-auto">

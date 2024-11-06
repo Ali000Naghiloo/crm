@@ -128,6 +128,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
   useEffect(() => {
     if (data) {
       validation.setFieldValue("productCategoryId", data?.productCategoryId);
+      validation.setFieldValue("products", data?.products);
       validation.setFieldValue("categoryName", data?.categoryName);
       validation.setFieldValue("description", data?.description);
       if (data?.parentCategoryId) {

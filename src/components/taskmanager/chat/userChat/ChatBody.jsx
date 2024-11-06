@@ -12,12 +12,12 @@ const ChatBody = ({ messages }) => {
 
   return (
     <>
-      <div className="max-w-3xl space-y-4">
+      <div className="max-w-3xl flex flex-col-reverse">
         {messages &&
           messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${
+              className={`flex my-2 ${
                 message?.senderFullName == userData?.fullName
                   ? "justify-start"
                   : "justify-end"
@@ -29,11 +29,6 @@ const ChatBody = ({ messages }) => {
                     ? "bg-blue-500 text-white"
                     : "bg-white text-gray-800"
                 } shadow-md transition-all duration-300 ease-in-out hover:shadow-lg`}
-                aria-label={`${
-                  message.sender === "user"
-                    ? "Your message"
-                    : "Responder message"
-                }`}
               >
                 <p className="text-sm sm:text-base">{message.messageText}</p>
                 <p className="text-xs mt-1 text-right opacity-70">

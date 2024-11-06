@@ -75,7 +75,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
       .post("/CustomerGroup/CreateCustomerGroup", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
-          toast.success("با موفقیت ویرایش شد");
+          toast.success("با موفقیت ثبت شد");
           handleClose();
         }
       })
@@ -230,8 +230,6 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
             <Select
               fieldNames={{ label: "groupName", value: "id" }}
               allowClear
-              mode="multiple"
-              maxTagCount={3}
               options={groupList}
               value={validation.values.parentGroupId}
               onChange={(e) => {

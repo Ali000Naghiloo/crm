@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import { BsPerson } from "react-icons/bs";
+import { MdGroup } from "react-icons/md";
 
 function compareChildrens(data) {
   // Create a map to quickly lookup groups by ID
@@ -249,8 +250,14 @@ export default function Groups() {
                 value: "id",
                 children: "children",
               }}
-              showLine={{ showLeafIcon: true }}
-              className="text-2xl"
+              showLine={{
+                showLeafIcon: (
+                  <div className="w-full h-full flex justify-center items-center">
+                    <MdGroup />
+                  </div>
+                ),
+              }}
+              className="text-lg p-5 px-10"
               // switcherIcon={<GrDown />}
               onSelect={onSelect}
               defaultExpandAll

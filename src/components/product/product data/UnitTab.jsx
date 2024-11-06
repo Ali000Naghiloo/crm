@@ -2,7 +2,14 @@ import { Button, Input, Popconfirm, Select, Table } from "antd";
 import useHttp from "../../../hooks/useHttps";
 import { Suspense, useEffect, useState } from "react";
 
-export default function UnitTab({ unit, setUnit, quantity, setQuantity }) {
+export default function UnitTab({
+  unit,
+  setUnit,
+  quantity,
+  setQuantity,
+  // for having the value in parent
+  setUnitData,
+}) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [unitList, setUnitList] = useState(false);
@@ -46,6 +53,14 @@ export default function UnitTab({ unit, setUnit, quantity, setQuantity }) {
         (u) => u.unitId === unit && u.unitType == 2
       );
       setParent(selectedUnitData[0]);
+    }
+  }, [unit]);
+
+  useEffect(() => {
+    if (unit && unitList) {
+      const selectedUnitData = unitList?.filter((u) => u.unitId === unit);
+
+      setUnitData(selectedUnitData[0]);
     }
   }, [unit]);
 

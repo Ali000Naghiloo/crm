@@ -9,11 +9,12 @@ export const baseURL =
     : "https://crmapi.fanwebautomation.ir/api";
 export const imageUrl =
   grantil == "true"
-    ? "https://fanwebautomation.ir/upload/userimage/"
-    : "http://192.168.3.12/upload/userimage/";
+    ? "http://192.168.3.12/upload/userimage/"
+    : "https://fanwebautomation.ir/upload/userimage/";
 
 const useHttp = () => {
   var token = localStorage.getItem("token");
+  let debug = false;
 
   const httpService = axios.create({
     // baseURL: process.env.REACT_APP_BASE_URL,

@@ -34,7 +34,7 @@ export default function RequestProduct({ pageType }) {
       key: "index",
     },
     {
-      title: "شماره فاکتور",
+      title: "شماره درخواست",
       dataIndex: "factorNumber",
       sorter: (a, b) => a.factorNumber - b.factorNumber,
       key: "factorNumber",
@@ -51,7 +51,7 @@ export default function RequestProduct({ pageType }) {
       key: "factorType",
     },
     {
-      title: "مسئولین فاکتور",
+      title: "مسئولین درخواست",
       dataIndex: "factorResponsibles",
       render: (value) => (
         <>
@@ -65,12 +65,6 @@ export default function RequestProduct({ pageType }) {
         </>
       ),
       key: "factorResponsibles",
-    },
-    {
-      title: "مبلغ کل فاکتور",
-      dataIndex: "totalFactorPrice",
-      render: (value) => <>{value ? formatHelper.numberSeperator(value) : 0}</>,
-      key: "totalFactorPrice",
     },
     {
       title: "عملیات",

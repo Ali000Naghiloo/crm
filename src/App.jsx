@@ -25,10 +25,10 @@ function App() {
               darkPopupBg: "#222831",
             },
             Table: {
-              rowHoverBg: "rgba(0,0,0,0.1)",
+              // rowHoverBg: "rgba(0,0,0,0.1)",
             },
             Tree: {
-              titleHeight: "70px",
+              titleHeight: "40px",
             },
             Layout: {
               colorBgBase: "#222831",
@@ -38,9 +38,6 @@ function App() {
           },
           token: {
             fontFamily: "iranSansFaNum",
-            colorPrimaryHover: "",
-            colorBgTextHover: "",
-            colorTextBase: "",
           },
         }}
         locale={fa_IR}

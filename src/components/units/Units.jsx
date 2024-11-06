@@ -61,9 +61,9 @@ export default function Units() {
       render: (data) => (
         <div className="flex gap-1">
           <Popconfirm
-            cancelText="لغو"
-            okText="حذف"
-            title="آیا از حذف این فاکتور اطمینان دارید؟"
+            cancelText="خیر"
+            okText="بله"
+            title="آیا از حذف این واحد اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.unitId)}
           >
@@ -71,6 +71,15 @@ export default function Units() {
               حذف
             </Button>
           </Popconfirm>
+          <Button
+            onClick={() => {
+              setDataModal({ data: data, open: true });
+            }}
+            size="middle"
+            type="primary"
+          >
+            ویرایش
+          </Button>
         </div>
       ),
       key: "actions",
@@ -87,8 +96,6 @@ export default function Units() {
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت حذف شد");
-        } else {
-          toast.error(res.data.msg);
         }
       })
       .catch(() => {});

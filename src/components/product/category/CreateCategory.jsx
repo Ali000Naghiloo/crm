@@ -22,6 +22,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
       categoryName: "",
       description: "",
       parentCategoryId: null,
+      products: [],
     },
     validationSchema,
     onSubmit: (values) => {
@@ -62,19 +63,13 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
 
   const handleGetProductList = async () => {
     setLoading(true);
-    const datas = [];
+    let datas = [];
 
     await httpService
       .get("/Product/GetAllProducts")
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
-          res.data?.productViewModelList?.map((pr, index) => {
-            datas.push({
-              label: pr?.productName,
-              value: pr?.productId,
-              key: index,
-            });
-          });
+          datas = res.data?.productViewModelList;
         }
       })
       .catch(() => {});
@@ -88,8 +83,8 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
   }, [list]);
 
   useEffect(() => {
-    // handleGetProductList()
-  }, [open]);
+    handleGetProductList();
+  }, []);
 
   useEffect(() => {
     if (validation.values.parentCategoryId) {
@@ -187,25 +182,23 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
             <span>محصولات گروه </span>
             <Select
-              options={[]}
-              fieldNames={{
-                label: "categoryName",
-                value: "productCategoryId",
-                children: "children",
-              }}
-              // value={validation.values.parentCategoryId}
+              mode="multiple"
+              showSearch
+              options={productList}
+              optionFilterProp="productName"
+              fieldNames={{ label: "productName", value: "productId" }}
+              value={validation.values.products}
               onChange={(e) => {
-                validation.setFieldValue("parentCategoryId", e);
+                validation.setFieldValue("products", e);
               }}
               className="w-[100%]"
               placeholder="لطفا اینجا وارد کنید..."
             />
-            {validation.touched.parentCategoryId &&
-              validation.errors.parentCategoryId && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.parentCategoryId}
-                </span>
-              )}
+            {validation.touched.products && validation.errors.products && (
+              <span className="text-red-300 text-xs">
+                {validation.errors.products}
+              </span>
+            )}
           </div>
 
           <div className="flex gap-1 flex-col items-start w-full mx-auto">
