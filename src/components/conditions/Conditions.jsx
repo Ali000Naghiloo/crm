@@ -1,7 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../../hooks/useHttps";
-import { Button, Popconfirm, Table, Tag } from "antd";
+import { Button, Checkbox, Popconfirm, Table, Tag } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
 // import CreateCondition from "./create factor/CreateCondition";
@@ -113,6 +113,12 @@ export default function Conditions() {
         );
       },
       key: "additionsAndDeductionsBannedUsers",
+    },
+    {
+      title: "فعال است؟",
+      dataIndex: "isActive",
+      render: (value) => <Checkbox checked={value} />,
+      key: "isActive",
     },
     {
       title: "عملیات",

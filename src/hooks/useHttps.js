@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const grantil = import.meta.env.VITE_GRANTILL;
+let debug = true;
 
 export const baseURL =
   grantil == "true"
@@ -14,7 +15,6 @@ export const imageUrl =
 
 const useHttp = () => {
   var token = localStorage.getItem("token");
-  let debug = false;
 
   const httpService = axios.create({
     // baseURL: process.env.REACT_APP_BASE_URL,
@@ -37,7 +37,7 @@ const useHttp = () => {
         toast.error("شما از برنامه خارج شده اید");
       }
       if (response?.status === 400) {
-        if (response?.data?.msg) {
+        if (response?.data?.msg && debug) {
           toast.error(response.data.msg);
         } else {
           toast.error("مشکلی در اطلاعات ارسالی وجود دارد");
@@ -48,7 +48,7 @@ const useHttp = () => {
         toast.error("درخواست مورد نظر شما پیدا نشد");
       } else if (response?.status === 500) {
         toast.error("مشکلی از سمت سرور پیش آمده لطفا بعدا تلاش کنید");
-      } else if (response?.data?.msg) {
+      } else if (response?.data?.msg && debug) {
         toast.error(response?.data?.msg);
       } else {
         console.log(error, response);

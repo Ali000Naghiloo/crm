@@ -62,7 +62,7 @@ export default function UnitTab({
 
       setUnitData(selectedUnitData[0]);
     }
-  }, [unit]);
+  }, [unit, unitList]);
 
   return (
     <Suspense>

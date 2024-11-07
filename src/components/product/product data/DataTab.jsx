@@ -15,6 +15,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
   const [categoryList, setCategoryList] = useState([]);
   const [pricingMethodGroupList, setPricingMethodGroupList] = useState([]);
   const [unitData, setUnitData] = useState(null);
+  const [warehouseUnits, setWarehouseUnits] = useState([]);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
@@ -45,6 +46,13 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
         {
           unitId: null,
           quantityInUnit: null,
+        },
+      ],
+      productUnitWarehouseStocks: [
+        {
+          productId: null,
+          unitId: null,
+          quantityInWarehouse: null,
         },
       ],
       sku: null,
@@ -291,23 +299,6 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               )}
           </div>
 
-          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-            <span>کد کالا :</span>
-            <Input
-              value={validation.values.productCode}
-              name="productCode"
-              onChange={validation.handleChange}
-              className="w-[100%]"
-              placeholder="لطفا اینجا وارد کنید..."
-            />
-            {validation.touched.productCode &&
-              validation.errors.productCode && (
-                <span className="text-red-300 text-xs">
-                  {validation.errors.productCode}
-                </span>
-              )}
-          </div>
-
           {!validation.values.serviceProduct && (
             <>
               <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
@@ -454,56 +445,71 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             )}
           </div> */}
 
-          {!validation.values.serviceProduct &&
-            validation.values.productIsAllowedToUseSerial && (
-              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-                <span>
-                  موجودی کالا {unitData && unitData?.unitName} در انبار :
-                </span>
-                <Input
-                  type="number"
-                  min={0}
-                  value={validation.values.stockQuantity}
-                  name="stockQuantity"
-                  onChange={validation.handleChange}
-                  className="w-[100%]"
-                  placeholder="لطفا اینجا وارد کنید..."
-                />
-                {validation.touched.stockQuantity &&
-                  validation.errors.stockQuantity && (
-                    <span className="text-red-300 text-xs">
-                      {validation.errors.stockQuantity}
-                    </span>
-                  )}
-              </div>
-            )}
+          <div className="w-full flex flex-wrap justify-center gap-5">
+            {!validation.values.serviceProduct &&
+              validation.values.productIsAllowedToUseSerial && (
+                <div className="flex gap-1 flex-col items-start w-[300px]">
+                  <span>
+                    موجودی کالا ({unitData && unitData?.unitName}) در انبار :
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={
+                      validation.values.productUnitWarehouseStocks.filter(
+                        (u) => u.unitId == unitData?.unitId
+                      )[0]?.quantityInWarehouse
+                    }
+                    onChange={(e) => {
+                      console.log(unitData.unitId);
+                      validation.setFieldValue("productUnitWarehouseStocks", [
+                        ...validation.values.productUnitWarehouseStocks,
+                        {
+                          productId: data?.productId,
+                          unitId: unitData?.unitId,
+                          quantityInWarehouse: parseFloat(e.target.value),
+                        },
+                      ]);
+                    }}
+                    className="w-[100%]"
+                    placeholder="لطفا اینجا وارد کنید..."
+                  />
+                  {validation.touched.stockQuantity &&
+                    validation.errors.stockQuantity && (
+                      <span className="text-red-300 text-xs">
+                        {validation.errors.stockQuantity}
+                      </span>
+                    )}
+                </div>
+              )}
 
-          {/* {!validation.values.serviceProduct &&
-            unitData?.parentUnit &&
-            validation.values.productIsAllowedToUseSerial && (
-              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
-                <span>
-                  موجودی کالا (
-                  {unitData && unitData.parentUnit && unitData?.parentUnit}) در
-                  انبار :
-                </span>
-                <Input
-                  type="number"
-                  min={0}
-                  value={validation.values.stockQuantity}
-                  name="stockQuantity"
-                  onChange={validation.handleChange}
-                  className="w-[100%]"
-                  placeholder="لطفا اینجا وارد کنید..."
-                />
-                {validation.touched.stockQuantity &&
-                  validation.errors.stockQuantity && (
-                    <span className="text-red-300 text-xs">
-                      {validation.errors.stockQuantity}
-                    </span>
-                  )}
-              </div>
-            )} */}
+            {!validation.values.serviceProduct &&
+              unitData?.parentUnit &&
+              validation.values.productIsAllowedToUseSerial && (
+                <div className="flex gap-1 flex-col items-start w-[300px]">
+                  <span>
+                    موجودی کالا (
+                    {unitData && unitData.parentUnit && unitData?.parentUnit})
+                    در انبار :
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={validation.values.stockQuantity}
+                    name="stockQuantity"
+                    onChange={validation.handleChange}
+                    className="w-[100%]"
+                    placeholder="لطفا اینجا وارد کنید..."
+                  />
+                  {validation.touched.stockQuantity &&
+                    validation.errors.stockQuantity && (
+                      <span className="text-red-300 text-xs">
+                        {validation.errors.stockQuantity}
+                      </span>
+                    )}
+                </div>
+              )}
+          </div>
 
           {!validation.values.serviceProduct && (
             <div className="flex gap-1 flex-col items-start w-full mx-auto">
