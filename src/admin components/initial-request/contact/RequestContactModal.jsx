@@ -133,7 +133,7 @@ export default function RequestContactModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.name && validation.errors.name && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.name}
                 </span>
               )}
@@ -149,7 +149,7 @@ export default function RequestContactModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.code && validation.errors.code && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.code}
                 </span>
               )}
@@ -167,7 +167,7 @@ export default function RequestContactModal({
               />
               {validation.touched.description &&
                 validation.errors.description && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.description}
                   </span>
                 )}

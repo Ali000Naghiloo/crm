@@ -135,7 +135,7 @@ export default function NoteModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.note && validation.errors.note && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.note}
               </span>
             )}

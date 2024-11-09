@@ -227,7 +227,7 @@ export default function MethodModal({
               />
               {validation.touched.pricingMethodTitle &&
                 validation.errors.pricingMethodTitle && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.pricingMethodTitle}
                   </span>
                 )}
@@ -247,7 +247,7 @@ export default function MethodModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.priceType && validation.errors.priceType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.priceType}
                 </span>
               )}
@@ -266,7 +266,7 @@ export default function MethodModal({
               />
               {validation.touched.priceValue &&
                 validation.errors.priceValue && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.priceValue}
                   </span>
                 )}
@@ -283,7 +283,7 @@ export default function MethodModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.priority && validation.errors.priority && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.priority}
                 </span>
               )}
@@ -303,7 +303,7 @@ export default function MethodModal({
               />
               {validation.touched.productPriceId &&
                 validation.errors.productPriceId && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.productPriceId}
                   </span>
                 )}
@@ -326,7 +326,7 @@ export default function MethodModal({
               />
               {validation.touched.factorTypes &&
                 validation.errors.factorTypes && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.factorTypes}
                   </span>
                 )}
@@ -370,7 +370,7 @@ export default function MethodModal({
                 />
                 {validation.touched.howMuchWillItBeRand &&
                   validation.errors.howMuchWillItBeRand && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.howMuchWillItBeRand}
                     </span>
                   )}
@@ -388,7 +388,7 @@ export default function MethodModal({
               />
               {validation.touched.description &&
                 validation.errors.description && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.description}
                   </span>
                 )}

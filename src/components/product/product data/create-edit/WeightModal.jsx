@@ -101,7 +101,7 @@ export default function WeightModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.weight && validation.errors.weight && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.weight}
               </span>
             )}
@@ -122,7 +122,7 @@ export default function WeightModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.weightUnit && validation.errors.weightUnit && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.weightUnit}
               </span>
             )}

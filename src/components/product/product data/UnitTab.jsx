@@ -9,6 +9,7 @@ export default function UnitTab({
   setQuantity,
   // for having the value in parent
   setUnitData,
+  error,
 }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
@@ -82,9 +83,10 @@ export default function UnitTab({
               }
               setUnit(e);
             }}
-            className="w-[100%]"
+            className="w-[100%] h-fit"
             placeholder="لطفا اینجا وارد کنید..."
           />
+          {error && <span className="text-xs text-error">{error}</span>}
         </div>
 
         {parent && (

@@ -160,7 +160,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.title && validation.errors.title && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.title}
             </span>
           )}
@@ -177,9 +177,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.code && validation.errors.code && (
-            <span className="text-red-300 text-xs">
-              {validation.errors.code}
-            </span>
+            <span className="text-error text-xs">{validation.errors.code}</span>
           )}
         </div>
 
@@ -200,7 +198,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.additionsAndDeductionsType &&
             validation.errors.additionsAndDeductionsType && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.additionsAndDeductionsType}
               </span>
             )}
@@ -258,7 +256,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.procedureForApplyingOnFactor &&
             validation.errors.procedureForApplyingOnFactor && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.procedureForApplyingOnFactor}
               </span>
             )}
@@ -281,7 +279,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.displayInTheFactor &&
             validation.errors.displayInTheFactor && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.displayInTheFactor}
               </span>
             )}
@@ -304,7 +302,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.displayInFactorPrinting &&
             validation.errors.displayInFactorPrinting && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.displayInFactorPrinting}
               </span>
             )}
@@ -326,7 +324,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.additionsAndDeductionsBannedUsers &&
             validation.errors.additionsAndDeductionsBannedUsers && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.additionsAndDeductionsBannedUsers}
               </span>
             )}
@@ -349,7 +347,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا عدد وارد کنید..."
           />
           {validation.touched.factorTypes && validation.errors.factorTypes && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.factorTypes}
             </span>
           )}
@@ -365,7 +363,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.description && validation.errors.description && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.description}
             </span>
           )}

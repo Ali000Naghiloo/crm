@@ -104,7 +104,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
             />
             {validation.touched.warehouseName &&
               validation.errors.warehouseName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.warehouseName}
                 </span>
               )}
@@ -125,7 +125,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
             />
             {validation.touched.warehouseType &&
               validation.errors.warehouseType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.warehouseType}
                 </span>
               )}
@@ -158,7 +158,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
             />
             {validation.touched.warehouseManualCode &&
               validation.errors.warehouseManualCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.warehouseManualCode}
                 </span>
               )}
@@ -179,7 +179,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
             />
             {validation.touched.warehouseStatus &&
               validation.errors.warehouseStatus && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.warehouseStatus}
                 </span>
               )}
@@ -196,7 +196,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.capacity && validation.errors.capacity && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.capacity}
               </span>
             )}
@@ -211,7 +211,7 @@ export default function DataTab({ data, handleClose, getNewList }) {
               className="w-full"
             />
             {validation.touched.isActive && validation.errors.isActive && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.isActive}
               </span>
             )}

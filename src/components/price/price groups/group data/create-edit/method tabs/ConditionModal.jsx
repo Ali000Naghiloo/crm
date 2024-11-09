@@ -316,7 +316,7 @@ export default function ConditionModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.title && validation.errors.title && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.title}
               </span>
             )}
@@ -333,7 +333,7 @@ export default function ConditionModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.priority && validation.errors.priority && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.priority}
               </span>
             )}
@@ -353,7 +353,7 @@ export default function ConditionModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.products && validation.errors.products && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.products}
               </span>
             )}
@@ -375,7 +375,7 @@ export default function ConditionModal({
             />
             {validation.touched.productCategories &&
               validation.errors.productCategories && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productCategories}
                 </span>
               )}
@@ -395,7 +395,7 @@ export default function ConditionModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.customers && validation.errors.customers && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.customers}
               </span>
             )}
@@ -416,7 +416,7 @@ export default function ConditionModal({
             />
             {validation.touched.customerRoles &&
               validation.errors.customerRoles && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerRoles}
                 </span>
               )}
@@ -433,7 +433,7 @@ export default function ConditionModal({
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

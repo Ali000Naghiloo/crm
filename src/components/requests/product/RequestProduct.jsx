@@ -24,7 +24,7 @@ export default function RequestProduct({ pageType }) {
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   // imports
-  const CreateRequestProduct = lazy(() => import("./CreateRequestProduct"));
+  const RequestProductModal = lazy(() => import("./RequestProductModal"));
 
   const columns = [
     {
@@ -234,7 +234,7 @@ export default function RequestProduct({ pageType }) {
         </div>
       </div>
 
-      <CreateRequestProduct
+      <RequestProductModal
         open={showModal.open}
         setOpen={(e) => {
           setShowModal({ open: e });

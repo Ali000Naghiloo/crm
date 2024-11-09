@@ -192,7 +192,7 @@ export default function RequestContactModal({
 
   useEffect(() => {
     if (data) {
-      console.log(data?.initialRequestItems);
+      // console.log(data?.initialRequestItems);
       validation.setFieldValue("id", data?.id);
       validation.setFieldValue("customer", data?.customer);
       validation.setFieldValue("customerId", data?.customerId);
@@ -260,7 +260,7 @@ export default function RequestContactModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.date && validation.errors.date && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.date}
                 </span>
               )}
@@ -285,7 +285,7 @@ export default function RequestContactModal({
               />
               {validation.touched.customerId &&
                 validation.errors.customerId && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.customerId}
                   </span>
                 )}
@@ -308,7 +308,7 @@ export default function RequestContactModal({
               />
               {validation.touched.initialRequestItems &&
                 validation.errors.initialRequestItems && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.initialRequestItems}
                   </span>
                 )}
@@ -333,7 +333,7 @@ export default function RequestContactModal({
               />
               {validation.touched.customerInitialRequestResponsibles &&
                 validation.errors.customerInitialRequestResponsibles && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.customerInitialRequestResponsibles}
                   </span>
                 )}
@@ -349,7 +349,7 @@ export default function RequestContactModal({
                 placeholder="لطفا اینجا وارد کنید..."
               />
               {validation.touched.code && validation.errors.code && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.code}
                 </span>
               )}
@@ -367,7 +367,7 @@ export default function RequestContactModal({
               />
               {validation.touched.description &&
                 validation.errors.description && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.description}
                   </span>
                 )}

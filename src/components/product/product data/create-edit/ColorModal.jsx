@@ -126,7 +126,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.colorName && validation.errors.colorName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.colorName}
               </span>
             )}
@@ -150,7 +150,7 @@ export default function SizeModal({
               />
             </div>
             {validation.touched.hexValue && validation.errors.hexValue && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.hexValue}
               </span>
             )}

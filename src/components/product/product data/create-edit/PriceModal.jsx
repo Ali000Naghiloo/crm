@@ -192,7 +192,7 @@ export default function PriceModal({
             />
             {validation.touched.productPriceId &&
               validation.errors.productPriceId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productPriceId}
                 </span>
               )}
@@ -211,7 +211,7 @@ export default function PriceModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.unitId && validation.errors.unitId && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.unitId}
               </span>
             )}
@@ -231,7 +231,7 @@ export default function PriceModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.price && validation.errors.price && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.price}
               </span>
             )}

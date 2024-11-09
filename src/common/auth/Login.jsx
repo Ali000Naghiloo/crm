@@ -106,7 +106,7 @@ export default function Login() {
                   />
                   {validations.touched.userName &&
                     validations.errors.userName && (
-                      <span className="text-sm text-red-300">
+                      <span className="text-sm text-error">
                         {validations.errors.userName}
                       </span>
                     )}
@@ -127,7 +127,7 @@ export default function Login() {
                   />
                   {validations.touched.password &&
                     validations.errors.password && (
-                      <span className="text-sm text-red-300">
+                      <span className="text-sm text-error">
                         {validations.errors.password}
                       </span>
                     )}

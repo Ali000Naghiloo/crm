@@ -89,7 +89,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.pricingMethodGroupTitle &&
             validation.errors.pricingMethodGroupTitle && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.pricingMethodGroupTitle}
               </span>
             )}
@@ -106,7 +106,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.pricingMethodGroupCode &&
             validation.errors.pricingMethodGroupCode && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.pricingMethodGroupCode}
               </span>
             )}
@@ -122,7 +122,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.description && validation.errors.description && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.description}
             </span>
           )}

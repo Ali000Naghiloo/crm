@@ -124,7 +124,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.firstName && validation.errors.firstName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.firstName}
               </span>
             )}
@@ -140,7 +140,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.lastName && validation.errors.lastName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.lastName}
               </span>
             )}
@@ -157,7 +157,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             />
             {validation.touched.birthdayDateTime &&
               validation.errors.birthdayDateTime && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.birthdayDateTime}
                 </span>
               )}
@@ -178,7 +178,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             />
             {validation.touched.customerSex &&
               validation.errors.customerSex && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerSex}
                 </span>
               )}
@@ -200,7 +200,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             />
             {validation.touched.maritalStatus &&
               validation.errors.maritalStatus && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.maritalStatus}
                 </span>
               )}
@@ -219,7 +219,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
                 />
                 {validation.touched.nameOfPartner &&
                   validation.errors.nameOfPartner && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.nameOfPartner}
                     </span>
                   )}
@@ -237,7 +237,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
                 />
                 {validation.touched.numberOfChildren &&
                   validation.errors.numberOfChildren && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.numberOfChildren}
                     </span>
                   )}
@@ -261,7 +261,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             />
             {validation.touched.customerName &&
               validation.errors.customerName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerName}
                 </span>
               )}
@@ -282,7 +282,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             />
             {validation.touched.companyType &&
               validation.errors.companyType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.companyType}
                 </span>
               )}
@@ -293,7 +293,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             <Input className="w-full" placeholder="لطفا اینجا وارد کنید..." />
             {validation.touched.economicCode &&
               validation.errors.economicCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.economicCode}
                 </span>
               )}
@@ -317,7 +317,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             <Input className="w-full" placeholder="لطفا اینجا وارد کنید..." />
             {validation.touched.companyType &&
               validation.errors.companyType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.companyType}
                 </span>
               )}
@@ -379,7 +379,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
           />
           {validation.touched.customerType &&
             validation.errors.customerType && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.customerType}
               </span>
             )}
@@ -430,7 +430,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.nickName && validation.errors.nickName && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.nickName}
             </span>
           )}
@@ -446,7 +446,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.description && validation.errors.description && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.description}
             </span>
           )}
@@ -462,7 +462,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.isActive && validation.errors.isActive && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.isActive}
             </span>
           )}

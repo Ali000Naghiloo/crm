@@ -18,7 +18,12 @@ export default function MyRequests({ pageType }) {
   const [pageList, setPageList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [showModal, setShowModal] = useState({
+  const [showContactModal, setShowContactModal] = useState({
+    open: false,
+    id: null,
+    data: null,
+  });
+  const [showProductModal, setShowProductModal] = useState({
     open: false,
     id: null,
     data: null,
@@ -27,6 +32,12 @@ export default function MyRequests({ pageType }) {
   const userData = useSelector((state) => state.userData.userData);
 
   // imports
+  const RequestProductModal = lazy(() =>
+    import("../product/RequestProductModal")
+  );
+  const RequestContactModal = lazy(() =>
+    import("../contact/RequestContactModal")
+  );
 
   const myRequestColumns = [
     {
@@ -77,7 +88,7 @@ export default function MyRequests({ pageType }) {
           </Button> */}
           <Button
             onClick={() => {
-              setShowModal({
+              setShowProductModal({
                 open: true,
                 data: data,
                 id: data?.factorId,
@@ -149,7 +160,7 @@ export default function MyRequests({ pageType }) {
         <div className="flex gap-2">
           <Button
             onClick={() => {
-              setShowModal({ data: data, open: true });
+              setShowContactModal({ data: data, open: true });
             }}
             size="middle"
             type="primary"
@@ -374,6 +385,22 @@ export default function MyRequests({ pageType }) {
           </div>
         </div>
       </div>
+
+      {/* update product request */}
+      <RequestProductModal
+        open={showProductModal.open}
+        setOpen={(e) => setShowProductModal({ ...showProductModal, open: e })}
+        getNewList={handleGetMyRequestList}
+        id={showProductModal.id}
+      />
+
+      {/* update initial contact request */}
+      <RequestContactModal
+        open={showContactModal.open}
+        setOpen={(e) => setShowContactModal({ ...showContactModal, open: e })}
+        data={showContactModal.data}
+        getNewList={handleGetList}
+      />
     </Suspense>
   );
 }

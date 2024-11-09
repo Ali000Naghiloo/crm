@@ -137,7 +137,7 @@ export default function ConnectorModal({
             />
             {validation.touched.connectorName &&
               validation.errors.connectorName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.connectorName}
                 </span>
               )}
@@ -154,7 +154,7 @@ export default function ConnectorModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.position && validation.errors.position && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.position}
               </span>
             )}

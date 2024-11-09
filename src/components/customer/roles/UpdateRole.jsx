@@ -111,7 +111,7 @@ export default function UpdateRole({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.roleName && validation.errors.roleName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.roleName}
               </span>
             )}
@@ -128,7 +128,7 @@ export default function UpdateRole({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

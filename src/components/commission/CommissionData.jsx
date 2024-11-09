@@ -109,7 +109,7 @@ export default function CreateCommission({ data, open, setOpen, getNewList }) {
               placeholder="لطفا عدد وارد کنید..."
             />
             {validation.touched.factorType && validation.errors.factorType && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.factorType}
               </span>
             )}
@@ -127,7 +127,7 @@ export default function CreateCommission({ data, open, setOpen, getNewList }) {
             />
             {validation.touched.commissionPercent &&
               validation.errors.commissionPercent && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.commissionPercent}
                 </span>
               )}

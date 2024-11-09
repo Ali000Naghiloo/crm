@@ -49,11 +49,11 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
         },
       ],
       productUnitWarehouseStocks: [
-        {
-          productId: null,
-          unitId: null,
-          quantityInWarehouse: null,
-        },
+        // {
+        //   productId: null,
+        //   unitId: null,
+        //   quantityInWarehouse: null,
+        // },
       ],
       sku: null,
       stockQuantity: 0,
@@ -237,7 +237,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productName &&
               validation.errors.productName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productName}
                 </span>
               )}
@@ -258,7 +258,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.natureOfProduct &&
               validation.errors.natureOfProduct && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.natureOfProduct}
                 </span>
               )}
@@ -276,7 +276,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productCode &&
               validation.errors.productCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productCode}
                 </span>
               )}
@@ -293,7 +293,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productManualCode &&
               validation.errors.productManualCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productManualCode}
                 </span>
               )}
@@ -349,7 +349,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productCategoryId &&
               validation.errors.productCategoryId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productCategoryId}
                 </span>
               )}
@@ -370,7 +370,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productManufacturerProducts &&
               validation.errors.productManufacturerProducts && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productManufacturerProducts}
                 </span>
               )}
@@ -401,7 +401,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.pricingMethodGroupId &&
               validation.errors.pricingMethodGroupId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.pricingMethodGroupId}
                 </span>
               )}
@@ -421,7 +421,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               />
               {validation.touched.productSerialNumber &&
                 validation.errors.productSerialNumber && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.productSerialNumber}
                   </span>
                 )}
@@ -439,13 +439,36 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.sku && validation.errors.sku && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.sku}
               </span>
             )}
           </div> */}
 
-          <div className="w-full flex flex-wrap justify-center gap-5">
+          {!validation.values.serviceProduct &&
+            validation.values.productIsAllowedToUseSerial && (
+              <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
+                <span>موجودی کالا در انبار :</span>
+                <Input
+                  type="number"
+                  min={0}
+                  value={validation.values.stockQuantity}
+                  onChange={(e) => {
+                    validation.setFieldValue("stockQuantity", e.target.value);
+                  }}
+                  className="w-[100%]"
+                  placeholder="لطفا اینجا وارد کنید..."
+                />
+                {validation.touched.stockQuantity &&
+                  validation.errors.stockQuantity && (
+                    <span className="text-error text-xs">
+                      {validation.errors.stockQuantity}
+                    </span>
+                  )}
+              </div>
+            )}
+
+          {/* <div className="w-full flex flex-wrap justify-center gap-5">
             {!validation.values.serviceProduct &&
               validation.values.productIsAllowedToUseSerial && (
                 <div className="flex gap-1 flex-col items-start w-[300px]">
@@ -476,7 +499,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                   />
                   {validation.touched.stockQuantity &&
                     validation.errors.stockQuantity && (
-                      <span className="text-red-300 text-xs">
+                      <span className="text-error text-xs">
                         {validation.errors.stockQuantity}
                       </span>
                     )}
@@ -503,13 +526,13 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
                   />
                   {validation.touched.stockQuantity &&
                     validation.errors.stockQuantity && (
-                      <span className="text-red-300 text-xs">
+                      <span className="text-error text-xs">
                         {validation.errors.stockQuantity}
                       </span>
                     )}
                 </div>
               )}
-          </div>
+          </div> */}
 
           {!validation.values.serviceProduct && (
             <div className="flex gap-1 flex-col items-start w-full mx-auto">
@@ -523,7 +546,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               />
               {validation.touched.description &&
                 validation.errors.description && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.description}
                   </span>
                 )}
@@ -541,7 +564,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}
@@ -557,7 +580,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.isActive && validation.errors.isActive && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.isActive}
               </span>
             )}
@@ -576,7 +599,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.productIsAllowedToUseSerial &&
               validation.errors.productIsAllowedToUseSerial && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productIsAllowedToUseSerial}
                 </span>
               )}
@@ -593,7 +616,7 @@ export default function DataTab({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.serviceProduct &&
               validation.errors.serviceProduct && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.serviceProduct}
                 </span>
               )}

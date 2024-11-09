@@ -128,12 +128,7 @@ export default function UpdateGroup({
       .get("/CustomerGroup/CustomerGroupsForCreate")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
-          res.data?.customerGroupViewModelList?.map((cu, index) => {
-            datas.push({
-              ...cu,
-              key: index,
-            });
-          });
+          datas = res.data?.customerGroupViewModelList;
         }
       })
       .catch(() => {});
@@ -239,7 +234,7 @@ export default function UpdateGroup({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.groupName && validation.errors.groupName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.groupName}
               </span>
             )}
@@ -263,7 +258,7 @@ export default function UpdateGroup({
             />
             {validation.touched.customersGroups &&
               validation.errors.customersGroups && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customersGroups}
                 </span>
               )}
@@ -282,6 +277,8 @@ export default function UpdateGroup({
             <Select
               fieldNames={{ label: "groupName", value: "id" }}
               allowClear
+              optionFilterProp="groupName"
+              showSearch
               options={groupList}
               treeDefaultExpandAll
               value={validation.values.parentGroupId}
@@ -293,7 +290,7 @@ export default function UpdateGroup({
             />
             {validation.touched.parentGroupId &&
               validation.errors.parentGroupId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.parentGroupId}
                 </span>
               )}
@@ -310,7 +307,7 @@ export default function UpdateGroup({
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

@@ -26,6 +26,7 @@ export default function WorkflowModal({
       name: "",
       description: "",
       color: "",
+      boardId: "",
     },
 
     validationSchema,
@@ -46,7 +47,7 @@ export default function WorkflowModal({
     };
 
     await httpService
-      .post("/WorkFlowController/CreateWorkFlow", formData)
+      .post("/WorkFlowController/AddNewWorkFlowToBoard", formData)
       .then((res) => {
         if (res.status >= 200 && res.status < 300 && res.data?.code == 1) {
           toast.success("کانبان شما با موفقیت ثبت شد");
@@ -111,6 +112,12 @@ export default function WorkflowModal({
     }
   }, [id]);
 
+  useEffect(() => {
+    if (boardId) {
+      validation.setFieldValue("boardId", boardId);
+    }
+  }, [boardId]);
+
   return (
     <Modal
       open={open}
@@ -165,7 +172,7 @@ export default function WorkflowModal({
           <span>توضیحات </span>
           <Input.TextArea
             rows={5}
-            placeholder="نام برد را وارد کنید"
+            placeholder="توضیحات را وارد کنید"
             className="w-full"
             name="description"
             value={validation.values.description}

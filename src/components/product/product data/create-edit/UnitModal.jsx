@@ -155,7 +155,7 @@ export default function UnitModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.unit && validation.errors.unit && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.unit}
               </span>
             )}
@@ -181,7 +181,7 @@ export default function UnitModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.unitId && validation.errors.unitId && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.unitId}
               </span>
             )}
@@ -203,7 +203,7 @@ export default function UnitModal({
               />
               {validation.touched.quantityInUnit &&
                 validation.errors.quantityInUnit && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.quantityInUnit}
                   </span>
                 )}

@@ -188,7 +188,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.groupName && validation.errors.groupName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.groupName}
               </span>
             )}
@@ -212,7 +212,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.customersGroups &&
               validation.errors.customersGroups && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customersGroups}
                 </span>
               )}
@@ -240,7 +240,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.parentGroupId &&
               validation.errors.parentGroupId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.parentGroupId}
                 </span>
               )}
@@ -257,7 +257,7 @@ export default function CreateGroup({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

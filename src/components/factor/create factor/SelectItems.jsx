@@ -616,7 +616,7 @@ export default function SelectItems({ validation, factorType }) {
             placeholder="انتخاب کنید..."
           />
           {validation.touched.customerId && validation.errors.customerId && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.customerId}
             </span>
           )}
@@ -641,7 +641,7 @@ export default function SelectItems({ validation, factorType }) {
           />
           {validation.touched.customerRoleId &&
             validation.errors.customerRoleId && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.customerRoleId}
               </span>
             )}

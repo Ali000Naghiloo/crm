@@ -158,7 +158,7 @@ export default function PhoneModal({
             />
             {validation.touched.mobileOrLandline &&
               validation.errors.mobileOrLandline && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.mobileOrLandline}
                 </span>
               )}
@@ -175,7 +175,7 @@ export default function PhoneModal({
             />
             {validation.touched.countryCode &&
               validation.errors.countryCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.countryCode}
                 </span>
               )}
@@ -192,7 +192,7 @@ export default function PhoneModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.cityCode && validation.errors.cityCode && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.cityCode}
               </span>
             )}
@@ -212,7 +212,7 @@ export default function PhoneModal({
             />
             {validation.touched.phoneNumber &&
               validation.errors.phoneNumber && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.phoneNumber}
                 </span>
               )}
@@ -229,7 +229,7 @@ export default function PhoneModal({
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

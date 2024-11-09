@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const grantil = import.meta.env.VITE_GRANTILL;
-let debug = true;
+let debug = false;
 
 export const baseURL =
   grantil == "true"

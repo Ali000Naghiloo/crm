@@ -99,7 +99,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.priceName && validation.errors.priceName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.priceName}
               </span>
             )}
@@ -121,7 +121,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
             />
             {validation.touched.priceCurrency &&
               validation.errors.priceCurrency && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.priceCurrency}
                 </span>
               )}
@@ -139,7 +139,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
             />
             {validation.touched.displayOrder &&
               validation.errors.displayOrder && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.displayOrder}
                 </span>
               )}
@@ -168,7 +168,7 @@ export default function CreatePirce({ open, setOpen, getNewList, list }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

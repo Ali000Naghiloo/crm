@@ -148,7 +148,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.firstName && validation.errors.firstName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.firstName}
               </span>
             )}
@@ -164,7 +164,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.lastName && validation.errors.lastName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.lastName}
               </span>
             )}
@@ -181,7 +181,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.birthdayDateTime &&
               validation.errors.birthdayDateTime && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.birthdayDateTime}
                 </span>
               )}
@@ -198,7 +198,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.nationalID && validation.errors.nationalID && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.nationalID}
               </span>
             )}
@@ -220,7 +220,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.customerSex &&
               validation.errors.customerSex && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerSex}
                 </span>
               )}
@@ -242,7 +242,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.maritalStatus &&
               validation.errors.maritalStatus && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.maritalStatus}
                 </span>
               )}
@@ -261,7 +261,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                 />
                 {validation.touched.nameOfPartner &&
                   validation.errors.nameOfPartner && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.nameOfPartner}
                     </span>
                   )}
@@ -280,7 +280,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                 />
                 {validation.touched.numberOfChildren &&
                   validation.errors.numberOfChildren && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.numberOfChildren}
                     </span>
                   )}
@@ -305,7 +305,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.customerName &&
               validation.errors.customerName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerName}
                 </span>
               )}
@@ -326,7 +326,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.companyType &&
               validation.errors.companyType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.companyType}
                 </span>
               )}
@@ -344,7 +344,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.companyType &&
               validation.errors.companyType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.companyType}
                 </span>
               )}
@@ -361,7 +361,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.economicCode &&
               validation.errors.economicCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.economicCode}
                 </span>
               )}
@@ -377,7 +377,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.nationalID && validation.errors.nationalID && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.nationalID}
               </span>
             )}
@@ -394,7 +394,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.companyType &&
               validation.errors.companyType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.companyType}
                 </span>
               )}
@@ -457,7 +457,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           />
           {validation.touched.representerId &&
             validation.errors.representerId && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.representerId}
               </span>
             )}
@@ -482,7 +482,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           />
           {validation.touched.representerId &&
             validation.errors.representerId && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.representerId}
               </span>
             )}
@@ -545,7 +545,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.customerType &&
               validation.errors.customerType && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.customerType}
                 </span>
               )}
@@ -596,7 +596,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.nickName && validation.errors.nickName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.nickName}
               </span>
             )}
@@ -613,7 +613,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}
@@ -635,7 +635,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               />
               {validation.touched.representerType &&
                 validation.errors.representerType && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.representerType}
                   </span>
                 )}
@@ -656,7 +656,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.isActive && validation.errors.isActive && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.isActive}
               </span>
             )}

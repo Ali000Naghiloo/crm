@@ -198,7 +198,7 @@ export default function AddressModal({
             />
             {validation.touched.addressName &&
               validation.errors.addressName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.addressName}
                 </span>
               )}
@@ -215,7 +215,7 @@ export default function AddressModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.priority && validation.errors.priority && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.priority}
               </span>
             )}
@@ -236,7 +236,7 @@ export default function AddressModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.province && validation.errors.province && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.province}
               </span>
             )}
@@ -261,7 +261,7 @@ export default function AddressModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.city && validation.errors.city && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.city}
               </span>
             )}
@@ -277,7 +277,7 @@ export default function AddressModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.address && validation.errors.address && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.address}
               </span>
             )}
@@ -298,7 +298,7 @@ export default function AddressModal({
                 }}
               />
               {validation.touched.lat && validation.errors.lat && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.lat}
                 </span>
               )}
@@ -323,7 +323,7 @@ export default function AddressModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.postalCode && validation.errors.postalCode && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.postalCode}
               </span>
             )}
@@ -340,7 +340,7 @@ export default function AddressModal({
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}

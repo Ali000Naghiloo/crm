@@ -19,9 +19,16 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
 
   const validationSchema = yup.object().shape({
     productName: yup.string().required("این فیلد را پر کنید"),
-    // manufactureDate: yup.string().required("این فیلد را پر کنید"),
-    // expiryDate: yup.string().required("این فیلد را پر کنید"),
     productCategoryId: yup.number().required("این فیلد را پر کنید"),
+    productUnits: yup
+      .array()
+      .of(
+        yup.object().shape({
+          unitId: yup.string().required("این فیلد را پر کنید"),
+        })
+      )
+      .min(1, "این فیلد را پر کنید")
+      .required("این فیلد را پر کنید"),
   });
 
   const validation = useFormik({
@@ -46,6 +53,13 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
           quantityInUnit: null,
         },
       ],
+      productUnitWarehouseStocks: [
+        // {
+        //   productId: null,
+        //   unitId: null,
+        //   quantityInWarehouse: null,
+        // },
+      ],
       stockQuantity: 0,
       productCategoryId: null,
       productManufacturerProducts: [],
@@ -55,7 +69,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     validationSchema,
 
     onSubmit: (values) => {
-      handleCreateProduct(values);
+      handleCreate(values);
     },
   });
 
@@ -79,7 +93,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       });
   };
 
-  const handleCreateProduct = async (values) => {
+  const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
       ...values,
@@ -107,6 +121,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("کالا و خدمات با موفقیت تعریف شد");
+          getNewList();
           handleClose();
         }
       })
@@ -201,7 +216,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               loading={loading}
               disabled={loading}
             >
-              ثبت کالا و خدمات جدید
+              ثبت
             </Button>
           </div>
         }
@@ -222,7 +237,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productName &&
               validation.errors.productName && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productName}
                 </span>
               )}
@@ -243,7 +258,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.natureOfProduct &&
               validation.errors.natureOfProduct && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.natureOfProduct}
                 </span>
               )}
@@ -260,7 +275,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productManualCode &&
               validation.errors.productManualCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productManualCode}
                 </span>
               )}
@@ -277,7 +292,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productCode &&
               validation.errors.productCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productCode}
                 </span>
               )}
@@ -293,7 +308,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.latinName && validation.errors.latinName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.latinName}
               </span>
             )}
@@ -349,7 +364,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.pricingMethodGroupId &&
               validation.errors.pricingMethodGroupId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.pricingMethodGroupId}
                 </span>
               )}
@@ -368,7 +383,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productCategoryId &&
               validation.errors.productCategoryId && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productCategoryId}
                 </span>
               )}
@@ -389,7 +404,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productManufacturerProducts &&
               validation.errors.productManufacturerProducts && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productManufacturerProducts}
                 </span>
               )}
@@ -405,6 +420,11 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               validation.setFieldValue("productUnits[0].quantityInUnit", e)
             }
             setUnitData={setUnitData}
+            error={
+              validation.touched.productUnits && validation.errors.productUnits
+                ? validation.errors.productUnits[0]?.unitId
+                : ""
+            }
           />
 
           {/* {validation.values.productIsAllowedToUseSerial && (
@@ -421,7 +441,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               />
               {validation.touched.productSerialNumber &&
                 validation.errors.productSerialNumber && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.productSerialNumber}
                   </span>
                 )}
@@ -439,7 +459,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.sku && validation.errors.sku && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.sku}
               </span>
             )}
@@ -460,7 +480,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                 />
                 {validation.touched.stockQuantity &&
                   validation.errors.stockQuantity && (
-                    <span className="text-red-300 text-xs">
+                    <span className="text-error text-xs">
                       {validation.errors.stockQuantity}
                     </span>
                   )}
@@ -479,7 +499,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               />
               {validation.touched.description &&
                 validation.errors.description && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.description}
                   </span>
                 )}
@@ -497,7 +517,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.description &&
               validation.errors.description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}
@@ -513,7 +533,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.isActive && validation.errors.isActive && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.isActive}
               </span>
             )}
@@ -532,7 +552,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.productIsAllowedToUseSerial &&
               validation.errors.productIsAllowedToUseSerial && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.productIsAllowedToUseSerial}
                 </span>
               )}
@@ -549,7 +569,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             />
             {validation.touched.serviceProduct &&
               validation.errors.serviceProduct && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.serviceProduct}
                 </span>
               )}

@@ -113,7 +113,7 @@ export default function FactorSettingData({ data, open, setOpen, getNewList }) {
               placeholder="لطفا عدد وارد کنید..."
             />
             {validation.touched.factorType && validation.errors.factorType && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.factorType}
               </span>
             )}
@@ -130,7 +130,7 @@ export default function FactorSettingData({ data, open, setOpen, getNewList }) {
             />
             {validation.touched.isFactorResponsibleEnabled &&
               validation.errors.isFactorResponsibleEnabled && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.isFactorResponsibleEnabled}
                 </span>
               )}
@@ -147,7 +147,7 @@ export default function FactorSettingData({ data, open, setOpen, getNewList }) {
             />
             {validation.touched.isFactorItemResponsibleEnabled &&
               validation.errors.isFactorItemResponsibleEnabled && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.isFactorItemResponsibleEnabled}
                 </span>
               )}

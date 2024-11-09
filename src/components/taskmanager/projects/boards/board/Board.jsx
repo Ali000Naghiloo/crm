@@ -56,6 +56,7 @@ export default function Board() {
         <Workflows
           boardId={boardId}
           workflows={boardData?.boardWorkFlowsViewModel}
+          getNewList={handleGetBoardData}
         />
       );
     } else {
@@ -104,9 +105,9 @@ export default function Board() {
 
   return (
     <Suspense>
-      <div className="w-full h-full min-h-contentHeight max-h-contentHeight flex flex-col gap-0 overflow-y-auto">
+      <div className="w-full min-h-contentHeight max-h-contentHeight flex flex-col gap-0 overflow-y-auto pt-[90px] relative">
         {/* board data */}
-        <div className="w-full h-[90px] flex justify-between p-5 border-gray-300 border-b-2 relative">
+        <div className="w-full absolute top-0 h-[90px] flex justify-between p-5 border-gray-300 border-b-2">
           <div
             onClick={() => setShowModal({ open: true })}
             className="w-full h-full z-0 absolute left-0 top-0 cursor-pointer"
@@ -171,7 +172,7 @@ export default function Board() {
           setShowModal({ open: e });
         }}
         id={boardId}
-        projectId={boardData?.peojectId}
+        projectId={boardData?.projectId}
       />
     </Suspense>
   );

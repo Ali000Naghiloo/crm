@@ -105,7 +105,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.sizeName && validation.errors.sizeName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.sizeName}
               </span>
             )}
@@ -126,7 +126,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.sizeUnit && validation.errors.sizeUnit && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.sizeUnit}
               </span>
             )}
@@ -144,7 +144,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.height && validation.errors.height && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.height}
               </span>
             )}
@@ -162,7 +162,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.width && validation.errors.width && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.width}
               </span>
             )}
@@ -180,7 +180,7 @@ export default function SizeModal({
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.length && validation.errors.length && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.length}
               </span>
             )}

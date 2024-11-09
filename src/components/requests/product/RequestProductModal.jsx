@@ -25,6 +25,7 @@ export default function CreateRequestProduct({
 
   const validation = useFormik({
     initialValues: {
+      factorId: null,
       factorNumber: 0,
       factorDate: moment().utc().locale("fa"),
       customerId: null,
@@ -75,11 +76,21 @@ export default function CreateRequestProduct({
 
   const handleEdit = async (values) => {
     setLoading(true);
-    const formData = { ...values };
+    const formData = {
+      ...values,
+      factorItemCreateViewModels: null,
+      factorItemEditViewModels: values?.factorItemCreateViewModels,
+    };
 
     await httpService
       .post("/Factor/EditRequest", formData)
-      .then((res) => {})
+      .then((res) => {
+        if (res.status == 200 && res.data.code == 1) {
+          toast.success("با موفقیت ثبت شد");
+          handleClose();
+          getNewList();
+        }
+      })
       .catch(() => {});
 
     setLoading(false);
@@ -95,6 +106,7 @@ export default function CreateRequestProduct({
         if (res.status == 200 && res.data?.code == 1) {
           const datas = res.data?.factorDetailViewModel;
           validation.setValues({
+            factorId: datas?.factorId,
             customerId: datas?.customerId,
             factorDate: datas?.factorDate,
             factorNumber: datas.factorNumber,
@@ -190,7 +202,7 @@ export default function CreateRequestProduct({
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.factorDate && validation.errors.factorDate && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.factorDate}
             </span>
           )}
@@ -208,7 +220,7 @@ export default function CreateRequestProduct({
             placeholder="لطفا اینجا وارد کنید..."
           />
           {validation.touched.customerId && validation.errors.customerId && (
-            <span className="text-red-300 text-xs">
+            <span className="text-error text-xs">
               {validation.errors.customerId}
             </span>
           )}

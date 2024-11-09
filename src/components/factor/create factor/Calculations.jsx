@@ -133,7 +133,7 @@ export default function Calculations({
           />
           {validation.touched.factorDescription &&
             validation.errors.factorDescription && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.factorDescription}
               </span>
             )}

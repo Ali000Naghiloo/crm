@@ -136,7 +136,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.unitType && validation.errors.unitType && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.unitType}
               </span>
             )}
@@ -152,7 +152,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.unitName && validation.errors.unitName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.unitName}
               </span>
             )}
@@ -171,7 +171,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
               />
               {validation.touched.parentUnitId &&
                 validation.errors.parentUnitId && (
-                  <span className="text-red-300 text-xs">
+                  <span className="text-error text-xs">
                     {validation.errors.parentUnitId}
                   </span>
                 )}
@@ -188,7 +188,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.printName && validation.errors.printName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.printName}
               </span>
             )}
@@ -205,7 +205,7 @@ export default function UnitModal({ open, setOpen, data, getNewList }) {
             />
             {validation.touched.abbreviation &&
               validation.errors.abbreviation && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.abbreviation}
                 </span>
               )}

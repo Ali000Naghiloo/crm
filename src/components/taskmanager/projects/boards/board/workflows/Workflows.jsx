@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import Workflow from "./Workflow";
 import { closestCenter, DndContext } from "@dnd-kit/core";
 
-export default function Workflows({ boardId, workflows }) {
+export default function Workflows({ boardId, workflows, getNewList }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(true);
   const [workflowList, setWorkflowList] = useState(null);
@@ -13,6 +13,7 @@ export default function Workflows({ boardId, workflows }) {
   const [showWfModal, setShowWfModal] = useState({
     open: false,
     id: null,
+    boardId: null,
   });
 
   const WorkflowModal = lazy(() => import("../../../../modals/WorkflowModal"));
@@ -38,7 +39,11 @@ export default function Workflows({ boardId, workflows }) {
   };
 
   const onWfClick = async (id) => {
-    setShowWfModal({ open: true, id: id });
+    setShowWfModal({ open: true, id: id, boardId: boardId });
+  };
+
+  const onNewWfClick = () => {
+    setShowWfModal({ open: true, id: id, boardId: boardId });
   };
 
   useEffect(() => {
@@ -50,14 +55,14 @@ export default function Workflows({ boardId, workflows }) {
   }, [boardId]);
 
   return (
-    <Suspense fallback={<></>}>
-      <DndContext
-        collisionDetection={closestCenter}
-        onDragEnd={(e) => {
-          console.log(e);
-        }}
-      >
-        <div className="w-full h-[100%] bg-white overflow-x-auto flex gap-4 p-5">
+    <Suspense>
+      <div className="w-full h-full bg-white overflow-x-auto flex gap-4 p-5">
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={(e) => {
+            console.log(e);
+          }}
+        >
           {workflowList ? (
             workflowList?.length !== 0 ? (
               workflowList.map((wf, index) => (
@@ -92,15 +97,15 @@ export default function Workflows({ boardId, workflows }) {
               افزودن کانبان جدید +
             </div>
           </div>
-        </div>
-      </DndContext>
+        </DndContext>
+      </div>
 
       <WorkflowModal
         open={showWfModal.open}
         setOpen={(e) => setShowWfModal({ open: e })}
         id={showWfModal.id}
-        boardId={boardId}
-        getNewList={() => {}}
+        boardId={showWfModal.boardId}
+        getNewList={getNewList}
       />
     </Suspense>
   );

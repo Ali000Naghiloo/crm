@@ -214,10 +214,7 @@ export default function BoardModal({
   }, [open]);
 
   useEffect(() => {
-    if (!allUsers) {
-      handleGetAllUsers();
-    }
-
+    handleGetAllUsers();
     handleGetAllWorkflows();
   }, []);
 
@@ -233,7 +230,14 @@ export default function BoardModal({
             })
           : []
       );
-      validation.setFieldValue("boardUsersId", data?.boardUsersId);
+      validation.setFieldValue(
+        "boardUsersId",
+        data?.boardUsersViewModel
+          ? data?.boardUsersViewModel?.map((u) => {
+              return u?.userId;
+            })
+          : []
+      );
       validation.setFieldValue("description", data?.description);
     }
   }, [data]);

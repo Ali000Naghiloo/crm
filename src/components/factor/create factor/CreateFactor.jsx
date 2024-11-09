@@ -467,12 +467,12 @@ export default function CreateFactor() {
 
   return (
     <>
-      <div className="w-full h-full flex p-1 md:p-3">
+      <div className="w-full min-h-contentHeight max-h-contentHeight flex flex-col p-1 md:p-3">
         <Form
           onFinish={validation.handleSubmit}
-          className="w-full flex flex-col gap-10"
+          className="w-full h-full flex flex-col justify-between gap-10"
         >
-          <div className="w-full flex justify-between items-center font-bold px-4 my-10 h-fit">
+          <div className="w-full flex justify-between items-center font-bold px-4 h-fit">
             <h1 className="text-lg md:text-4xl">{factorTitle}</h1>
 
             <div className="flex items-center">
@@ -519,7 +519,7 @@ export default function CreateFactor() {
           <Steps className="w-full" current={currentStep} items={steps} />
 
           {/* steps */}
-          <div className="w-full border-2 py-5 rounded-md">
+          <div className="w-full h-full border-2 rounded-md overflow-y-auto">
             {currentStep == 0 && (
               <SelectItems
                 validation={validation}
@@ -551,7 +551,7 @@ export default function CreateFactor() {
           </div>
 
           {/* change step */}
-          <div className="w-full flex justify-center gap-1 items-center py-10">
+          <div className="w-full flex justify-center gap-1 items-center">
             <Button
               type="primary"
               onClick={() => {

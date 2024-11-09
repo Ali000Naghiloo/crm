@@ -99,7 +99,7 @@ export default function RequestContact({ pageType }) {
     setLoading(true);
 
     await httpService
-      .get("/InitialRequest/DeleteInitialRequest", {
+      .get("/CustomerInitialRequest/DeleteInitialRequest", {
         params: { initialRequestId: id },
       })
       .then((res) => {

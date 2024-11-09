@@ -130,8 +130,8 @@ export default function Products() {
     setLoading(true);
 
     await httpService
-      .get("/CustomerGroup/DeleteCustomerGroup", {
-        params: { customerGroupId: id },
+      .get("/Product/DeleteProduct", {
+        params: { productId: id },
       })
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1)

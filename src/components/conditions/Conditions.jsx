@@ -140,7 +140,7 @@ export default function Conditions() {
           <Popconfirm
             cancelText="لغو"
             okText="حذف"
-            title="آیا از حذف این فاکتور اطمینان دارید؟"
+            title="آیا از حذف این اضافه کسری اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.additionsAndDeductionsId)}
           >

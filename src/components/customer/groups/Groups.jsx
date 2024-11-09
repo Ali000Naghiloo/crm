@@ -9,6 +9,7 @@ import { HiRefresh } from "react-icons/hi";
 import formatHelper from "../../../helper/formatHelper";
 import { BsPerson } from "react-icons/bs";
 import { MdGroup } from "react-icons/md";
+import UpdateGroup from "./UpdateGroup";
 
 function compareChildrens(data) {
   // Create a map to quickly lookup groups by ID
@@ -47,7 +48,7 @@ export default function Groups() {
   });
 
   // components
-  const UpdateGroup = lazy(() => import("./UpdateGroup"));
+  // const UpdateGroup = lazy(() => import("./UpdateGroup"));
   const CreateGroup = lazy(() => import("./CreateGroup"));
 
   // const allEnum = useSelector((state) => state.allEnum.allEnum);

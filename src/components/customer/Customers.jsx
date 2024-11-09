@@ -151,8 +151,11 @@ export default function Customers() {
     await httpService
       .get("/Customer/DeleteCustomer", { params: { customerId: id } })
       .then((res) => {
-        if (res.status === 200 && res.data?.code === 1)
+        if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت حذف شد");
+        } else {
+          toast.info(res.data.msg);
+        }
       })
       .catch(() => {});
 

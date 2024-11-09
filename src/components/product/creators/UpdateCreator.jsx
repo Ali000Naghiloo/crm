@@ -114,7 +114,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.Name && validation.errors.Name && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.Name}
               </span>
             )}
@@ -131,7 +131,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
               placeholder="لطفا اینجا وارد کنید..."
             />
             {validation.touched.LatinName && validation.errors.LatinName && (
-              <span className="text-red-300 text-xs">
+              <span className="text-error text-xs">
                 {validation.errors.LatinName}
               </span>
             )}
@@ -148,7 +148,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.ProductManufacturerCode &&
               validation.errors.ProductManufacturerCode && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.ProductManufacturerCode}
                 </span>
               )}
@@ -165,7 +165,7 @@ export default function UpdateGroup({ open, setOpen, getNewList, data }) {
             />
             {validation.touched.Description &&
               validation.errors.Description && (
-                <span className="text-red-300 text-xs">
+                <span className="text-error text-xs">
                   {validation.errors.description}
                 </span>
               )}
