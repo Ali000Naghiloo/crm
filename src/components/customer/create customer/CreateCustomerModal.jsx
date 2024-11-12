@@ -424,11 +424,11 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
 
     if (validation.values.representerType === 1) {
       await httpService
-        .post("/CustomerGroup/CustomerGroups")
+        .get("/CustomerGroup/CustomerGroups")
         .then((res) => {
           if (res.status === 200 && res.data?.code === 1) {
             res.data?.customerGroupViewModelList?.map((cu) => {
-              datas.push({ label: cu.title, value: cu.id });
+              datas.push({ label: cu.groupName, value: cu.id });
             });
           }
         })

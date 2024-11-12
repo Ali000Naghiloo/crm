@@ -28,6 +28,7 @@ export default function RequestContactModal({
 
   const validation = useFormik({
     initialValues: {
+      id: "",
       code: 0,
       date: moment().utc().locale("fa"),
       customerId: null,
@@ -77,7 +78,7 @@ export default function RequestContactModal({
     };
 
     await httpService
-      .post("/CustomerInitialRequest/CreateInitialRequest", formData)
+      .post("/CustomerInitialRequest/EditInitialRequest", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");
@@ -113,7 +114,7 @@ export default function RequestContactModal({
     };
 
     await httpService
-      .post("/InitialRequest/EditInitialRequest", formData)
+      .post("/CustomerInitialRequest/EditInitialRequest", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ویرایش شد");
@@ -192,7 +193,6 @@ export default function RequestContactModal({
 
   useEffect(() => {
     if (data) {
-      // console.log(data?.initialRequestItems);
       validation.setFieldValue("id", data?.id);
       validation.setFieldValue("customer", data?.customer);
       validation.setFieldValue("customerId", data?.customerId);

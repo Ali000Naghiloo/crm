@@ -2,6 +2,8 @@ import { Avatar, Dropdown, Image } from "antd";
 import { FaUser } from "react-icons/fa";
 import { imageUrl } from "../../httpConfig/useHttp";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { useSelector } from "react-redux";
+import { CiSaveDown2 } from "react-icons/ci";
 
 const ChatHeader = ({ selectedChat }) => {
   const chatOptions = [
@@ -11,7 +13,9 @@ const ChatHeader = ({ selectedChat }) => {
     },
   ];
 
-  if (selectedChat) {
+  const user = useSelector((state) => state?.userData?.userData);
+
+  if (selectedChat && user?.id !== selectedChat?.id) {
     return (
       <div className="w-full flex justify-between p-2 px-5 border-gray-300 border-[1px]">
         <div className="flex flex-col">
@@ -45,7 +49,30 @@ const ChatHeader = ({ selectedChat }) => {
       </div>
     );
   } else {
-    return <></>;
+    return (
+      <div className="w-full flex justify-between p-2 px-5 border-gray-300 border-[1px]">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1">
+            <div className="w-[50px] h-[50px]">
+              <Avatar
+                icon={<CiSaveDown2 />}
+                className="w-full h-full bg-blue-500"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg">پیام های ذخیره شده</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <Dropdown menu={{ items: chatOptions }}>
+            <PiDotsThreeOutlineVerticalFill />
+          </Dropdown>
+        </div>
+      </div>
+    );
   }
 };
 

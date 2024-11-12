@@ -1,20 +1,32 @@
-import { Button, ColorPicker, Input, Modal } from "antd";
+import { Button, ColorPicker, Dropdown, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import useHttp from "../httpConfig/useHttp";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 
+const colors = [
+  { color: "#3498db", name: "آسمانی" }, // Aseman (Sky)
+  { color: "#ff6b6b", name: "ثریا" }, // Soraya (Bright Star or Pleiades)
+  { color: "#2ecc71", name: "سبز" }, // Sabz (Green)
+  { color: "#f1c40f", name: "طلایی" }, // Tala (Gold)
+  { color: "#8e44ad", name: "بنفش" }, // Banafsh (Purple)
+  { color: "#34495e", name: "شبنم" }, // Shabnam (Dew)
+  { color: "#e67e22", name: "نارنجی" }, // Narenji (Orange)
+  { color: "#1abc9c", name: "دریا" }, // Darya (Sea)
+  { color: "#e84393", name: "گل‌رنگ" }, // Golrang (Flower Color, Pinkish)
+];
+
 export default function WorkflowModal({
   open,
   setOpen,
   id,
+  data,
   boardId,
   getNewList,
 }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
   const [title, setTitle] = useState("");
 
   const validationSchema = yup.object().shape({
@@ -81,36 +93,60 @@ export default function WorkflowModal({
     setLoading(false);
   };
 
-  const handleGetData = async () => {
-    setLoading(true);
-    const formData = {
-      workflowid: id,
-    };
+  // const handleGetData = async () => {
+  //   setLoading(true);
+  //   const formData = {
+  //     workflowid: id,
+  //   };
 
-    await httpService
-      .get("/WorkFlowController/EditWorkFlow", { params: formData })
-      .then((res) => {
-        if (res.status >= 200 && res.status > 300 && res.data?.data) {
-          setData(res.data?.data);
-        }
-      })
-      .catch(() => {});
+  //   await httpService
+  //     .get("/WorkFlowController/EditWorkFlow", { params: formData })
+  //     .then((res) => {
+  //       if (res.status >= 200 && res.status > 300 && res.data?.data) {
+  //         setData(res.data?.data);
+  //       }
+  //     })
+  //     .catch(() => {});
 
-    setLoading(false);
-  };
+  //   setLoading(false);
+  // };
 
   const handleClose = () => {
     setOpen(false);
     validation.resetForm();
   };
 
+  const handleRenderSelectedColor = () => {
+    const selected = colors.filter((c) => c.color == validation.values.color);
+
+    return (
+      <div
+        className={`w-full text-white rounded text-center`}
+        style={{ background: selected.color }}
+      >
+        {selected.name}
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (id) {
-      handleGetData();
+      setTitle("ویرایش کانبان");
     } else {
       setTitle("تعریف کانبان جدید");
     }
   }, [id]);
+
+  useEffect(() => {
+    if (data) {
+      validation.setValues({
+        boardId: boardId,
+        color: data?.color,
+        description: data?.description,
+        name: data?.name,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     if (boardId) {
@@ -136,7 +172,7 @@ export default function WorkflowModal({
         </div>
       }
     >
-      <div className="w-full flex justify-between flex-wrap gap-2 py-5">
+      <div className="w-full flex flex-col justify-between items-center flex-wrap gap-2 py-5">
         {/* name */}
         <div className="flex flex-col gap-1 w-[300px]">
           <span>نام برد </span>
@@ -155,13 +191,34 @@ export default function WorkflowModal({
         {/* color */}
         <div className="flex flex-col gap-1 w-[300px]">
           <span>رنگ </span>
-          <ColorPicker
-            placeholder="نام برد را وارد کنید"
-            className="w-full"
-            name="color"
-            value={validation.values.color}
-            onChange={(e, value) => validation.setFieldValue("color", value)}
-          />
+          <div className="w-[300px] flex justify-center">
+            <Select
+              className="w-full h-fit text-center"
+              value={validation.values.color}
+              onChange={(e) => validation.setFieldValue("color", e)}
+              options={colors.map((c) => {
+                return {
+                  label: (
+                    <div
+                      className={`w-full text-white p-2 rounded text-center`}
+                      style={{ background: c.color }}
+                    >
+                      {c.name}
+                    </div>
+                  ),
+                  value: c.color,
+                };
+              })}
+              placeholder={<span>رنگ کانبان خود را انتخاب کنید</span>}
+              children={
+                validation.values.color ? (
+                  handleRenderSelectedColor()
+                ) : (
+                  <span>رنگ کانبان خود را انتخاب کنید</span>
+                )
+              }
+            />
+          </div>
           {validation.errors.color && validation.touched.color && (
             <span className="text-error">{validation.errors.color}</span>
           )}

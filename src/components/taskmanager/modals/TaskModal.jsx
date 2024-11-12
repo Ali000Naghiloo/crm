@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import MyDatePicker from "../../../common/MyDatePicker";
+import SubtaskList from "./SubtaskList";
 
 export default function TaskModal({
   open,
@@ -19,6 +20,7 @@ export default function TaskModal({
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [data, setData] = useState(null);
+  const [subTaskList, setSubTaskList] = useState(null);
 
   const [allUsers, setAllUsers] = useState(null);
   const [workflows, setWorkflows] = useState(null);
@@ -97,17 +99,18 @@ export default function TaskModal({
 
   const handleClose = () => {
     setOpen(false);
+    validation.resetForm();
   };
 
   const handleGetAllUsers = async () => {
     let datas = [];
 
     await httpService
-      .get("/Account/GetAllUsers")
+      .get("/BoardController/BoardUsers", { params: { boardId: boardId } })
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
           res.data?.data?.map((u) =>
-            datas.push({ label: u.fullName, value: u.id })
+            datas.push({ ...u, label: u.fullName, value: u.userId })
           );
         }
       })
@@ -163,13 +166,11 @@ export default function TaskModal({
   }, [open]);
 
   useEffect(() => {
-    if (!allUsers) {
+    if (open) {
       handleGetAllUsers();
-    }
-    if (!workflows) {
       handleGetAllWorkFlows();
     }
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     if (data) {
@@ -221,7 +222,7 @@ export default function TaskModal({
 
           {/* users */}
           <div className="flex flex-col gap-1 w-[300px]">
-            <span>کاربران وظیفه </span>
+            <span>کاربران موظف (فقط کاربران برد)</span>
             <Select
               optionFilterProp="label"
               options={allUsers}
@@ -338,6 +339,8 @@ export default function TaskModal({
               <span className="text-error">{validation.errors.priority}</span>
             )}
           </div>
+
+          <SubtaskList wfId={workflowId} taskId={id} userList={allUsers} />
 
           {/* description */}
           <div className="flex flex-col gap-1 w-full">

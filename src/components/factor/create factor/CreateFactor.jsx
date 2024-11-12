@@ -65,7 +65,7 @@ export default function CreateFactor() {
     initialValues: {
       factorType: null,
       factorNumber: 0,
-      factorDate: moment().utc().locale("fa"),
+      factorDate: null,
       customerId: null,
       customerRoleId: null,
       totalFactorQuantity: 0,
@@ -463,6 +463,7 @@ export default function CreateFactor() {
 
   useEffect(() => {
     validation.setFieldValue("factorType", pageData?.type);
+    validation.setFieldValue("factorDate", moment().utc().locale("fa"));
   }, [pageData?.type]);
 
   return (

@@ -16,10 +16,13 @@ export default function Board() {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState();
   const [boardData, setBoardData] = useState(null);
-  const boardId = serachParams.get("boardId");
+  const [workflowList, setWorkflowList] = useState(null);
+  const [taskList, setTaskList] = useState(null);
   const [showModal, setShowModal] = useState({
     open: false,
   });
+
+  const boardId = serachParams.get("boardId");
 
   const boardOptions = [
     { key: 1, label: "تنظیمات", icon: <IoMdSettings /> },
@@ -44,6 +47,38 @@ export default function Board() {
     setLoading(false);
   };
 
+  const handleGetBoardWorkflows = async () => {
+    setLoading(true);
+    const formData = { boardId: boardId };
+
+    await httpService
+      .get("/WorkFlowController/BoardWorkFlows", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code) {
+          setWorkflowList(res.data.data);
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
+  const handleGetBoardTasks = async () => {
+    setLoading(true);
+    const formData = { boardId: boardId };
+
+    await httpService
+      .get("/TaskController/Tasks", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code) {
+          setTaskList(res.data.data);
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
   const handleRenderContent = (type) => {
     if (type === "group") {
       return <Group boardId={boardId} />;
@@ -55,8 +90,8 @@ export default function Board() {
       return (
         <Workflows
           boardId={boardId}
-          workflows={boardData?.boardWorkFlowsViewModel}
-          getNewList={handleGetBoardData}
+          workflows={workflowList}
+          getNewList={handleGetBoardWorkflows}
         />
       );
     } else {
@@ -100,12 +135,14 @@ export default function Board() {
   useEffect(() => {
     if (boardId) {
       handleGetBoardData();
+      handleGetBoardWorkflows();
+      handleGetBoardTasks();
     }
   }, [boardId]);
 
   return (
     <Suspense>
-      <div className="w-full min-h-contentHeight max-h-contentHeight flex flex-col gap-0 overflow-y-auto pt-[90px] relative">
+      <div className="w-full min-h-contentHeight max-h-contentHeight flex gap-0 overflow-y-auto pt-[90px] relative">
         {/* board data */}
         <div className="w-full absolute top-0 h-[90px] flex justify-between p-5 border-gray-300 border-b-2">
           <div
@@ -136,7 +173,7 @@ export default function Board() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 z-10">
             <Dropdown
               menu={{ items: boardOptions }}
               className="h-full flex items-center justify-center"
@@ -156,24 +193,27 @@ export default function Board() {
         </div>
 
         {/* board tabs  */}
-        <div className="w-full h-full overflow-x-auto">
+        <div className="w-full h-full flex-1 overflow-x-auto">
           <Tabs
             defaultActiveKey="workflows"
             items={boardTabs}
-            className="w-full p-0 pt-5 h-full"
+            className="w-full h-full p-0 pt-5"
+            itemID="board-workflow"
           />
         </div>
       </div>
 
-      <BoardModal
-        getNewList={handleGetBoardData}
-        open={showModal.open}
-        setOpen={(e) => {
-          setShowModal({ open: e });
-        }}
-        id={boardId}
-        projectId={boardData?.projectId}
-      />
+      {showModal.open && (
+        <BoardModal
+          getNewList={handleGetBoardData}
+          open={showModal.open}
+          setOpen={(e) => {
+            setShowModal({ open: e });
+          }}
+          id={boardId}
+          projectId={boardData?.projectId}
+        />
+      )}
     </Suspense>
   );
 }

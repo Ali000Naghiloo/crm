@@ -1,12 +1,21 @@
-import { Button } from "antd";
+import { Button, Popconfirm } from "antd";
 import React, { lazy, Suspense, useEffect, useState } from "react";
-import { MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import Task from "./Task";
 import { useDroppable } from "@dnd-kit/core";
 import TaskModal from "../../../../modals/TaskModal";
 import WorkflowModal from "../../../../modals/WorkflowModal";
+import useHttp from "../../../../httpConfig/useHttp";
+import { toast } from "react-toastify";
 
-export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
+export default function Workflow({
+  wf,
+  tasks,
+  boardId,
+  handleGetTasks,
+  getNewList,
+}) {
+  const { httpService } = useHttp();
   const [showTaskModal, setShowTaskModal] = useState({
     open: false,
     id: null,
@@ -15,10 +24,11 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
   const [showWfModal, setShowWfModal] = useState({
     open: false,
     id: null,
+    data: null,
   });
 
   const { setNodeRef, isOver } = useDroppable({
-    id: `droppable ${wf?.id}`,
+    id: `${wf?.id}`,
     data: wf,
   });
 
@@ -30,22 +40,54 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
     setShowTaskModal({ open: true, id: id, workflowId: workFlowId });
   };
 
-  const onWfClick = async (id) => {
-    setShowWfModal({ open: true, id: id });
+  const onWfClick = async (id, data) => {
+    setShowWfModal({ open: true, id: id, data: data });
+  };
+
+  const handleDelete = async (id) => {
+    const formData = { wfid: id };
+
+    await httpService
+      .get("/WorkFlowController/DeleteWorkFlow", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          toast.success("با موفقیت حذف شد");
+          getNewList();
+        }
+      })
+      .catch(() => {});
   };
 
   // wf parts
   const workFlowHeader = () => (
-    <div className="w-full sticky top-0 flex flex-col gap-2">
+    <div className="w-full sticky top-0 flex flex-col gap-1 z-50 bg-white">
       <div
-        className={`w-full min-h-[33px] flex justify-between items-center p-2 rounded-md text-white text-lg text-bold ${
-          wf.color ? `bg-[${wf?.color}]` : "bg-accent"
+        className={`w-full min-h-[33px] flex justify-between items-center p-1 rounded-md text-white text-lg text-bold ${
+          wf.color && wf?.color?.length !== 0 ? `` : "bg-accent"
         }`}
+        style={wf.color ? { background: wf.color } : {}}
       >
         <span>{wf?.name}</span>
-        <Button onClick={() => onWfClick(wf?.id)} type="text" className="p-0">
-          <MdEdit />
-        </Button>
+
+        <div className="flex gap-2">
+          <Button
+            onClick={() => onWfClick(wf?.id, wf)}
+            type="text"
+            className="p-0"
+          >
+            <MdEdit />
+          </Button>
+          <Popconfirm
+            title="آیا میخواهید کانبان را حذف کنید؟"
+            okText="بله"
+            cancelText="خیر"
+            onConfirm={() => handleDelete(wf?.id)}
+          >
+            <Button type="text" className="p-0">
+              <MdDelete />
+            </Button>
+          </Popconfirm>
+        </div>
       </div>
       <Button
         onClick={() =>
@@ -66,6 +108,7 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
               key={index}
               data={task}
               onClick={() => onTaskClick(task.id, task?.workFlow)}
+              getNewList={handleGetTasks}
             />
           ))}
       </>
@@ -78,8 +121,8 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
     <>
       <div
         ref={setNodeRef}
-        className={`min-w-[300px] h-full overflow-y-auto flex flex-col gap-2 overflow-visible min-h-[700px] rounded-lg ${
-          isOver ? "bg-accent" : ""
+        className={`w-[300px] h-full flex flex-col gap-2 rounded-lg ${
+          isOver ? "bg-[rgba(204,204,204,0.5)]" : ""
         }`}
       >
         {workFlowHeader()}
@@ -98,8 +141,9 @@ export default function Workflow({ wf, tasks, boardId, handleGetTasks }) {
         open={showWfModal.open}
         setOpen={(e) => setShowWfModal({ open: e })}
         id={showWfModal.id}
+        data={showWfModal.data}
         boardId={boardId}
-        getNewList={() => {}}
+        getNewList={getNewList}
       />
     </>
   );

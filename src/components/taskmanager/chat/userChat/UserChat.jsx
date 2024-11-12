@@ -9,20 +9,28 @@ import { BsSendFill } from "react-icons/bs";
 import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
 import ChatForm from "./ChatForm";
-import useHttp from "../../httpConfig/useHttp";
+import useHttp, { baseURL } from "../../httpConfig/useHttp";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { useSearchParams } from "react-router-dom";
 
 const UserChat = ({ selectedChat }) => {
+  const siganlBaseUrl = baseURL.replace("api/", "");
   const { httpService } = useHttp();
   const [messages, setMessages] = useState(null);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const chatContainerRef = useRef(null);
+  const accessToken = localStorage.getItem("token");
+  const [searchParams] = useSearchParams();
+  const currentUserId = searchParams.get("userId");
+
+  const [connection, setConnection] = useState(false);
 
   const handleGetMessages = async () => {
     setMessages(null);
     setLoading(true);
-    const formData = { receiverId: selectedChat.id };
+    const formData = { receiverId: currentUserId };
     let datas = [];
 
     await httpService
@@ -50,15 +58,37 @@ const UserChat = ({ selectedChat }) => {
       attachmentsCreateViewModel: [],
     };
 
-    await httpService
-      .post("/ChatMessage/CreateMessages", formData)
-      .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          setInputMessage("");
-          handleGetMessages();
-        }
-      })
-      .catch(() => {});
+    if (inputMessage.length !== 0) {
+      await httpService
+        .post("/ChatMessage/CreateMessages", formData)
+        .then((res) => {
+          if (res.status == 200 && res.data?.code == 1) {
+            setInputMessage("");
+            handleGetMessages();
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
+  const handleSignalConnection = async () => {
+    try {
+      const conn = new HubConnectionBuilder()
+        .withUrl(`${siganlBaseUrl}ChatHubTaskManager`, {
+          accessTokenFactory: () => accessToken,
+        })
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      await conn.start().catch((error) => {
+        console.error(error.toString());
+      });
+      // conn.invoke("api/Account/TestNotificationUserSignalR", {});
+
+      setConnection(conn);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -69,10 +99,20 @@ const UserChat = ({ selectedChat }) => {
   }, [messages]);
 
   useEffect(() => {
-    if (selectedChat) {
+    if (currentUserId) {
       handleGetMessages();
+      handleSignalConnection();
     }
-  }, [selectedChat]);
+  }, [currentUserId]);
+
+  useEffect(() => {
+    if (connection) {
+      connection.on("ReceiveMessage", (messages) => {
+        console.log(messages);
+        handleGetMessages();
+      });
+    }
+  }, [connection]);
 
   return (
     <div className="w-full h-full flex flex-col justify-between bg-gradient-to-br from-blue-50 to-purple-50 border rounded-md">

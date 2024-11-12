@@ -25,6 +25,10 @@ export default function MyDatePicker({
     // console.log(localValue);
   }, [localValue]);
 
+  useEffect(() => {
+    setLocalValue(null);
+  }, []);
+
   return (
     <div className="w-full">
       <DatePicker

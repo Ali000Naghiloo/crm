@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setPageRoutes } from "../../../store/reducers/pageRoutes";
-import useHttp from "../../../hooks/useHttps";
-import { Button } from "antd";
 import { HiRefresh } from "react-icons/hi";
 import PageRoutes from "../../../common/PageRoutes";
 import UsersList from "./usersList/UsersList";
 import UserChat from "./userChat/UserChat";
+import useHttp, { baseURL } from "../httpConfig/useHttp";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 const Chat = () => {
+  const siganlBaseUrl = baseURL.replace("api/", "");
   const { httpService } = useHttp();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [connection, setConnection] = useState(null);
+  const accessToken = localStorage.getItem("token");
 
   const handleGetUsersList = async () => {
     let datas = [];
+    setLoading(true);
 
     await httpService
       .get("/Account/GetAllUsers")
@@ -27,14 +31,43 @@ const Chat = () => {
       })
       .catch(() => {});
 
+    setLoading(false);
     setUsersList(datas);
+  };
+
+  const handleSignalConnection = async () => {
+    try {
+      const conn = new HubConnectionBuilder()
+        .withUrl(`${siganlBaseUrl}ChatHubTaskManager`, {
+          accessTokenFactory: () => accessToken,
+        })
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      await conn.start().catch((error) => {
+        console.error(error.toString());
+      });
+
+      setConnection(conn);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "مدیریت پروژه" }, { label: "گفتگو" }]));
 
     handleGetUsersList();
+    handleSignalConnection();
   }, []);
+
+  useEffect(() => {
+    if (connection) {
+      connection.on("UpdateOnlineUsers", (onlineUsers) => {
+        console.log(onlineUsers);
+      });
+    }
+  }, [connection]);
 
   return (
     <>
@@ -61,6 +94,7 @@ const Chat = () => {
             setSelectedChat={setSelectedChat}
             selectedChat={selectedChat}
             usersData={usersList}
+            loading={loading}
           />
           <UserChat selectedChat={selectedChat} />
         </div>

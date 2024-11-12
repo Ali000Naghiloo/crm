@@ -79,7 +79,7 @@ export default function useSideMenuItems() {
             ],
           },
           {
-            key: "/prices",
+            key: "prices",
             icon: <MdPriceChange size={"1.5em"} className="" />,
             label: "قیمت ها",
             children: [
@@ -96,24 +96,12 @@ export default function useSideMenuItems() {
             ],
           },
           {
-            key: "/commissions",
-            icon: <MdPriceChange size={"1.5em"} className="" />,
-            label: "پورسانت ها",
-            children: [
-              {
-                key: "/commissions",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "فهرست",
-              },
-            ],
-          },
-          {
             key: "/units",
             icon: <FaWeightScale size={"1.5em"} className="" />,
             label: "واحد ها",
           },
           {
-            key: "/products",
+            key: "products",
             icon: <AiFillProduct size={"1.5em"} className="" />,
             label: "کالا و خدمات",
             children: [
@@ -135,7 +123,7 @@ export default function useSideMenuItems() {
             ],
           },
           {
-            key: "/conditions",
+            key: "conditions",
             icon: <FaListCheck size={"1.5em"} className="" />,
             label: "اضافات و کسورات",
             children: [
@@ -213,7 +201,7 @@ export default function useSideMenuItems() {
             ],
           },
           {
-            key: "/warehouses",
+            key: "warehouses",
             icon: <FaWarehouse size={"1.5em"} className="" />,
             label: "انبار ها",
             children: [

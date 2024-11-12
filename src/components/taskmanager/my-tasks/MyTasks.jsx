@@ -54,7 +54,7 @@ export default function MyTasks() {
 
   return (
     <Suspense fallback={<></>}>
-      <div className="w-full h-full h-full overflow-y-auto flex flex-col text-lg">
+      <div className="w-full min-h-contentHeight max-h-contentHeight overflow-y-auto flex flex-col text-lg">
         {/* filters and sorts and show by */}
         <div className="w-full flex items-center justify-between p-8">
           <div className="flex gap-3">
@@ -108,7 +108,7 @@ export default function MyTasks() {
         </div>
 
         {/* list */}
-        <div className="w-full h-ful flex flex-col overflow-y-auto gap-3 px-5">
+        <div className="w-full h-full flex flex-col overflow-y-auto gap-3 px-5">
           {!loading ? (
             allTasksList && allTasksList?.length !== 0 ? (
               allTasksList?.map((task, index) => (

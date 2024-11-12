@@ -46,6 +46,28 @@ export default function Workflows({ boardId, workflows, getNewList }) {
     setShowWfModal({ open: true, id: id, boardId: boardId });
   };
 
+  const handleDragTask = async (e) => {
+    console.log(e);
+    const taskId = e?.active?.id;
+    const wfId = e?.over?.id;
+
+    const formData = {
+      taskId: taskId,
+      newWorkFlowId: wfId,
+    };
+
+    if (taskId && wfId) {
+      await httpService
+        .post("/TaskController/ChangeTaskWorkFlow", formData)
+        .then((res) => {
+          if (res.status == 200 && res.data?.code == 1) {
+            handleGetTasks();
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
   useEffect(() => {
     if (workflows) setWorkflowList(workflows);
   }, [workflows]);
@@ -56,12 +78,10 @@ export default function Workflows({ boardId, workflows, getNewList }) {
 
   return (
     <Suspense>
-      <div className="w-full h-full bg-white overflow-x-auto flex gap-4 p-5">
+      <div className="w-full h-full bg-white overflow-auto flex gap-4 p-5">
         <DndContext
           collisionDetection={closestCenter}
-          onDragEnd={(e) => {
-            console.log(e);
-          }}
+          onDragEnd={handleDragTask}
         >
           {workflowList ? (
             workflowList?.length !== 0 ? (
@@ -76,6 +96,7 @@ export default function Workflows({ boardId, workflows, getNewList }) {
                   }
                   boardId={boardId}
                   handleGetTasks={handleGetTasks}
+                  getNewList={getNewList}
                 />
               ))
             ) : null
@@ -89,7 +110,7 @@ export default function Workflows({ boardId, workflows, getNewList }) {
           )}
 
           {/* add new workflow */}
-          <div className="min-w-[300px]  h-full overflow-x-auto flex gap-4">
+          <div className="min-w-[300px] h-full overflow-x-auto flex gap-4">
             <div
               onClick={() => onWfClick(null)}
               className={`w-full min-h-[30px] h-fit text-center p-2 rounded-md text-white text-lg text-bold cursor-pointer bg-gray-700 hover:bg-gray-500`}

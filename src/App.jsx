@@ -10,10 +10,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import fa_IR from "antd/locale/fa_IR";
 import { Flip, ToastContainer } from "react-toastify";
 import MyLayout from "./Layout";
+import HandleNotification from "./common/HandleNotification";
 
 function App() {
   return (
     <>
+      <HandleNotification />
+
       <ConfigProvider
         direction="rtl"
         theme={{
