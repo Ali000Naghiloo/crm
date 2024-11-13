@@ -124,18 +124,16 @@ export default function Tasks({ boardId }) {
         </div>
 
         {/* list */}
-        <div className="w-full h-ful flex flex-col overflow-y-auto gap-3 px-5">
+        <div className="w-full h-full flex flex-col gap-3 px-5">
           {!loading ? (
             allTasksList && allTasksList?.length !== 0 ? (
               allTasksList?.map((task, index) => (
-                <>
-                  <Task
-                    data={task}
-                    key={index}
-                    getNewList={handleGetAllTasksList}
-                    onClick={() => onTaskClick(task?.id)}
-                  />
-                </>
+                <Task
+                  data={task}
+                  key={index}
+                  getNewList={handleGetAllTasksList}
+                  onClick={() => onTaskClick(task?.id)}
+                />
               ))
             ) : (
               <div className="w-full h-full flex justify-center items-center pt-10 text-gray-500 text-xl">

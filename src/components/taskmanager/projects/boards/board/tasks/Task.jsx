@@ -30,7 +30,7 @@ export default function Task({ data, getNewList, onClick }) {
   return (
     <>
       <div
-        className={`w-full h-full flex justify-between items-center rounded-lg shadow-md border border-gray-300 py-3 px-5 cursor-pointer hover:bg-gray-100 bg-white relative`}
+        className={`w-full h-[50px]  flex justify-between items-center rounded-lg shadow-md border border-gray-300 py-3 px-5 cursor-pointer hover:bg-gray-100 bg-white relative`}
       >
         <div
           onClick={onClick}
