@@ -7,6 +7,8 @@ import UsersList from "./usersList/UsersList";
 import UserChat from "./userChat/UserChat";
 import useHttp, { baseURL } from "../httpConfig/useHttp";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { toast } from "react-toastify";
+import { Button } from "antd";
 
 const Chat = () => {
   const siganlBaseUrl = baseURL.replace("api/", "");
@@ -45,7 +47,18 @@ const Chat = () => {
         .build();
 
       await conn.start().catch((error) => {
-        console.error(error.toString());
+        // console.error(error.toString());
+      });
+
+      conn.onclose((error) => {
+        toast.warning(
+          <div className="flex flex-col gap-2">
+            <span>اتصال شما با سیستم اعلانات قطع شد!</span>
+            <Button onClick={handleSignalConnection()}>
+              اتصال مجدد <HiRefresh />
+            </Button>
+          </div>
+        );
       });
 
       setConnection(conn);
@@ -62,11 +75,24 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (connection) {
-      connection.on("UpdateOnlineUsers", (onlineUsers) => {
-        console.log(onlineUsers);
-      });
-    }
+    // connection?.onclose((error) => {
+    //   toast.warn(
+    //     <div className="flex flex-col gap-2">
+    //       <span>اتصال شما با سیستم اعلانات قطع شد!</span>
+    //       <Button onClick={handleSignalConnection()}>
+    //         اتصال مجدد <HiRefresh />
+    //       </Button>
+    //     </div>
+    //   );
+    // });
+    connection?.on("UpdateOnlineUsers", (onlineUsers) => {
+      const ouList = onlineUsers?.map((ou) => ou?.userId);
+      const updatedUsers = usersList.map((user) => ({
+        ...user,
+        isOnline: ouList.includes(user.id), // Check if the user is online
+      }));
+      setUsersList(updatedUsers);
+    });
   }, [connection]);
 
   return (
@@ -96,7 +122,7 @@ const Chat = () => {
             usersData={usersList}
             loading={loading}
           />
-          <UserChat selectedChat={selectedChat} />
+          <UserChat connection={connection} selectedChat={selectedChat} />
         </div>
       </div>
     </>

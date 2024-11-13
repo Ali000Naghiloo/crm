@@ -13,7 +13,7 @@ import useHttp, { baseURL } from "../../httpConfig/useHttp";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useSearchParams } from "react-router-dom";
 
-const UserChat = ({ selectedChat }) => {
+const UserChat = ({ selectedChat, connection }) => {
   const siganlBaseUrl = baseURL.replace("api/", "");
   const { httpService } = useHttp();
   const [messages, setMessages] = useState(null);
@@ -21,11 +21,10 @@ const UserChat = ({ selectedChat }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
   const accessToken = localStorage.getItem("token");
   const [searchParams] = useSearchParams();
   const currentUserId = searchParams.get("userId");
-
-  const [connection, setConnection] = useState(false);
 
   const handleGetMessages = async () => {
     setMessages(null);
@@ -57,39 +56,40 @@ const UserChat = ({ selectedChat }) => {
       originalMessageId: null,
       attachmentsCreateViewModel: [],
     };
+    setInputMessage("");
 
-    if (inputMessage.length !== 0) {
+    if (inputMessage.length !== 0 && !loading) {
       await httpService
         .post("/ChatMessage/CreateMessages", formData)
         .then((res) => {
           if (res.status == 200 && res.data?.code == 1) {
-            setInputMessage("");
             handleGetMessages();
+            inputRef.current?.focus();
           }
         })
         .catch(() => {});
     }
   };
 
-  const handleSignalConnection = async () => {
-    try {
-      const conn = new HubConnectionBuilder()
-        .withUrl(`${siganlBaseUrl}ChatHubTaskManager`, {
-          accessTokenFactory: () => accessToken,
-        })
-        .configureLogging(LogLevel.Information)
-        .build();
+  // const handleSignalConnection = async () => {
+  //   try {
+  //     const conn = new HubConnectionBuilder()
+  //       .withUrl(`${siganlBaseUrl}ChatHubTaskManager`, {
+  //         accessTokenFactory: () => accessToken,
+  //       })
+  //       .configureLogging(LogLevel.Information)
+  //       .build();
 
-      await conn.start().catch((error) => {
-        console.error(error.toString());
-      });
-      // conn.invoke("api/Account/TestNotificationUserSignalR", {});
+  //     await conn.start().catch((error) => {
+  //       console.error(error.toString());
+  //     });
+  //     // conn.invoke("api/Account/TestNotificationUserSignalR", {});
 
-      setConnection(conn);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     setConnection(conn);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -101,14 +101,12 @@ const UserChat = ({ selectedChat }) => {
   useEffect(() => {
     if (currentUserId) {
       handleGetMessages();
-      handleSignalConnection();
     }
   }, [currentUserId]);
 
   useEffect(() => {
     if (connection) {
-      connection.on("ReceiveMessage", (messages) => {
-        console.log(messages);
+      connection?.on("ReceiveMessage", (messages) => {
         handleGetMessages();
       });
     }
@@ -128,7 +126,7 @@ const UserChat = ({ selectedChat }) => {
               className="w-full h-fit flex flex-col p-4 sm:p-6 overflow-y-auto mt-auto"
               ref={chatContainerRef}
             >
-              <ChatBody messages={messages} />
+              <ChatBody messages={messages} ref={chatContainerRef} />
             </div>
           ) : (
             <div className="w-full flex justify-center items-center text-gray-500">
@@ -147,12 +145,13 @@ const UserChat = ({ selectedChat }) => {
       )}
 
       <div className="h-fit bg-white border-t border-gray-200 p-4 flex justify-center items-center">
-        {selectedChat && (
+        {currentUserId && (
           <ChatForm
             handleSubmit={handleSubmit}
             handleChange={handleInputChange}
             value={inputMessage}
             loading={loading}
+            ref={inputRef}
           />
         )}
       </div>

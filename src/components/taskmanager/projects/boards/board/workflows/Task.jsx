@@ -9,6 +9,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 export default function Task({ data, onClick, getNewList }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
+  const m = (d) => moment(d).utc().locale("fa");
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: data?.id,
@@ -38,14 +39,31 @@ export default function Task({ data, onClick, getNewList }) {
 
     setLoading(false);
   };
-  const handleChangeSubTaskStatus = async (e) => {};
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    const formData = {
+      taskid: id,
+    };
+
+    await httpService
+      .get("/TaskController/DeleteTask", { params: formData })
+      .then((res) => {
+        if (res.status == 200 && res.data?.code == 1) {
+          getNewList();
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
 
   return (
     <>
       <div
-        className={`w-full min-h-[fit-content] overflow-y-auto relative flex flex-col bg-[#e6e8ec] cursor-pointer gap-3 pt-5 p-2 rounded-md  border-2 border-gray-300 shadow ${
-          data?.isDelayed ? "border-red-500 border-4" : ""
-        }`}
+        ref={setNodeRef}
+        style={draggableStyle}
+        className={`w-full min-h-[fit-content] overflow-y-auto relative flex flex-col bg-white cursor-pointer gap-3 pt-5 p-2 rounded-md  border-2 border-gray-300 shadow-lg overflow-visible`}
       >
         {/* open task data */}
         <div
@@ -63,7 +81,7 @@ export default function Task({ data, onClick, getNewList }) {
               title="آیا میخواهید وظیفه را حذف کنید؟"
               okText="بله"
               cancelText="خیر"
-              // onConfirm={() => handleDelete(wf?.id)}
+              onConfirm={() => handleDelete(data?.id)}
             >
               <Button type="text" className="p-1 h-fit">
                 <MdDelete />
@@ -76,8 +94,6 @@ export default function Task({ data, onClick, getNewList }) {
         <div
           {...attributes}
           {...listeners}
-          ref={setNodeRef}
-          style={draggableStyle}
           className="w-full h-[20px] flex justify-center cursor-pointer items-center absolute top-0 left-0 z-0 hover:bg-[rgba(44,44,44,0.2)]"
         >
           <RxDragHandleDots1 className="rotate-90" />
@@ -101,28 +117,23 @@ export default function Task({ data, onClick, getNewList }) {
           {data?.remainderDateTime ? (
             <Tag color="cyan-inverse" className="w-fit flex gap-1 text-sm">
               <span>یادآوری : </span>
-              <span>
-                {moment
-                  .utc(data?.remainderDateTime)
-                  .locale("fa")
-                  .format("dddd")}
-              </span>
-              <span>
-                {moment.utc(data?.remainderDateTime).locale("fa").format("DD")}
-              </span>
-              <span>
-                {moment
-                  .utc(data?.remainderDateTime)
-                  .locale("fa")
-                  .format("MMMM")}
-              </span>
-              -
-              <span>
-                {moment
-                  .utc(data?.remainderDateTime)
-                  .locale("fa")
-                  .format("HH:mm")}
-              </span>
+              <span>{m(data?.remainderDateTime)?.format("dddd")}</span>
+              <span>{m(data?.remainderDateTime).format("DD")}</span>
+              <span>{m(data?.remainderDateTime).format("MMMM")}</span>-
+              <span>{m(data?.remainderDateTime).format("HH:mm")}</span>
+            </Tag>
+          ) : null}
+          {/* reminder */}
+          {data?.dueDateTime ? (
+            <Tag
+              color={data?.isDelayed ? "error" : "cyan"}
+              className="w-fit flex gap-1 text-sm"
+            >
+              <span>مهلت انجام : </span>
+              <span>{m(data?.dueDateTime)?.format("dddd")}</span>
+              <span>{m(data?.dueDateTime).format("DD")}</span>
+              <span>{m(data?.dueDateTime).format("MMMM")}</span>-
+              <span>{m(data?.dueDateTime).format("HH:mm")}</span>
             </Tag>
           ) : null}
 

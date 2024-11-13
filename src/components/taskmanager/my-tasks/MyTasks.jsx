@@ -29,10 +29,9 @@ export default function MyTasks() {
   const handleGetAllTasksList = async () => {
     setLoading(true);
     let datas = [];
-    const formData = {};
 
     await httpService
-      .get("/TaskController/Tasks", { params: formData })
+      .get("/Dashboard/UserTasks")
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           datas = res.data?.data;
@@ -49,7 +48,7 @@ export default function MyTasks() {
   };
 
   useEffect(() => {
-    if (!allTasksList) handleGetAllTasksList();
+    handleGetAllTasksList();
   }, []);
 
   return (

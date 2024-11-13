@@ -47,11 +47,21 @@ const UsersList = ({ selectedChat, setSelectedChat, usersData, loading }) => {
               <List.Item.Meta
                 className="max-w-full"
                 avatar={
-                  index == 0 ? (
-                    <Avatar className="bg-blue-500" icon={<CiSaveDown2 />} />
-                  ) : (
-                    <Avatar src={item.imagePath} icon={<TiUser />} />
-                  )
+                  <div className="relative">
+                    {index == 0 ? (
+                      <Avatar className="bg-blue-500" icon={<CiSaveDown2 />} />
+                    ) : (
+                      <>
+                        <Avatar src={item.imagePath} icon={<TiUser />} />
+                        {/* online badge */}
+                        <div
+                          className={`w-[10px] h-[10px] absolute bottom-0 right-0 rounded-full shadow border border-[#ccc] ${
+                            item?.isOnline ? "bg-green-500" : "bg-gray-500"
+                          }`}
+                        ></div>
+                      </>
+                    )}
+                  </div>
                 }
                 title={index == 0 ? "پیام های ذخیره شده" : item.fullName}
                 // description={item.email}

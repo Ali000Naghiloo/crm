@@ -20,7 +20,7 @@ const ChatHeader = ({ selectedChat }) => {
       <div className="w-full flex justify-between p-2 px-5 border-gray-300 border-[1px]">
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
-            <div className="w-[50px] h-[50px]">
+            <div className="w-[50px] h-[50px] flex justify-center items-center overflow-hidden rounded-full bg-gray-300">
               {imageUrl !== selectedChat?.imagePath ? (
                 <Image
                   src={selectedChat?.imagePath}

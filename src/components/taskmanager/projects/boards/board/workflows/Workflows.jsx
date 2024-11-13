@@ -78,7 +78,7 @@ export default function Workflows({ boardId, workflows, getNewList }) {
 
   return (
     <Suspense>
-      <div className="w-full h-full bg-white overflow-auto flex gap-4 p-5">
+      <div className="w-full h-full bg-[#e6e8ec] overflow-auto flex gap-4 p-5">
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragTask}

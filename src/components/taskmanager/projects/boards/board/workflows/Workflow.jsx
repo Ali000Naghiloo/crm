@@ -47,15 +47,19 @@ export default function Workflow({
   const handleDelete = async (id) => {
     const formData = { wfid: id };
 
-    await httpService
-      .get("/WorkFlowController/DeleteWorkFlow", { params: formData })
-      .then((res) => {
-        if (res.status == 200 && res.data?.code == 1) {
-          toast.success("با موفقیت حذف شد");
-          getNewList();
-        }
-      })
-      .catch(() => {});
+    if (tasks?.length == 0) {
+      await httpService
+        .get("/WorkFlowController/DeleteWorkFlow", { params: formData })
+        .then((res) => {
+          if (res.status == 200 && res.data?.code == 1) {
+            toast.success("با موفقیت حذف شد");
+            getNewList();
+          }
+        })
+        .catch(() => {});
+    } else {
+      toast.info("شما نمیتوانید یک کانبان با وظیفه را حذف کنید");
+    }
   };
 
   // wf parts

@@ -40,8 +40,8 @@ export default function TaskModal({
       dueDateTime: null,
       remainderDateTime: null,
       boardId: boardId,
-      taskAssignedUsersId: [],
-      taskVerifyUsersId: [],
+      taskAssignedUsersViewModels: [],
+      taskVerifyUsersViewModels: [],
       attachmentCreateViewModels: [],
     },
 
@@ -99,6 +99,7 @@ export default function TaskModal({
 
   const handleClose = () => {
     setOpen(false);
+    getNewList();
     validation.resetForm();
   };
 
@@ -176,13 +177,26 @@ export default function TaskModal({
     if (data) {
       validation.setFieldValue("name", data?.name);
       validation.setFieldValue("dueDateTime", data?.dueDateTime);
+      validation.setFieldValue("remainderDateTime", data?.remainderDateTime);
+      validation.setFieldValue(
+        "taskAssignedUsersViewModels",
+        data?.taskAssignedUsersViewModels
+          ? data?.taskAssignedUsersViewModels?.map((user) => user?.userId)
+          : []
+      );
+      validation.setFieldValue(
+        "taskVerifyUsersViewModels",
+        data?.taskVerifyUsersViewModels
+          ? data?.taskVerifyUsersViewModels?.map((user) => user?.userId)
+          : []
+      );
       validation.setFieldValue("workFlow", data?.workFlow);
       validation.setFieldValue("description", data?.description);
     }
   }, [data]);
 
   useEffect(() => {
-    validation.setFieldValue("workFlow", workflowId);
+    if (workflowId) validation.setFieldValue("workFlow", workflowId);
   }, [workflowId]);
 
   return (
@@ -229,16 +243,16 @@ export default function TaskModal({
               mode="multiple"
               placeholder="کاربران وظیفه را وارد کنید"
               className="w-full"
-              name="taskAssignedUsersId"
-              value={validation.values.taskAssignedUsersId}
+              name="taskAssignedUsersViewModels"
+              value={validation.values.taskAssignedUsersViewModels}
               onChange={(e) => {
-                validation.setFieldValue("taskAssignedUsersId", e);
+                validation.setFieldValue("taskAssignedUsersViewModels", e);
               }}
             />
-            {validation.errors.taskAssignedUsersId &&
-              validation.touched.taskAssignedUsersId && (
+            {validation.errors.taskAssignedUsersViewModels &&
+              validation.touched.taskAssignedUsersViewModels && (
                 <span className="text-error">
-                  {validation.errors.taskAssignedUsersId}
+                  {validation.errors.taskAssignedUsersViewModels}
                 </span>
               )}
           </div>
@@ -252,16 +266,16 @@ export default function TaskModal({
               mode="multiple"
               placeholder="کاربران تایید کننده وظیفه را وارد کنید"
               className="w-full"
-              name="taskVerifyUsersId"
-              value={validation.values.taskVerifyUsersId}
+              name="taskVerifyUsersViewModels"
+              value={validation.values.taskVerifyUsersViewModels}
               onChange={(e) => {
-                validation.setFieldValue("taskVerifyUsersId", e);
+                validation.setFieldValue("taskVerifyUsersViewModels", e);
               }}
             />
-            {validation.errors.taskVerifyUsersId &&
-              validation.touched.taskVerifyUsersId && (
+            {validation.errors.taskVerifyUsersViewModels &&
+              validation.touched.taskVerifyUsersViewModels && (
                 <span className="text-error">
-                  {validation.errors.taskVerifyUsersId}
+                  {validation.errors.taskVerifyUsersViewModels}
                 </span>
               )}
           </div>
@@ -272,7 +286,6 @@ export default function TaskModal({
             <Select
               optionFilterProp="label"
               options={workflows}
-              mode="multiple"
               placeholder="کاربران تایید کننده وظیفه را وارد کنید"
               className="w-full"
               name="workFlow"
@@ -340,8 +353,9 @@ export default function TaskModal({
             )}
           </div>
 
-          <SubtaskList wfId={workflowId} taskId={id} userList={allUsers} />
-
+          {id && (
+            <SubtaskList wfId={workflowId} taskId={id} userList={allUsers} />
+          )}
           {/* description */}
           <div className="flex flex-col gap-1 w-full">
             <span>توضیحات </span>

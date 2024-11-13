@@ -278,7 +278,7 @@ export default function BoardModal({
           </div>
 
           {/* workflows */}
-          <div className="flex flex-col gap-1 w-[300px]">
+          {/* <div className="flex flex-col gap-1 w-[300px]">
             <span>کانبان های برد </span>
             <Select
               mode="multiple"
@@ -297,7 +297,7 @@ export default function BoardModal({
                   {validation.errors.boardWorkFlowsCreateViewModels}
                 </span>
               )}
-          </div>
+          </div> */}
 
           {/* users */}
           <div className="flex flex-col gap-1 w-[300px]">

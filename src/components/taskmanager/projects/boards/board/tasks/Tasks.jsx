@@ -35,14 +35,26 @@ export default function Tasks({ boardId }) {
       boardId: boardId,
     };
 
-    await httpService
-      .get("/TaskController/Tasks", { params: formData })
-      .then((res) => {
-        if (res.status === 200 && res.data?.code == 1) {
-          datas = res.data?.data;
-        }
-      })
-      .catch(() => {});
+    if (boardId) {
+      await httpService
+        .get("/TaskController/Tasks", { params: formData })
+        .then((res) => {
+          if (res.status === 200 && res.data?.code == 1) {
+            datas = res.data?.data;
+          }
+        })
+        .catch(() => {});
+    } else {
+      await httpService
+        .get("/TaskController/TaskDoneStatus", { params: formData })
+        .then((res) => {
+          if (res.status == 200 && res.data?.code == 1) {
+            toast.success("وضعیت وظیفه با موفقیت تغییر پیدا کرد");
+            getNewList();
+          }
+        })
+        .catch(() => {});
+    }
 
     setAllTasksList(datas);
     setLoading(false);
@@ -57,7 +69,7 @@ export default function Tasks({ boardId }) {
   }, [boardId]);
 
   return (
-    <Suspense fallback={<></>}>
+    <Suspense>
       <div className="w-full h-full overflow-y-auto flex flex-col text-lg py-5">
         {/* filters and sorts and show by */}
         <div className="w-full flex items-center justify-between p-8">

@@ -9,15 +9,16 @@ export default function ChatForm({
   handleChange,
   handleSubmit,
   loading,
+  ref,
 }) {
   return (
     <>
       <Form
         onFinish={handleSubmit}
         className="max-w-3xl mx-auto flex items-center h-full w-full"
-        disabled={loading}
       >
         <Input
+          ref={ref}
           disabled={loading}
           type="text"
           value={value}
@@ -28,11 +29,11 @@ export default function ChatForm({
         />
         {/* upload */}
         {/* <input type="file" hidden name="upload" /> */}
-        <Button className="!h-full rounded-none" htmlType="submit">
+        <Button className="!h-full rounded-none">
           <HiOutlineUpload size={"1.5em"} />
         </Button>
         {/* voice */}
-        <Button className="!h-full rounded-none" htmlType="submit">
+        <Button className="!h-full rounded-none">
           <MdSettingsVoice size={"1.5em"} />
         </Button>
         {/* submit */}
