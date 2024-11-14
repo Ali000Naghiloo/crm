@@ -18,7 +18,11 @@ export default function Tasks({ boardId }) {
     filters: false,
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const [showModal, setShowModal] = useState({ open: false, id: null });
+  const [showModal, setShowModal] = useState({
+    open: false,
+    id: null,
+    boardId: null,
+  });
 
   const viewByItems = [
     { key: "1", label: "کار های انجام نشده", value: "undone" },
@@ -46,11 +50,10 @@ export default function Tasks({ boardId }) {
         .catch(() => {});
     } else {
       await httpService
-        .get("/TaskController/TaskDoneStatus", { params: formData })
+        .get("/Dashboard/UserTasks")
         .then((res) => {
           if (res.status == 200 && res.data?.code == 1) {
-            toast.success("وضعیت وظیفه با موفقیت تغییر پیدا کرد");
-            getNewList();
+            datas = res.data?.data;
           }
         })
         .catch(() => {});
@@ -60,12 +63,12 @@ export default function Tasks({ boardId }) {
     setLoading(false);
   };
 
-  const onTaskClick = async (id) => {
-    setShowModal({ open: true, id: id });
+  const onTaskClick = async (id, boardId) => {
+    setShowModal({ open: true, id: id, boardId: boardId });
   };
 
   useEffect(() => {
-    if (!allTasksList) handleGetAllTasksList();
+    handleGetAllTasksList();
   }, [boardId]);
 
   return (
@@ -114,7 +117,7 @@ export default function Tasks({ boardId }) {
           {/* actions */}
           <div className="flex items-center">
             <Button
-              onClick={() => onTaskClick(null)}
+              onClick={() => onTaskClick(null, boardId)}
               type="primary"
               className="flex items-center justify-center p-5 bg-[#0f9d58]"
             >
@@ -132,7 +135,7 @@ export default function Tasks({ boardId }) {
                   data={task}
                   key={index}
                   getNewList={handleGetAllTasksList}
-                  onClick={() => onTaskClick(task?.id)}
+                  onClick={() => onTaskClick(task?.id, task?.boardId)}
                 />
               ))
             ) : (
@@ -155,7 +158,7 @@ export default function Tasks({ boardId }) {
 
       <TaskModal
         open={showModal.open}
-        boardId={boardId}
+        boardId={showModal.boardId}
         workflowId={null}
         getNewList={handleGetAllTasksList}
         setOpen={(e) => setShowModal({ open: e })}

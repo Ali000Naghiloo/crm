@@ -50,16 +50,20 @@ export default function Board() {
   const handleGetBoardWorkflows = async () => {
     setLoading(true);
     const formData = { boardId: boardId };
+    let datas = [];
 
     await httpService
       .get("/WorkFlowController/BoardWorkFlows", { params: formData })
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
-          setWorkflowList(res.data.data);
+          datas = res.data?.data;
+        } else {
+          datas = [];
         }
       })
       .catch(() => {});
 
+    setWorkflowList(datas);
     setLoading(false);
   };
 
@@ -138,7 +142,7 @@ export default function Board() {
       handleGetBoardWorkflows();
       handleGetBoardTasks();
     }
-  }, [boardId]);
+  }, [boardId, selectedTab]);
 
   return (
     <Suspense>
@@ -197,6 +201,7 @@ export default function Board() {
           <Tabs
             defaultActiveKey="workflows"
             items={boardTabs}
+            onChange={setSelectedTab}
             className="w-full h-full p-0 pt-5"
             itemID="board-workflow"
           />
