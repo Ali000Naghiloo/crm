@@ -7,6 +7,7 @@ import { MdSettingsVoice } from "react-icons/md";
 export default function ChatForm({
   value,
   handleChange,
+  handleUpload,
   handleSubmit,
   loading,
   ref,
@@ -19,7 +20,7 @@ export default function ChatForm({
       >
         <Input
           ref={ref}
-          disabled={loading}
+          // disabled={loading}
           type="text"
           value={value}
           onChange={handleChange}
@@ -29,7 +30,12 @@ export default function ChatForm({
         />
         {/* upload */}
         {/* <input type="file" hidden name="upload" /> */}
-        <Button className="!h-full rounded-none">
+        <Button className="!h-full rounded-none relative">
+          <input
+            type="file"
+            hidden={true}
+            className="invisible w-full h-full absolute top-0 bottom-0"
+          />
           <HiOutlineUpload size={"1.5em"} />
         </Button>
         {/* voice */}

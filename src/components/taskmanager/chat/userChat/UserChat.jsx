@@ -29,7 +29,9 @@ const UserChat = ({ selectedChat, connection }) => {
   const handleGetMessages = async () => {
     setMessages(null);
     setLoading(true);
-    const formData = { receiverId: currentUserId };
+    const formData = {
+      receiverId: currentUserId ? currentUserId : selectedChat?.id,
+    };
     let datas = [];
 
     await httpService
@@ -47,6 +49,10 @@ const UserChat = ({ selectedChat, connection }) => {
   const handleInputChange = async (e) => {
     setInputMessage(e.target.value);
     setError("");
+  };
+
+  const handleUpload = (e) => {
+    console.log(e?.target?.files[0]);
   };
 
   const handleSubmit = async () => {
@@ -71,26 +77,6 @@ const UserChat = ({ selectedChat, connection }) => {
     }
   };
 
-  // const handleSignalConnection = async () => {
-  //   try {
-  //     const conn = new HubConnectionBuilder()
-  //       .withUrl(`${siganlBaseUrl}ChatHubTaskManager`, {
-  //         accessTokenFactory: () => accessToken,
-  //       })
-  //       .configureLogging(LogLevel.Information)
-  //       .build();
-
-  //     await conn.start().catch((error) => {
-  //       console.error(error.toString());
-  //     });
-  //     // conn.invoke("api/Account/TestNotificationUserSignalR", {});
-
-  //     setConnection(conn);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -107,7 +93,7 @@ const UserChat = ({ selectedChat, connection }) => {
   useEffect(() => {
     if (connection) {
       connection?.on("ReceiveMessage", (messages) => {
-        handleGetMessages();
+        if (selectedChat?.id || currentUserId) handleGetMessages();
       });
     }
   }, [connection]);
@@ -123,7 +109,7 @@ const UserChat = ({ selectedChat, connection }) => {
         messages ? (
           messages?.length !== 0 ? (
             <div
-              className="w-full h-fit flex flex-col p-4 sm:p-6 overflow-y-auto mt-auto"
+              className="w-full h-fit p-4 sm:p-6 overflow-y-auto mt-auto"
               ref={chatContainerRef}
             >
               <ChatBody messages={messages} ref={chatContainerRef} />
@@ -149,6 +135,7 @@ const UserChat = ({ selectedChat, connection }) => {
           <ChatForm
             handleSubmit={handleSubmit}
             handleChange={handleInputChange}
+            handleUpload={handleUpload}
             value={inputMessage}
             loading={loading}
             ref={inputRef}

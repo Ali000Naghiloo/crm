@@ -66,8 +66,10 @@ export default function HandleNotification() {
   };
 
   useEffect(() => {
-    handleSignalConnection();
-  }, []);
+    if (accessToken) {
+      handleSignalConnection();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (connection) {

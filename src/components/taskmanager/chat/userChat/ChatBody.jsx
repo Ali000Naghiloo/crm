@@ -7,7 +7,7 @@ const ChatBody = ({ messages }) => {
   const [prevDate, setPrevDate] = useState(null);
 
   const formatTimestamp = (date) => {
-    if (date) return moment(date).utc().locale("fa").format("HH:mm");
+    if (date) return moment(date).locale("fa").format("HH:mm");
     return "";
   };
 
@@ -15,17 +15,15 @@ const ChatBody = ({ messages }) => {
 
   return (
     <>
-      <div className="max-w-3xl flex flex-col-reverse">
+      <div className="max-w-3xl flex flex-col-reverse justify-start">
         {messages &&
           messages.map((message, index) => {
-            let prevData = messages[index - 1]?.sentDate
-              ? moment(messages[index - 1]?.sentDate)
-                  .utc()
+            let prevData = messages[index + 1]?.sentDate
+              ? moment(messages[index + 1]?.sentDate)
                   .locale("fa")
                   .format("YYYY/MM/DD")
               : null;
             let currentDate = moment(message?.sentDate)
-              .utc()
               .locale("fa")
               .format("YYYY/MM/DD");
             return (
@@ -37,11 +35,11 @@ const ChatBody = ({ messages }) => {
                     : "items-end"
                 }`}
               >
-                {
+                {currentDate !== prevData && (
                   <section className="w-full flex justify-center text-xs text-gray-500">
                     {currentDate}
                   </section>
-                }
+                )}
                 <div
                   className={`w-fit max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg px-3 py-1 ${
                     message?.senderFullName == userData?.fullName
