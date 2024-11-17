@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Select } from "antd";
+import { Button, Input, Modal, Select, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import useHttp from "../httpConfig/useHttp";
 import * as yup from "yup";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import MyDatePicker from "../../../common/MyDatePicker";
 import SubtaskList from "./SubtaskList";
+import { Link } from "react-router-dom";
 
 export default function TaskModal({
   open,
@@ -205,7 +206,29 @@ export default function TaskModal({
         open={open}
         onCancel={handleClose}
         loading={loading}
-        title={title}
+        title={
+          <div className="flex gap-2">
+            {title}
+            {data && (
+              <>
+                <Link
+                  to={`/taskmanager/projects/boards/board?boardId=${data?.boardId}`}
+                >
+                  <Tag className="cursor-pointer" color="gold">
+                    برد : {data?.board}
+                  </Tag>
+                </Link>
+                <Link
+                  to={`/taskmanager/projects/boards/board?boardId=${data?.boardId}`}
+                >
+                  <Tag className="cursor-pointer" color="blue">
+                    ستون : {data?.workFlowName}
+                  </Tag>
+                </Link>
+              </>
+            )}
+          </div>
+        }
         className="lg:min-w-[990px] w-full"
         footer={
           <div className="w-full flex justify-end gap-3">

@@ -197,7 +197,7 @@ const Projects = () => {
                           <span>وضعیت کل برد :</span>
                           <Progress
                             className="!text-sm !h-[11px]"
-                            percent={br.projectProgressBar}
+                            percent={br.boardProgressBar}
                             percentPosition={{ align: "center", type: "inner" }}
                           />
                         </div>

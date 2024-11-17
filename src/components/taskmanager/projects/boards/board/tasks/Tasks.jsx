@@ -1,4 +1,4 @@
-import { Button, Dropdown, Select, Skeleton } from "antd";
+import { Button, Collapse, Dropdown, Select, Skeleton } from "antd";
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { IoMdMore } from "react-icons/io";
 import useHttp from "../../../../httpConfig/useHttp";
@@ -13,19 +13,25 @@ export default function Tasks({ boardId }) {
   const [loading, setLoading] = useState(true);
   const [allTasksList, setAllTasksList] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({
-    viewBy: "undone",
-    sortBy: "default",
-    filters: false,
+    viewBy: null,
+    sortBy: null,
+    filters: null,
   });
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    show: null,
+    sortBy: null,
+    filters: {},
+  });
   const [showModal, setShowModal] = useState({
     open: false,
     id: null,
     boardId: null,
+    workFlow: null,
   });
 
   const viewByItems = [
     { key: "1", label: "کار های انجام نشده", value: "undone" },
+    { key: "2", label: "کار های انجام شده", value: "done" },
   ];
   const sortBy = [{ key: "1", label: "پیش فرض", value: "default" }];
   const filters = [];
@@ -63,13 +69,15 @@ export default function Tasks({ boardId }) {
     setLoading(false);
   };
 
-  const onTaskClick = async (id, boardId) => {
-    setShowModal({ open: true, id: id, boardId: boardId });
+  const onTaskClick = async (id, boardId, workflow) => {
+    setShowModal({ open: true, id: id, boardId: boardId, workFlow: workflow });
   };
 
   useEffect(() => {
     handleGetAllTasksList();
   }, [boardId]);
+
+  useEffect(() => {}, [selectedOptions]);
 
   return (
     <Suspense>
@@ -83,6 +91,7 @@ export default function Tasks({ boardId }) {
               <Select
                 variant="borderless"
                 value={selectedOptions.viewBy}
+                placeholder="نمایش بر اساس..."
                 onChange={(e) => {
                   setSelectedOptions({ ...selectedOptions, viewBy: e });
                 }}
@@ -98,6 +107,7 @@ export default function Tasks({ boardId }) {
               <Select
                 variant="borderless"
                 value={selectedOptions.sortBy}
+                placeholder="مرتب سازی بر اساس..."
                 onChange={(e) => {
                   setSelectedOptions({ ...selectedOptions, sortBy: e });
                 }}
@@ -112,22 +122,24 @@ export default function Tasks({ boardId }) {
               <span>فیلتر </span>
               <MdFilterList />
             </Button>
+
+            <Collapse />
           </div>
 
           {/* actions */}
           <div className="flex items-center">
-            <Button
+            {/* <Button
               onClick={() => onTaskClick(null, boardId)}
               type="primary"
               className="flex items-center justify-center p-5 bg-[#0f9d58]"
             >
               <FaPlus /> ایجاد وظیفه
-            </Button>
+            </Button> */}
           </div>
         </div>
 
         {/* list */}
-        <div className="w-full h-full flex flex-col gap-3 px-5">
+        <div className="w-full h-full flex flex-col gap-1 px-5">
           {!loading ? (
             allTasksList && allTasksList?.length !== 0 ? (
               allTasksList?.map((task, index) => (
@@ -135,7 +147,9 @@ export default function Tasks({ boardId }) {
                   data={task}
                   key={index}
                   getNewList={handleGetAllTasksList}
-                  onClick={() => onTaskClick(task?.id, task?.boardId)}
+                  onClick={() =>
+                    onTaskClick(task?.id, task?.boardId, task?.workFlow)
+                  }
                 />
               ))
             ) : (
@@ -159,7 +173,7 @@ export default function Tasks({ boardId }) {
       <TaskModal
         open={showModal.open}
         boardId={showModal.boardId}
-        workflowId={null}
+        workflowId={showModal.workFlow}
         getNewList={handleGetAllTasksList}
         setOpen={(e) => setShowModal({ open: e })}
         id={showModal.id}

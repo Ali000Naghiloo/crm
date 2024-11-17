@@ -3,7 +3,15 @@ import useHttp from "../httpConfig/useHttp";
 import { useDispatch } from "react-redux";
 import { setPageRoutes } from "../../../store/reducers/pageRoutes";
 import PageRoutes from "../../../common/PageRoutes";
-import { Avatar, Button, Input, Popconfirm, Progress, Skeleton } from "antd";
+import {
+  Avatar,
+  Button,
+  Input,
+  Popconfirm,
+  Progress,
+  Skeleton,
+  Tag,
+} from "antd";
 import { HiRefresh } from "react-icons/hi";
 import { FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +39,10 @@ const Projects = () => {
       .get("/ProjectController/Projects")
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
-          setProjects(res.data?.data);
+          const sortedData = res?.data?.data.sort(
+            (a, b) => b.projectPriority - a.projectPriority
+          );
+          setProjects(sortedData);
         }
       })
       .catch(() => {});
@@ -106,33 +117,42 @@ const Projects = () => {
                     className="w-[220px] min-h-[220px] relative shadow shadow-[rgba(0,0,0,0.5)] rounded-lg hover:scale-y-[20px] cursor-pointer hover:translate-y-[10%]"
                   >
                     {/* options */}
-                    <div className="flex gap-2 absolute left-[10px] top-[10px]">
-                      <Popconfirm
-                        title="آیا از حذف این پروژه اطمینان دارید؟"
-                        okText="بله"
-                        cancelText="خیر"
-                        onConfirm={() => handleDelete(pr?.id)}
-                      >
+                    <div className="w-full flex justify-between absolute left-0 top-0 p-3">
+                      <div>
+                        <Tag className="">{pr?.projectPriority}</Tag>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Popconfirm
+                          title="آیا از حذف این پروژه اطمینان دارید؟"
+                          okText="بله"
+                          cancelText="خیر"
+                          onConfirm={() => handleDelete(pr?.id)}
+                        >
+                          <Button
+                            size="small"
+                            className="p-1"
+                            type="primary"
+                            danger
+                          >
+                            <MdDelete className="w-full h-full" size={"2em"} />
+                          </Button>
+                        </Popconfirm>
+
                         <Button
                           size="small"
                           className="p-1"
                           type="primary"
-                          danger
+                          onClick={() =>
+                            setShowModal({ open: true, projectId: pr?.id })
+                          }
                         >
-                          <MdDelete className="w-full h-full" size={"2em"} />
+                          <IoMdSettings
+                            className="w-full h-full"
+                            size={"2em"}
+                          />
                         </Button>
-                      </Popconfirm>
-
-                      <Button
-                        size="small"
-                        className="p-1"
-                        type="primary"
-                        onClick={() =>
-                          setShowModal({ open: true, projectId: pr?.id })
-                        }
-                      >
-                        <IoMdSettings className="w-full h-full" size={"2em"} />
-                      </Button>
+                      </div>
                     </div>
 
                     <div

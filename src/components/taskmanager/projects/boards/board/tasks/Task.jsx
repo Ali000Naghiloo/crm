@@ -39,7 +39,7 @@ export default function Task({ data, getNewList, onClick }) {
           className="absolute left-0 top-0 w-full h-full z-0"
         ></div>
 
-        {data?.isDelayed && (
+        {data?.isDelayed && !data?.doneStatus && (
           <div className="w-[5px] h-full absolute right-0 bg-red-500"></div>
         )}
         {data?.donStatus && (

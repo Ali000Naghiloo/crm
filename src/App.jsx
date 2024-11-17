@@ -38,6 +38,7 @@ function App() {
               siderBg: "#222831",
               triggerBg: "#393E46",
             },
+            Progress: {},
           },
           token: {
             fontFamily: "iranSansFaNum",

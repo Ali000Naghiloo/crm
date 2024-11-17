@@ -1,6 +1,7 @@
 import { Button, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import useHttp from "../httpConfig/useHttp";
+import crmHttp from "../../../hooks/useHttps";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -9,6 +10,7 @@ import MyDatePicker from "../../../common/MyDatePicker";
 
 export default function ProjectModal({ open, setOpen, id, getNewList }) {
   const { httpService } = useHttp();
+  const { httpService: crmHttpService } = crmHttp();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [data, setData] = useState(null);
@@ -125,9 +127,12 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
       .get("/Account/GetAllUsers")
       .then((res) => {
         if (res.status == 200 && res.data?.code) {
-          res.data?.data?.map((u) =>
-            datas.push({ label: u.fullName, value: u.id })
-          );
+          res.data?.data?.map((u) => {
+            // let role = u?.roleMappings?.filter(
+            //   (role) => role?.customerRole == "کارمند"
+            // );
+            datas.push({ ...u, label: u.fullName, value: u.id });
+          });
         }
       })
       .catch(() => {});
@@ -162,9 +167,7 @@ export default function ProjectModal({ open, setOpen, id, getNewList }) {
   }, [open]);
 
   useEffect(() => {
-    if (!allUsers) {
-      handleGetAllUsers();
-    }
+    handleGetAllUsers();
   }, []);
 
   useEffect(() => {
