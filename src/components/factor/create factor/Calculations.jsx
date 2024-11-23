@@ -1,4 +1,4 @@
-import { Button, Input, Select } from "antd";
+import { Button, Input, InputNumber, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useHttp from "../../../hooks/useHttps";
@@ -10,7 +10,7 @@ export default function Calculations({
   factorTotalQuantity,
 }) {
   const { httpService } = useHttp();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   const [calculations, setCalculations] = useState({
     allFactorPrice: 0, // before conditions
     allConditions: null,
@@ -28,6 +28,7 @@ export default function Calculations({
       .post("/Factor/GetFactorAdditionsAndDeductions", conditionFormData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
+          // calculate price with conditions
           let allConditionsValue = 0;
           res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList.map(
             (c) => {
@@ -49,6 +50,17 @@ export default function Calculations({
     setLoading(false);
   };
 
+  const handledPrice = () => {
+    return setCalculations({
+      ...calculations,
+      allFactorPrice: calculations.allFactorPrice
+        ? formatHelper.numberSeperator(
+            calculations.allFactorPrice + calculations.allConditionsValue
+          )
+        : 0,
+    });
+  };
+
   useEffect(() => {
     if (factorItems) {
       handleCalculations();
@@ -57,6 +69,8 @@ export default function Calculations({
 
   useEffect(() => {
     if (calculations.allFactorPrice) {
+      handledPrice();
+
       validation.setFieldValue(
         "totalFactorPrice",
         calculations.allFactorPrice + calculations.allConditionsValue
@@ -81,15 +95,30 @@ export default function Calculations({
               calculations.allConditions?.length !== 0 ? (
                 calculations.allConditions?.map((value, index) => {
                   return (
-                    <div className="flex gap-1 text-md p-1" key={index}>
+                    <div
+                      className="flex items-center gap-1 text-md p-1"
+                      key={index}
+                    >
                       <p className="font-bold">
                         {value?.factorAdditionsAndDeductions} :{" "}
                       </p>
-                      <span>
-                        {value?.amount
-                          ? formatHelper.numberSeperator(value?.amount)
-                          : 0}
-                      </span>
+                      <div>
+                        <InputNumber
+                          type="number"
+                          className=""
+                          size="large"
+                          value={calculations.allConditions[index]["amount"]}
+                          onChange={(e) =>
+                            setCalculations((prev) => {
+                              let newConditions = prev.allConditions;
+                              newConditions[index]["amount"] = e;
+                              console.log(prev.allConditions);
+
+                              return { ...prev, allConditions: newConditions };
+                            })
+                          }
+                        />
+                      </div>
                     </div>
                   );
                 })
@@ -108,14 +137,7 @@ export default function Calculations({
             مبلغ کل فاکتور(بعد از اعمال اضافات و کسورات) :{" "}
           </span>{" "}
           <div className="w-full text-center">
-            <span>
-              {calculations.allFactorPrice
-                ? formatHelper.numberSeperator(
-                    calculations.allFactorPrice +
-                      calculations.allConditionsValue
-                  )
-                : 0}
-            </span>
+            <span>{calculations.allFactorPrice}</span>
           </div>
         </div>
 

@@ -35,6 +35,8 @@
     "react-to-print": "^3.0.1",
     "react-toastify": "^10.0.5",
     "redux": "^5.0.1",
+    "simplex-noise": "^4.0.3",
+    "statuses": "^2.0.1",
     "vite-plugin-pwa": "^0.20.1",
     "yup": "^1.4.0"
   },
