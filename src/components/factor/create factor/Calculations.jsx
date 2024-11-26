@@ -65,7 +65,6 @@ export default function Calculations({
       let newAllConditionsValue = parseFloat(mainConditionsValue) + e;
       let newAllFactorPrice =
         parseFloat(mainFactorPrice) + parseFloat(newAllConditionsValue);
-      console.log(newAllFactorPrice);
 
       return {
         ...prev,
@@ -77,10 +76,7 @@ export default function Calculations({
 
   useEffect(() => {
     if (calculations.allFactorPrice) {
-      validation.setFieldValue(
-        "totalFactorPrice",
-        calculations.allFactorPrice + calculations.allConditionsValue
-      );
+      validation.setFieldValue("totalFactorPrice", calculations.allFactorPrice);
       validation.setFieldValue("totalFactorQuantity", factorTotalQuantity);
       validation.setFieldValue(
         "factorAdditionsAndDeductionsMappings",
@@ -90,7 +86,7 @@ export default function Calculations({
   }, [calculations]);
 
   useEffect(() => {
-    if (factorItems) {
+    if (factorItems && validation.values.factorType) {
       handleCalculations();
     }
   }, [factorItems]);
@@ -138,13 +134,11 @@ export default function Calculations({
         {/* price count */}
         <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
           <span className="font-bold">
-            مبلغ کل فاکتور(بعد از اعمال اضافات و کسورات) :{" "}
+            مبلغ کل فاکتور(بعد از اعمال اضافات و کسورات) :
           </span>
           <div className="w-full text-center">
             <span>
-              {calculations.allFactorPrice
-                ? formatHelper.numberSeperator(calculations.allFactorPrice)
-                : 0}
+              {formatHelper.numberSeperator(calculations.allFactorPrice)}
             </span>
           </div>
         </div>

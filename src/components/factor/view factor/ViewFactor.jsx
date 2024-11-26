@@ -15,6 +15,7 @@ export default function ViewFactor({ open, setOpen, factorId }) {
   const { httpService } = useHttp();
   const [factorData, setFactorData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [totalCondition, setTotalCondition] = useState(0);
   const ref = useRef(null);
 
   const columns = [
@@ -69,6 +70,11 @@ export default function ViewFactor({ open, setOpen, factorId }) {
       .then((res) => {
         if (res.status === 200 && res.data?.code == 1) {
           setFactorData(res.data?.factorDetailViewModel);
+          let totalConditions = 0;
+          res.data?.factorDetailViewModel?.factorItems?.map((c) => {
+            totalConditions += parseFloat(c?.totalPrice);
+          });
+          setTotalCondition(totalConditions);
         }
       })
       .catch(() => {});
@@ -181,10 +187,10 @@ export default function ViewFactor({ open, setOpen, factorId }) {
               {/* factor footer */}
               <div className="w-full flex flex-col">
                 {/* factor price */}
-                <div className="w-full flex justify-center items-center">
+                <div className="w-full flex justify-center items-center gap-2">
                   <span className="text-gray-500">مبلغ کل فاکتور : </span>
                   <span className="text-lg font-bold">
-                    {formatHelper.numberSeperator(factorData?.totalFactorPrice)}
+                    {formatHelper.numberSeperator(parseFloat(totalCondition))}
                   </span>
                 </div>
 
@@ -200,6 +206,14 @@ export default function ViewFactor({ open, setOpen, factorId }) {
                     }
                     columns={conditionsColumns}
                   />
+                </div>
+
+                {/* payable */}
+                <div className="w-full flex justify-center items-center gap-2">
+                  <span className="">مبلغ قابل پرداخت : </span>
+                  <span className="text-lg font-bold">
+                    {formatHelper.numberSeperator(factorData?.totalFactorPrice)}
+                  </span>
                 </div>
 
                 {/* factor description */}

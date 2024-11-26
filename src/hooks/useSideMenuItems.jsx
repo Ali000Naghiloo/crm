@@ -72,6 +72,11 @@ export default function useSideMenuItems() {
                 label: "نقش",
               },
               {
+                key: "/customers/region",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "درخت مناطق",
+              },
+              {
                 key: "/customers/groups",
                 icon: <GoDot size={"1em"} className="" />,
                 label: "گروه",
