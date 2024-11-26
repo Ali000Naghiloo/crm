@@ -360,11 +360,20 @@ export default function SelectItems({ validation, factorType }) {
 
     if (
       editable &&
-      (id === "discount" ||
-        id === "totalPrice" ||
-        id === "inventory" ||
-        id === "itemRow")
+      (id === "totalPrice" || id === "inventory" || id === "itemRow")
     ) {
+      return (
+        <Input
+          type="number"
+          min={0}
+          className="w-[100px]"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+        />
+      );
+    }
+    if (editable && id === "discount") {
       return (
         <Input
           type="number"
@@ -564,13 +573,17 @@ export default function SelectItems({ validation, factorType }) {
       // count factor totals
       let prices = 0;
       let quantity = 0;
+      let discount = 0;
       validation.values.factorItemCreateViewModels.map((value) => {
         prices += parseInt(value.totalPrice);
         quantity += parseInt(value.quantity);
+        discount += parseInt(value.discount);
       });
-      validation.setFieldValue("totalFactorPrice", prices);
+
+      // set factor totals
+      validation.setFieldValue("totalFactorPrice", prices - discount);
       validation.setFieldValue("totalFactorQuantity", quantity);
-      setTotals({ quantity: quantity, price: prices });
+      setTotals({ quantity: quantity, price: prices - discount });
     }
   }, [validation.values]);
 

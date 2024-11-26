@@ -17,11 +17,16 @@ export default function Calculations({
     allConditionsValue: 0,
     paymentMethod: 0,
   });
+  const [mainFactorPrice, setMainFactorPrice] = useState(0);
+  const [mainConditionsValue, setMainConditionsValue] = useState(0);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const handleCalculations = async () => {
     setLoading(true);
-    const conditionFormData = validation.values;
+    const conditionFormData = {
+      ...validation.values,
+      factorAdditionsAndDeductionsMappings: null,
+    };
 
     // set all details
     await httpService
@@ -41,8 +46,11 @@ export default function Calculations({
             allConditions:
               res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList,
             allConditionsValue: allConditionsValue,
-            allFactorPrice: validation.values.totalFactorPrice,
+            allFactorPrice:
+              validation.values.totalFactorPrice + allConditionsValue,
           });
+          setMainFactorPrice(validation.values.totalFactorPrice);
+          setMainConditionsValue(allConditionsValue);
         }
       })
       .catch(() => {});
@@ -50,27 +58,25 @@ export default function Calculations({
     setLoading(false);
   };
 
-  const handledPrice = () => {
-    return setCalculations({
-      ...calculations,
-      allFactorPrice: calculations.allFactorPrice
-        ? formatHelper.numberSeperator(
-            calculations.allFactorPrice + calculations.allConditionsValue
-          )
-        : 0,
-    });
-  };
+  const handleChangeConditions = (e, index) =>
+    setCalculations((prev) => {
+      let newConditions = prev.allConditions;
+      newConditions[index]["amount"] = e;
+      let newAllConditionsValue = parseFloat(mainConditionsValue) + e;
+      let newAllFactorPrice =
+        parseFloat(mainFactorPrice) + parseFloat(newAllConditionsValue);
+      console.log(newAllFactorPrice);
 
-  useEffect(() => {
-    if (factorItems) {
-      handleCalculations();
-    }
-  }, []);
+      return {
+        ...prev,
+        allConditions: newConditions,
+        allConditionsValue: newAllConditionsValue,
+        allFactorPrice: newAllFactorPrice,
+      };
+    });
 
   useEffect(() => {
     if (calculations.allFactorPrice) {
-      handledPrice();
-
       validation.setFieldValue(
         "totalFactorPrice",
         calculations.allFactorPrice + calculations.allConditionsValue
@@ -82,6 +88,12 @@ export default function Calculations({
       );
     }
   }, [calculations]);
+
+  useEffect(() => {
+    if (factorItems) {
+      handleCalculations();
+    }
+  }, [factorItems]);
 
   return (
     <>
@@ -100,7 +112,7 @@ export default function Calculations({
                       key={index}
                     >
                       <p className="font-bold">
-                        {value?.factorAdditionsAndDeductions} :{" "}
+                        {value?.factorAdditionsAndDeductions} :
                       </p>
                       <div>
                         <InputNumber
@@ -108,15 +120,7 @@ export default function Calculations({
                           className=""
                           size="large"
                           value={calculations.allConditions[index]["amount"]}
-                          onChange={(e) =>
-                            setCalculations((prev) => {
-                              let newConditions = prev.allConditions;
-                              newConditions[index]["amount"] = e;
-                              console.log(prev.allConditions);
-
-                              return { ...prev, allConditions: newConditions };
-                            })
-                          }
+                          onChange={(e) => handleChangeConditions(e, index)}
                         />
                       </div>
                     </div>
@@ -135,9 +139,13 @@ export default function Calculations({
         <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
           <span className="font-bold">
             مبلغ کل فاکتور(بعد از اعمال اضافات و کسورات) :{" "}
-          </span>{" "}
+          </span>
           <div className="w-full text-center">
-            <span>{calculations.allFactorPrice}</span>
+            <span>
+              {calculations.allFactorPrice
+                ? formatHelper.numberSeperator(calculations.allFactorPrice)
+                : 0}
+            </span>
           </div>
         </div>
 
