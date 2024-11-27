@@ -78,7 +78,7 @@ export default function RequestContactModal({
     };
 
     await httpService
-      .post("/CustomerInitialRequest/EditInitialRequest", formData)
+      .post("/CustomerInitialRequest/CreateInitialRequest", formData)
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           toast.success("با موفقیت ایجاد شد");

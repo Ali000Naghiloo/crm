@@ -120,11 +120,11 @@ export default function useSideMenuItems() {
                 icon: <GoDot size={"1em"} className="" />,
                 label: "دسته بندی",
               },
-              {
-                key: "/products/creators",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "تامین کنندگان کالا و خدمات",
-              },
+              // {
+              //   key: "/products/creators",
+              //   icon: <GoDot size={"1em"} className="" />,
+              //   label: "تامین کنندگان کالا و خدمات",
+              // },
             ],
           },
           {

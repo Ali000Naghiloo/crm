@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useHttp from "../../../hooks/useHttps";
 import formatHelper from "../../../helper/formatHelper";
+import { BiMinus, BiPlus } from "react-icons/bi";
 
 export default function Calculations({
   validation,
@@ -34,10 +35,21 @@ export default function Calculations({
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           // calculate price with conditions
+          let factorPrice = validation.values.totalFactorPrice;
           let allConditionsValue = 0;
+          res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList.filter(
+            (c) =>
+              c?.factorAdditionsAndDeductions == "تخفیف"
+                ? factorPrice - c?.amount
+                : null
+          );
           res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList.map(
             (c) => {
-              allConditionsValue += c?.amount;
+              if (c?.impactOnFactorAmount == "افزاینده") {
+                allConditionsValue += c?.amount;
+              } else {
+                allConditionsValue -= c?.amount;
+              }
             }
           );
 
@@ -46,8 +58,7 @@ export default function Calculations({
             allConditions:
               res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList,
             allConditionsValue: allConditionsValue,
-            allFactorPrice:
-              validation.values.totalFactorPrice + allConditionsValue,
+            allFactorPrice: factorPrice,
           });
           setMainFactorPrice(validation.values.totalFactorPrice);
           setMainConditionsValue(allConditionsValue);
@@ -65,6 +76,7 @@ export default function Calculations({
       let newAllConditionsValue = parseFloat(mainConditionsValue) + e;
       let newAllFactorPrice =
         parseFloat(mainFactorPrice) + parseFloat(newAllConditionsValue);
+      console.log(newAllConditionsValue);
 
       return {
         ...prev,
@@ -107,9 +119,16 @@ export default function Calculations({
                       className="flex items-center gap-1 text-md p-1"
                       key={index}
                     >
-                      <p className="font-bold">
+                      <div className="flex items-center gap-2 font-bold">
+                        <span className="rounded-full border w-[15px] h-[15px] flex justify-center items-center text-center">
+                          {value?.impactOnFactorAmount == "افزاینده" ? (
+                            <BiPlus />
+                          ) : (
+                            <BiMinus />
+                          )}
+                        </span>
                         {value?.factorAdditionsAndDeductions} :
-                      </p>
+                      </div>
                       <div>
                         <InputNumber
                           type="number"

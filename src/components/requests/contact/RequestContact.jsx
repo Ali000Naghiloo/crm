@@ -81,7 +81,7 @@ export default function RequestContact({ pageType }) {
           <Popconfirm
             cancelText="خیر"
             okText="بله"
-            title="آیا از حذف این فاکتور اطمینان دارید؟"
+            title="آیا از حذف این درخواست اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.id)}
           >
@@ -179,6 +179,7 @@ export default function RequestContact({ pageType }) {
               setShowModal({
                 open: true,
                 id: null,
+                data: null,
               })
             }
           >
