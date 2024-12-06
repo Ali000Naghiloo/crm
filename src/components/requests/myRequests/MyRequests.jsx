@@ -222,9 +222,15 @@ export default function MyRequests({ pageType }) {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
           res.data.customerInitialRequestViewModelList.map((data, index) => {
-            // console.log(data?.creator.includes(userData?.fullName));
-            if (data?.creator?.includes(userData?.fullName))
-              datas.push({ ...data, index: index + 1, key: data?.id });
+            // if (data?.creator?.includes(userData?.fullName)) {
+            //   datas.push({ ...data, index: index + 1, key: data?.id });
+            // }
+            let responsibles = data?.customerInitialRequestResponsibles?.filter(
+              (c) => c.user?.includes(userData?.fullName)
+            );
+            if (responsibles?.length !== 0) {
+              datas.push(data);
+            }
           });
           setPageList(datas);
         }
@@ -363,7 +369,7 @@ export default function MyRequests({ pageType }) {
           {/* <Button className="w-full" type="primary" size="large">
             خروجی جدول
           </Button> */}
-          <Button
+          {/* <Button
             className="w-full"
             type="primary"
             size="large"
@@ -375,7 +381,7 @@ export default function MyRequests({ pageType }) {
             }
           >
             {"درخواست تماس اولیه"} جدید
-          </Button>
+          </Button> */}
         </div>
 
         {/* content */}

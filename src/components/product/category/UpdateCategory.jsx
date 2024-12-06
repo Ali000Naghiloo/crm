@@ -125,10 +125,28 @@ export default function UpdateGroup({ open, setOpen, getNewList, data, list }) {
     }
   }, [validation.values.parentCategoryId]);
 
+  const handleGetData = async (id) => {
+    setLoading(true);
+
+    await httpService
+      .get("/ProductCategory/GetCategoryDetail", { params: { categoryId: id } })
+      .then((res) => {
+        if (res.data?.code == 1 && res.status == 200) {
+          validation.setFieldValue(
+            "products",
+            res.data?.categoryViewModel?.products?.map((pr) => pr?.productId)
+          );
+        }
+      })
+      .catch(() => {});
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (data) {
+      handleGetData(data?.productCategoryId);
       validation.setFieldValue("productCategoryId", data?.productCategoryId);
-      validation.setFieldValue("products", data?.products);
       validation.setFieldValue("categoryName", data?.categoryName);
       validation.setFieldValue("description", data?.description);
       if (data?.parentCategoryId) {

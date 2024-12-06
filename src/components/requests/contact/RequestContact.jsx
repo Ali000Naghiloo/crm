@@ -23,6 +23,7 @@ export default function RequestContact({ pageType }) {
     data: null,
   });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
+  const userData = useSelector((state) => state.userData.userData);
 
   // imports
   const CreateRequestContact = lazy(() => import("./RequestContactModal"));
@@ -126,7 +127,9 @@ export default function RequestContact({ pageType }) {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
           res.data.customerInitialRequestViewModelList.map((data, index) => {
-            datas.push({ ...data, index: index + 1, key: data?.id });
+            if (data?.creator?.includes(userData?.fullName)) {
+              datas.push({ ...data, index: index + 1, key: data?.id });
+            }
           });
           setPageList(datas);
         }

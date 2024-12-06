@@ -1,5 +1,4 @@
 import { Layout } from "antd";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideMenu from "./common/SideMenu";
 import AppHeader from "./common/Header";
@@ -66,7 +65,7 @@ export default function MyLayout() {
           </div>
         </Content>
         <Footer className="flex justify-center items-center text-center max-h-footer font-bold bg-[#222831] text-white mt-auto">
-          توسعه و طراحی توسط تیم شرکت فرتاک آراد راهور ایمن
+          توسعه و طراحی توسط تیم شرکت فرتاک آراد راهور ایمن (وبکام)
         </Footer>
       </Layout>
     </>

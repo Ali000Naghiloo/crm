@@ -85,6 +85,7 @@ const Chat = () => {
     //     </div>
     //   );
     // });
+
     connection?.on("UpdateOnlineUsers", (onlineUsers) => {
       const ouList = onlineUsers?.map((ou) => ou?.userId);
       const updatedUsers = usersList.map((user) => ({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // icons
-import { TbLayoutDashboardFilled } from "react-icons/tb";
+import { TbLayoutDashboardFilled, TbLockAccess } from "react-icons/tb";
 import { IoPersonSharp } from "react-icons/io5";
 //
 import { MdFactCheck, MdPerson, MdPriceChange } from "react-icons/md";
@@ -26,9 +26,41 @@ export default function useSideMenuItems() {
             label: "داشبورد",
           },
           {
-            key: "/employees",
-            icon: <IoPersonSharp size={"1.5em"} />,
-            label: "کارمندان",
+            key: "customers",
+            icon: <IoPersonSharp size={"1.5em"} className="" />,
+            label: "اشخاص",
+            children: [
+              {
+                key: "/customers",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "فهرست",
+              },
+              {
+                key: "/customers/roles",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "نقش",
+              },
+              {
+                key: "/customers/region",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "درخت مناطق",
+              },
+              {
+                key: "/customers/groups",
+                icon: <GoDot size={"1em"} className="" />,
+                label: "گروه",
+              },
+            ],
+          },
+          // {
+          //   key: "/employees",
+          //   icon: <IoPersonSharp size={"1.5em"} />,
+          //   label: "کارمندان",
+          // },
+          {
+            key: "/permissions",
+            icon: <TbLockAccess size={"1.5em"} />,
+            label: "سطوح دسترسی",
           },
           {
             key: "/requests",
@@ -220,7 +252,7 @@ export default function useSideMenuItems() {
           {
             key: "/taskmanager",
             icon: <MdManageSearch size={"1.7em"} className="" />,
-            label: "مدیریت پروژه",
+            label: "مدیریت وظیفه",
             children: [
               {
                 key: "/taskmanager/chat",

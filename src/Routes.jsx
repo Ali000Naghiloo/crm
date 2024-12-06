@@ -40,6 +40,7 @@ import MyRequestsPage from "./pages/user/requests/MyRequestsPage";
 import UnitsPage from "./pages/user/units/UnitsPage";
 import RejectedBuyFactorPage from "./pages/user/factors/RejectedBuyFactorPage";
 import BuyFactorsPage from "./pages/user/factors/BuyFactorsPage";
+import PermissionsPage from "./pages/admin/PermissionsPage";
 
 export default function AllRoutes() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -115,6 +116,7 @@ export default function AllRoutes() {
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/employees" element={<EmployeesPage />} />
+          <Route path="/permissions" element={<PermissionsPage />} />
           {/* initial request */}
           <Route
             path="/requests/contact"

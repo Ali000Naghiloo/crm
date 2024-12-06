@@ -196,6 +196,7 @@ export default function RequestContactModal({
       validation.setFieldValue("id", data?.id);
       validation.setFieldValue("customer", data?.customer);
       validation.setFieldValue("customerId", data?.customerId);
+      validation.setFieldValue("description", data?.description);
       validation.setFieldValue(
         "customerInitialRequestResponsibles",
         data?.customerInitialRequestResponsibles

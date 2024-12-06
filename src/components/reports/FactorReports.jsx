@@ -143,6 +143,16 @@ export default function Factors({ pageType }) {
     },
   ];
 
+  const handleFixValues = (obj) => {
+    const newObj = {};
+
+    Object.keys(obj).forEach((key) => {
+      newObj[key] = obj[key] === "" ? null : obj[key];
+    });
+
+    return newObj;
+  };
+
   const handleDelete = async (id) => {
     setLoading(true);
 
@@ -167,7 +177,7 @@ export default function Factors({ pageType }) {
 
   const handleGetList = async () => {
     setLoading(true);
-    const formData = { ...validation.values };
+    const formData = handleFixValues(validation.values);
 
     await httpService
       .post("/Report/GetFactors", formData)

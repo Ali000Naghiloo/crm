@@ -40,11 +40,7 @@ export default function CreateGroup({ open, setOpen, getNewList, list }) {
   const handleCreate = async (values) => {
     setLoading(true);
     const formData = {
-      categoryName: values?.categoryName,
-      description: values?.description,
-      parentCategoryId: values?.parentCategoryId
-        ? values?.parentCategoryId
-        : null,
+      ...values,
     };
 
     await httpService

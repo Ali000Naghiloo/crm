@@ -21,6 +21,7 @@ export default function Calculations({
   const [mainFactorPrice, setMainFactorPrice] = useState(0);
   const [mainConditionsValue, setMainConditionsValue] = useState(0);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
+  const [calculated, setCalculated] = useState([]);
 
   const handleCalculations = async () => {
     setLoading(true);
@@ -35,31 +36,20 @@ export default function Calculations({
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           // calculate price with conditions
-          let factorPrice = validation.values.totalFactorPrice;
           let allConditionsValue = 0;
-          res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList.filter(
-            (c) =>
-              c?.factorAdditionsAndDeductions == "تخفیف"
-                ? factorPrice - c?.amount
-                : null
-          );
-          res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList.map(
-            (c) => {
-              if (c?.impactOnFactorAmount == "افزاینده") {
-                allConditionsValue += c?.amount;
-              } else {
-                allConditionsValue -= c?.amount;
-              }
-            }
-          );
-
-          setCalculations({
-            ...calculations,
-            allConditions:
-              res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList,
-            allConditionsValue: allConditionsValue,
-            allFactorPrice: factorPrice,
-          });
+          handleCalculatePrice(
+            res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList
+          ),
+            setCalculations({
+              ...calculations,
+              allConditions:
+                res.data
+                  ?.factorAdditionsAndDeductionsMappingCreateViewModelList,
+              allConditionsValue: allConditionsValue,
+              allFactorPrice: handleCalculatePrice(
+                res.data?.factorAdditionsAndDeductionsMappingCreateViewModelList
+              ),
+            });
           setMainFactorPrice(validation.values.totalFactorPrice);
           setMainConditionsValue(allConditionsValue);
         }
@@ -69,14 +59,42 @@ export default function Calculations({
     setLoading(false);
   };
 
-  const handleChangeConditions = (e, index) =>
+  const handleCalculatePrice = (conditions) => {
+    let newPrice = calculations.allFactorPrice;
+    let sortedByPrio = conditions.sort((a, b) => a.priority - b.priority);
+
+    sortedByPrio.map((c) => {
+      let value = c?.amount;
+      if (c.conditionsType == "درصد") {
+        value = (newPrice * c?.amount) / 100;
+      }
+      if (c?.impactOnFactorAmount === "کاهنده") {
+        newPrice -= value;
+      }
+      if (c?.impactOnFactorAmount === "افزاینده") {
+        newPrice += value;
+      }
+    });
+
+    setMainFactorPrice(newPrice);
+    console.log(newPrice);
+    return newPrice;
+  };
+
+  const handleChangeConditions = (e, index, data) => {
     setCalculations((prev) => {
-      let newConditions = prev.allConditions;
-      newConditions[index]["amount"] = e;
-      let newAllConditionsValue = parseFloat(mainConditionsValue) + e;
-      let newAllFactorPrice =
-        parseFloat(mainFactorPrice) + parseFloat(newAllConditionsValue);
-      console.log(newAllConditionsValue);
+      let newConditions = [...prev.allConditions];
+      newConditions[index].amount = e;
+      let newAllConditionsValue = prev.allConditionsValue;
+      newConditions.map((c) => {
+        if (c.impactOnFactorAmount === "افزاینده") {
+          newAllConditionsValue = newAllConditionsValue + c?.amount;
+        }
+        if (c.impactOnFactorAmount === "کاهنده") {
+          newAllConditionsValue = newAllConditionsValue - c?.amount;
+        }
+      });
+      let newAllFactorPrice = handleCalculatePrice(newConditions);
 
       return {
         ...prev,
@@ -85,6 +103,7 @@ export default function Calculations({
         allFactorPrice: newAllFactorPrice,
       };
     });
+  };
 
   useEffect(() => {
     if (calculations.allFactorPrice) {
@@ -110,13 +129,13 @@ export default function Calculations({
         <div className="w-full flex flex-col gap-2 text-lg border-b-[1px] border-b-gray-300 p-3">
           <span className="font-bold">اضافات کسورات : </span>
           <div className="w-full flex flex-col justify-center items-center">
-            <div className="w-full flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center justify-end">
               {calculations.allConditions &&
               calculations.allConditions?.length !== 0 ? (
                 calculations.allConditions?.map((value, index) => {
                   return (
                     <div
-                      className="flex items-center gap-1 text-md p-1"
+                      className="flex items-end gap-1 text-md p-1"
                       key={index}
                     >
                       <div className="flex items-center gap-2 font-bold">
@@ -129,13 +148,30 @@ export default function Calculations({
                         </span>
                         {value?.factorAdditionsAndDeductions} :
                       </div>
-                      <div>
+                      <div className="flex flex-col items-center gap-1">
+                        <span>مقدار</span>
+                        <Input
+                          type="number"
+                          className=""
+                          size="large"
+                          value={
+                            (mainFactorPrice *
+                              calculations.allConditions[index]["amount"]) /
+                            100
+                          }
+                          onChange={() => {}}
+                        />
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <span>درصد</span>
                         <InputNumber
                           type="number"
                           className=""
                           size="large"
                           value={calculations.allConditions[index]["amount"]}
-                          onChange={(e) => handleChangeConditions(e, index)}
+                          onChange={(e) =>
+                            handleChangeConditions(e, index, value)
+                          }
                         />
                       </div>
                     </div>
@@ -157,7 +193,7 @@ export default function Calculations({
           </span>
           <div className="w-full text-center">
             <span>
-              {formatHelper.numberSeperator(calculations.allFactorPrice)}
+              {mainFactorPrice && formatHelper.numberSeperator(mainFactorPrice)}
             </span>
           </div>
         </div>
