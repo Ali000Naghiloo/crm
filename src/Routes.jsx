@@ -116,6 +116,11 @@ export default function AllRoutes() {
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<AdminDashboard />} />
           <Route path="/employees" element={<EmployeesPage />} />
+          {/* customers */}
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/customers/groups" element={<CustomerGroups />} />
+          <Route path="/customers/roles" element={<CustomerRoles />} />
+          {/* permissions */}
           <Route path="/permissions" element={<PermissionsPage />} />
           {/* initial request */}
           <Route

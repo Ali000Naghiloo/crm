@@ -6,6 +6,8 @@ import useHttp from "../../hooks/useHttps";
 import { Button, Input, Popconfirm, Table, Tag } from "antd";
 import { toast } from "react-toastify";
 import { HiRefresh } from "react-icons/hi";
+import CreatePermission from "./PermissionModal";
+import { FaUsers } from "react-icons/fa";
 
 export default function Permissions() {
   const dispatch = useDispatch();
@@ -14,17 +16,10 @@ export default function Permissions() {
   const [pageList, setPageList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [customerDataModal, setCustomerDataModal] = useState({
+  const [permissionModal, setPermissionModal] = useState({
     open: false,
     id: null,
-  });
-  const [createCustomerModal, setCreateCustomerModal] = useState({
-    open: false,
-    id: null,
-  });
-  const [filters, setFilters] = useState({
-    keyword: "",
-    loading: false,
+    data: null,
   });
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
@@ -37,80 +32,32 @@ export default function Permissions() {
     },
     {
       title: "نام دسترسی",
-      dataIndex: "claimValue",
-      key: "claimValue",
+      dataIndex: "menuAccessGroupName",
+      key: "menuAccessGroupName",
     },
     {
-      title: "نوع شخص",
-      dataIndex: "customerType",
-      showSorterTooltip: {
-        target: "full-header",
-      },
-      render: (value) => (
-        <div>
-          {allEnum?.CustomerType[value] ? allEnum?.CustomerType[value] : "-"}
-        </div>
-      ),
-      filters: allEnum
-        ? allEnum?.CustomerType?.map((i, index) => {
-            return { text: i, value: index };
-          })
-        : [],
-      sorter: (a, b) => a.customerType - b.customerType,
-      onFilter: (value, record) => {
-        console.log(value, record);
-      },
-      key: "customerType",
+      title: "نوع دسترسی",
+      dataIndex: "claimType",
+      render: (value) => <>{allEnum?.ClaimType[value]}</>,
+      key: "claimType",
     },
     {
-      title: "نقش (ها)",
-      dataIndex: "roleMappings",
-      render: (value) => {
-        if (value && value?.length !== 0) {
-          return (
-            <div className="flex gap-1 flex-wrap max-w-[170px]">
-              {value?.map((v) => (
-                <Tag color="blue" key={v?.customerId}>
-                  {v?.customerRole}
-                </Tag>
-              ))}
-            </div>
-          );
-        } else {
-          return <>-</>;
-        }
-      },
-      key: "roleMappings",
-    },
-    {
-      title: "نوع شرکت",
-      dataIndex: "companyType",
-      render: (value) => (
-        <div>
-          {allEnum?.CompanyType[value] ? allEnum?.CompanyType[value] : "-"}
-        </div>
-      ),
-      key: "companyType",
-    },
-    {
-      title: "کد شخص",
-      dataIndex: "customerCod",
-      render: (value) => <div>{value}</div>,
-      key: "customerCod",
-    },
-    {
-      title: "فعال است؟",
-      dataIndex: "isActive",
+      title: "منو های در دسترس",
+      dataIndex: "groupMenuAccesses",
       render: (value) => (
         <>
-          {value ? (
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          ) : (
-            <div className="w-2 h-2 rounded-full bg-red-500"></div>
-          )}
+          {!!value?.length
+            ? value?.map((v) => <Tag color="blue">{v?.name}</Tag>)
+            : "-"}
         </>
       ),
-      key: "isActive",
+      key: "groupMenuAccesses",
+    },
+    {
+      title: "توضیحات",
+      dataIndex: "description",
+      render: (value) => <>{value}</>,
+      key: "description",
     },
     {
       title: "عملیات",
@@ -118,7 +65,7 @@ export default function Permissions() {
         <div className="flex gap-2">
           <Button
             onClick={() =>
-              setCustomerDataModal({ id: data?.customerId, open: true })
+              setPermissionModal({ id: data?.customerId, open: true })
             }
             size="middle"
             type="primary"
@@ -128,7 +75,7 @@ export default function Permissions() {
           <Popconfirm
             cancelText="لغو"
             okText="حذف"
-            title="آیا از حذف این شخص اطمینان دارید؟"
+            title="آیا از حذف این دسترسی اطمینان دارید؟"
             placement="topRight"
             onConfirm={() => handleDelete(data?.customerId)}
           >
@@ -169,33 +116,11 @@ export default function Permissions() {
     setLoading(true);
 
     await httpService
-      .get("/AccessClaim/AccessClaims")
+      .get("/AccessClaim/MenuAccessGroups")
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           let datas = [];
-          res.data.accessClaims.map((data, index) => {
-            datas.push({ ...data, index: index + 1, key: index });
-          });
-          setPageList(datas);
-        }
-      })
-      .catch(() => {});
-
-    setLoading(false);
-  };
-
-  const handleGetListByKeyword = async () => {
-    setLoading(true);
-    const formData = {
-      keyword: filters.keyword,
-    };
-
-    await httpService
-      .get("/Customer/SearchCustomers", { params: formData })
-      .then((res) => {
-        if (res.status === 200 && res.data?.code === 1) {
-          let datas = [];
-          res.data.customerList.map((data, index) => {
+          res.data.menuAccessGroupViewModelList.map((data, index) => {
             datas.push({ ...data, index: index + 1, key: index });
           });
           setPageList(datas);
@@ -210,25 +135,12 @@ export default function Permissions() {
     dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "فهرست اشخاص" }]));
   }, []);
 
-  useEffect(() => {
-    if (filters.keyword.length !== 0) {
-      const timeoutId = setTimeout(() => {
-        handleGetListByKeyword();
-      }, 1000);
-      setFilters({ ...filters, loading: false });
-      return () => clearTimeout(timeoutId);
-    } else {
-      handleGetList();
-      setFilters({ ...filters, loading: false });
-    }
-  }, [filters.keyword]);
-
   return (
     <>
       <div className="w-full h-full p-5">
         {/* page title */}
         <div className="w-full flex justify-between text-4xl py-5 font-bold">
-          <h1>سطح دسترسی</h1>
+          <h1>لیست دسترسی کاربران</h1>
 
           <div className="flex items-center justify-center pl-5">
             <Button className="p-1" type="text" onClick={handleGetList}>
@@ -251,27 +163,14 @@ export default function Permissions() {
             className="w-full"
             type="primary"
             size="large"
-            onClick={() => setCreateCustomerModal({ open: true })}
+            onClick={() => setPermissionModal({ open: true })}
           >
-            تعریف شخص جدید
+            اختصاص دسترسی به گروه کاربران <FaUsers />
           </Button>
         </div>
 
         {/* filter bar */}
-        <div className="w-full mt-10">
-          <Input.Search
-            className="w-full"
-            size="large"
-            variant="filled"
-            placeholder="برای جستجو در مشخصات اشخاص شروع به نوشتن کنید..."
-            loading={filters.loading}
-            value={filters.keyword}
-            onChange={(e) =>
-              setFilters({ loading: true, keyword: e.target.value })
-            }
-            allowClear
-          />
-        </div>
+        <div className="w-full mt-10"> </div>
 
         {/* content */}
         <div className="w-full py-5 overflow-x-auto">
@@ -291,6 +190,13 @@ export default function Permissions() {
           />
         </div>
       </div>
+
+      <CreatePermission
+        open={permissionModal.open}
+        setOpen={(e) => setPermissionModal({ open: e })}
+        data={permissionModal.data}
+        getNewList={handleGetList}
+      />
     </>
   );
 }
