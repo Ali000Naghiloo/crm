@@ -38,7 +38,7 @@ export default function DataTab({ data, getNewList, handleClose }) {
       description: "",
       isActive: null,
       representerType: 0,
-      representerId: 0,
+      representerId: null,
       representerName: "",
       nationalID: "",
       // person fields
@@ -55,6 +55,8 @@ export default function DataTab({ data, getNewList, handleClose }) {
       economicCode: "",
       registrationDateTime: null,
       registrationNumber: "",
+      userName: "",
+      password: "",
     },
 
     validationSchema,
@@ -68,23 +70,13 @@ export default function DataTab({ data, getNewList, handleClose }) {
     setLoading(true);
     // common fields
     const formData = {
-      customerType: values?.customerType,
-      customerId: values?.customerId,
+      ...values,
       customerName: values.customerType === 1 ? values?.customerName : "string",
-      customerCod: values?.customerCod,
-      startDateTime: values?.startDateTime,
-      endDateTime: values?.endDateTime,
-      nickName: values?.nickName,
-      description: values?.description,
-      isActive: values?.isActive,
       nationalID: `${values?.nationalID}`,
       // person fields
       firstName: values?.firstName ? values?.firstName : "",
       lastName: values?.lastName ? values?.lastName : "",
-      customerSex: values?.customerSex,
-      birthdayDateTime: values?.birthdayDateTime,
       maritalStatus: values?.maritalStatus + 1 ? values.maritalStatus : null,
-      numberOfChildren: values?.numberOfChildren,
       nameOfPartner: values?.nameOfPartner ? values?.nameOfPartner : "",
       // company fields
       companyType: values?.customerType ? values?.customerType : 0,
@@ -351,6 +343,10 @@ export default function DataTab({ data, getNewList, handleClose }) {
       validation.setFieldValue("customerName", data?.customerName);
       validation.setFieldValue("companyType", data?.companyType);
       validation.setFieldValue("economicCode", data?.economicCode);
+
+      //
+      validation.setFieldValue("userName", data?.userName);
+      validation.setFieldValue("password", data?.password);
     }
   }, [data]);
 
@@ -450,6 +446,44 @@ export default function DataTab({ data, getNewList, handleClose }) {
               {validation.errors.description}
             </span>
           )}
+        </div>
+
+        {/* userName & password */}
+        <div className="w-full flex pt-10">
+          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto ">
+            <span>نام کاربری</span>
+            <Input
+              value={validation.values.userName}
+              onChange={(e) => {
+                validation.setFieldValue("userName", e.target.value);
+              }}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.userName && validation.errors.userName && (
+              <span className="text-error text-xs">
+                {validation.errors.userName}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="w-full flex">
+          <div className="flex gap-1 flex-col items-start w-[300px] mx-auto ">
+            <span>رمز عبور</span>
+            <Input.Password
+              value={validation.values.password}
+              onChange={(e) => {
+                validation.setFieldValue("password", e.target.value);
+              }}
+              className="w-[100%]"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.password && validation.errors.password && (
+              <span className="text-error text-xs">
+                {validation.errors.password}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-1 w-full mx-auto">

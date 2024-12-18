@@ -148,7 +148,7 @@ export default function Roles() {
   useEffect(() => {
     dispatch(
       setPageRoutes([
-        { label: "CRM" },
+        { label: "XRM" },
         { label: "اشخاص" },
         { label: "فهرست نقش اشخاص" },
       ])

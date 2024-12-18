@@ -22,6 +22,8 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     // description: yup.string().required("این فیلد را پر کنید"),
     isActive: null,
     // representerName: yup.string().required("این فیلد را پر کنید"),
+    userName: yup.string().required("این فیلد را پر کنید"),
+    password: yup.string().required("این فیلد را پر کنید"),
     nationalID: yup.number("لطفا از اعداد استفاده کنید"),
   });
 
@@ -30,6 +32,8 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       // common fields
       customerType: 0,
       customerId: "",
+      userName: "",
+      password: "",
       customerCod: "",
       startDateTime: null,
       endDateTime: null,
@@ -75,7 +79,6 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
       .then((res) => {
         if (res.status === 200 && res.data?.code === 1) {
           validation.setFieldValue("customerCod", res.data?.customerCod);
-          console.log(res.data?.customerCod);
         }
       })
       .catch(() => {
@@ -464,7 +467,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
         </div>
       );
     }
-    // توسط گروه شخصان
+    // توسط گروه شخص ها
     if (validation.values.representerType === 1) {
       return (
         <div className="flex gap-1 flex-col items-start w-[300px] mx-auto">
@@ -621,6 +624,44 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
 
           <div className="w-full flex pt-10">
             <div className="flex gap-1 flex-col items-start w-[300px] mx-auto ">
+              <span>نام کاربری</span>
+              <Input
+                value={validation.values.userName}
+                onChange={(e) => {
+                  validation.setFieldValue("userName", e.target.value);
+                }}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.userName && validation.errors.userName && (
+                <span className="text-error text-xs">
+                  {validation.errors.userName}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="w-full flex">
+            <div className="flex gap-1 flex-col items-start w-[300px] mx-auto ">
+              <span>رمز عبور</span>
+              <Input
+                value={validation.values.password}
+                onChange={(e) => {
+                  validation.setFieldValue("password", e.target.value);
+                }}
+                className="w-[100%]"
+                placeholder="لطفا اینجا وارد کنید..."
+              />
+              {validation.touched.password && validation.errors.password && (
+                <span className="text-error text-xs">
+                  {validation.errors.password}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="w-full flex pt-10">
+            <div className="flex gap-1 flex-col items-start w-[300px] mx-auto ">
               <span>نوع معرف : (اگر شخص معرف دارد این فیلد را پر کنید)</span>
               <Select
                 options={allEnum?.RepresenterType?.map((type, index) => {
@@ -644,6 +685,22 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
             {validation.values.representerType + 1
               ? handleShowRepresentList()
               : null}
+          </div>
+
+          <div className="flex items-center gap-1 w-full mx-auto">
+            <span className="text-nowrap">شخص فعال است؟</span>
+            <Checkbox
+              checked={validation.values.isActive}
+              name="isActive"
+              onChange={validation.handleChange}
+              className="w-full"
+              placeholder="لطفا اینجا وارد کنید..."
+            />
+            {validation.touched.isActive && validation.errors.isActive && (
+              <span className="text-error text-xs">
+                {validation.errors.isActive}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1 w-full mx-auto">

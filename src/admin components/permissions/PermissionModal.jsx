@@ -34,7 +34,6 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
   const handleClose = () => {
     setOpen(false);
     validation.resetForm();
-    getNewList();
   };
 
   const handleCreate = async (values) => {
@@ -42,7 +41,7 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
     const formData = {
       ...values,
       menuAccessGroupAccessClaims:
-        values && values?.length
+        values && values?.menuAccessGroupAccessClaims.length
           ? values?.menuAccessGroupAccessClaims.map((i) => {
               return {
                 accessClaimId: i,
@@ -50,7 +49,7 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
             })
           : [],
       menuAccessGroupCustomerGroups:
-        values && values?.length
+        values && values?.menuAccessGroupCustomerGroups.length
           ? values?.menuAccessGroupCustomerGroups.map((i) => {
               return {
                 customerGroupId: i,
@@ -65,6 +64,7 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
         if (res.status == 200 && res.data?.code == 1) {
           toast.success("با موفقیت ایجاد شد");
           handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
@@ -77,7 +77,7 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
     const formData = {
       ...values,
       menuAccessGroupAccessClaims:
-        values && values?.length
+        values && values?.menuAccessGroupAccessClaims.length
           ? values?.menuAccessGroupAccessClaims.map((i) => {
               return {
                 accessClaimId: i,
@@ -85,7 +85,7 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
             })
           : [],
       menuAccessGroupCustomerGroups:
-        values && values?.length
+        values && values?.menuAccessGroupCustomerGroups.length
           ? values?.menuAccessGroupCustomerGroups.map((i) => {
               return {
                 customerGroupId: i,
@@ -98,8 +98,9 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
       .post("/AccessClaim/EditMenuAccessGroup", formData)
       .then((res) => {
         if (res.status == 200 && res.data?.code == 1) {
-          toast.success("با موفقیت ایجاد شد");
+          toast.success("با موفقیت ویرایش شد");
           handleClose();
+          getNewList();
         }
       })
       .catch(() => {});
@@ -174,12 +175,20 @@ export default function CreatePermission({ open, setOpen, data, getNewList }) {
   }, []);
 
   useEffect(() => {
+    let claims;
+    let groups;
+
+    claims = data?.menuAccessGroupAccessClaims?.map((c) => c?.accessClaimId);
+    groups = data?.menuAccessGroupCustomerGroups?.map(
+      (c) => c?.customerGroupId
+    );
+
     if (data) {
       validation.setValues({
         menuAccessGroupId: data?.menuAccessGroupId,
         menuAccessGroupName: data?.menuAccessGroupName,
-        menuAccessGroupAccessClaims: data?.menuAccessGroupAccessClaims,
-        menuAccessGroupCustomerGroups: data?.menuAccessGroupCustomerGroups,
+        menuAccessGroupAccessClaims: claims,
+        menuAccessGroupCustomerGroups: groups,
       });
     }
   }, [data]);

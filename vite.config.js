@@ -22,8 +22,8 @@ export default defineConfig({
         "/icons/apple-touch-icon.png",
       ],
       manifest: {
-        name: "CRM",
-        short_name: "CRM",
+        name: "XRM",
+        short_name: "XRM",
         description: "app for cover all employees needs",
         display_override: ["fullscreen"],
         icons: [

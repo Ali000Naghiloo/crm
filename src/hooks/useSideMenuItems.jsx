@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 // icons
 import { TbLayoutDashboardFilled, TbLockAccess } from "react-icons/tb";
 import { IoPersonSharp } from "react-icons/io5";
-//
 import { MdFactCheck, MdPerson, MdPriceChange } from "react-icons/md";
 import { GoDot } from "react-icons/go";
 import { AiFillProduct } from "react-icons/ai";
@@ -14,10 +13,12 @@ import { FaWarehouse } from "react-icons/fa";
 
 export default function useSideMenuItems() {
   const userRole = useSelector((state) => state.userData.userRole);
-  let [items, setItems] = useState([]);
+  const userAccess = useSelector((state) => state.userData.userAccess);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     if (userRole) {
+      let items = [];
       if (userRole === "admin") {
         setItems([
           {
@@ -81,39 +82,14 @@ export default function useSideMenuItems() {
           },
         ]);
       }
+      //
+
       if (userRole === "user") {
-        setItems([
+        let items = [
           {
             key: "/",
             icon: <TbLayoutDashboardFilled size={"1.5em"} className="" />,
             label: "داشبورد",
-          },
-          {
-            key: "customers",
-            icon: <MdPerson size={"1.5em"} className="" />,
-            label: "اشخاص",
-            children: [
-              {
-                key: "/customers",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "فهرست",
-              },
-              {
-                key: "/customers/roles",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "نقش",
-              },
-              {
-                key: "/customers/region",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "درخت مناطق",
-              },
-              {
-                key: "/customers/groups",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "گروه",
-              },
-            ],
           },
           {
             key: "prices",
@@ -276,7 +252,50 @@ export default function useSideMenuItems() {
               },
             ],
           },
-        ]);
+        ];
+
+        // customers
+        if (userAccess?.includes("GetAllCustomers")) {
+          let childrens = [];
+          if (userAccess?.includes("EditCustomerRole")) {
+            childrens.push({
+              key: "/customers/roles",
+              icon: <GoDot size={"1em"} className="" />,
+              label: "نقش",
+            });
+          }
+          if (userAccess?.includes("")) {
+            childrens.push({
+              key: "/customers/groups",
+              icon: <GoDot size={"1em"} className="" />,
+              label: "گروه",
+            });
+          }
+
+          items = [
+            {
+              key: "customers",
+              icon: <MdPerson size={"1.5em"} className="" />,
+              label: "اشخاص",
+              children: [
+                {
+                  key: "/customers",
+                  icon: <GoDot size={"1em"} className="" />,
+                  label: "فهرست",
+                },
+                ...childrens,
+                {
+                  key: "/customers/region",
+                  icon: <GoDot size={"1em"} className="" />,
+                  label: "درخت مناطق",
+                },
+              ],
+            },
+            ...items,
+          ];
+        }
+
+        setItems(items);
       }
     }
   }, [userRole]);

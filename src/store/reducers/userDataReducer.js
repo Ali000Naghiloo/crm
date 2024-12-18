@@ -4,6 +4,7 @@ const initialState = {
   userData: null,
   location: null,
   userRole: "",
+  userAccess: [],
 };
 
 export const userDataSlice = createSlice({
@@ -19,11 +20,14 @@ export const userDataSlice = createSlice({
     setUserLocation: (state, action) => {
       state.location = action.payload;
     },
+    setUserAcess: (state, action) => {
+      state.userAccess = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserData, setUserRole, setUserLocation } =
+export const { setUserData, setUserRole, setUserLocation, setUserAcess } =
   userDataSlice.actions;
 
 export default userDataSlice.reducer;

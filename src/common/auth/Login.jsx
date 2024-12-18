@@ -82,7 +82,7 @@ export default function Login() {
             >
               {/* header */}
               <div className="w-full flex justify-between items-center gap-6 text-white text-2xl font-extrabold">
-                <h1>به پنل CRM خوش آمدید!</h1>
+                <h1>به پنل XRM خوش آمدید!</h1>
                 <div className="w-[40px]">
                   <img className="w-full" src={logo} alt="logo" />
                 </div>

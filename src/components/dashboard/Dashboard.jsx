@@ -31,7 +31,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="w-full flex flex-col gap-5 md:pt-10">
-          <h1 className="text-2xl font-bold">به پنل CRM خوش آمدید!</h1>
+          <h1 className="text-2xl font-bold">به پنل XRM خوش آمدید!</h1>
 
           <div className="w-full flex gap-10 flex-wrap overflow-x-auto">
             <Card

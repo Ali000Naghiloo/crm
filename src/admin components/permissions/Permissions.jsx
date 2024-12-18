@@ -65,7 +65,11 @@ export default function Permissions() {
         <div className="flex gap-2">
           <Button
             onClick={() =>
-              setPermissionModal({ id: data?.customerId, open: true })
+              setPermissionModal({
+                id: data?.customerId,
+                open: true,
+                data: data,
+              })
             }
             size="middle"
             type="primary"
@@ -133,6 +137,10 @@ export default function Permissions() {
 
   useEffect(() => {
     dispatch(setPageRoutes([{ label: "اشخاص" }, { label: "فهرست اشخاص" }]));
+  }, []);
+
+  useEffect(() => {
+    handleGetList();
   }, []);
 
   return (

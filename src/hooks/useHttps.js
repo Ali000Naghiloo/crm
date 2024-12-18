@@ -32,9 +32,9 @@ const useHttp = () => {
     (response) => response,
     async ({ error, response }) => {
       if (response?.status === 401) {
-        localStorage.removeItem("token");
-        window.location.replace("/login");
-        toast.error("شما از برنامه خارج شده اید");
+        // localStorage.removeItem("token");
+        // window.location.replace("/login");
+        // toast.error("شما از برنامه خارج شده اید");
       }
       if (response?.status === 400) {
         if (response?.data?.msg && debug) {

@@ -3,7 +3,11 @@ import useHttp from "../hooks/useHttps";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUserData, setUserRole } from "../store/reducers/userDataReducer";
+import {
+  setUserAcess,
+  setUserData,
+  setUserRole,
+} from "../store/reducers/userDataReducer";
 import { setAllEnum } from "../store/reducers/enumReducer";
 
 export default function Checker() {
@@ -24,9 +28,10 @@ export default function Checker() {
             dispatch(setUserRole("user"));
           }
           dispatch(setUserData(res.data.data));
+          dispatch(setUserAcess(res.data.data.accessList));
         } else {
-          toast.warn(res.data.msg);
-          navigate("/login");
+          toast.info(res.data.msg);
+          // navigate("/login");
         }
       })
       .catch(() => {

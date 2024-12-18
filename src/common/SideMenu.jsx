@@ -179,7 +179,7 @@ export default function SideMenu() {
           }
           title={
             <div className="w-full text-2xl flex items-center ltr">
-              <h1>CRM</h1>
+              <h1>XRM</h1>
             </div>
           }
           open={!openMenu}
