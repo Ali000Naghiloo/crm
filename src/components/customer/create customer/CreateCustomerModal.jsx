@@ -89,6 +89,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   const handleCreateCustomer = async (values) => {
     setLoading(true);
     const formData = {
+      ...values,
       customerType: values?.customerType,
       customerCod: values?.customerCod,
       customerName: values.customerType == 1 ? values?.customerName : "string",
