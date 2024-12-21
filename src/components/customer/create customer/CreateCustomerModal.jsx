@@ -11,6 +11,7 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
   const { httpService } = useHttp();
   const [loading, setLoading] = useState(false);
   const [representList, setRepresentList] = useState([]);
+  const [isEmployee, setIsEmployee] = useState(false);
   const allEnum = useSelector((state) => state.allEnum.allEnum);
 
   const validationSchema = yup.object().shape({
@@ -22,9 +23,6 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
     // description: yup.string().required("این فیلد را پر کنید"),
     isActive: null,
     // representerName: yup.string().required("این فیلد را پر کنید"),
-    userName: yup.string().required("این فیلد را پر کنید"),
-    password: yup.string().required("این فیلد را پر کنید"),
-    nationalID: yup.number("لطفا از اعداد استفاده کنید"),
   });
 
   const validation = useFormik({
@@ -621,6 +619,14 @@ export default function CreateCustomerModal({ open, setOpen, getNewList }) {
                   {validation.errors.description}
                 </span>
               )}
+          </div>
+
+          <div className="flex gap-1">
+            <span>شخص کارمند است؟</span>
+            <Checkbox
+              checked={isEmployee}
+              onChange={(e) => setIsEmployee(e.target.checked)}
+            />
           </div>
 
           <div className="w-full flex pt-10">
