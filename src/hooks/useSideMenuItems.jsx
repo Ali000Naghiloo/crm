@@ -10,6 +10,8 @@ import { FaListCheck, FaWeightScale } from "react-icons/fa6";
 import { HiDocumentReport } from "react-icons/hi";
 import { MdManageSearch } from "react-icons/md";
 import { FaWarehouse } from "react-icons/fa";
+// menues
+import { customerGroups, customerRoles } from "./menus/customers";
 
 export default function useSideMenuItems() {
   const userRole = useSelector((state) => state.userData.userRole);
@@ -92,28 +94,6 @@ export default function useSideMenuItems() {
             label: "داشبورد",
           },
           {
-            key: "prices",
-            icon: <MdPriceChange size={"1.5em"} className="" />,
-            label: "قیمت ها",
-            children: [
-              {
-                key: "/prices",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "فهرست",
-              },
-              {
-                key: "/prices/groups",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "گروه قیمت گذاری",
-              },
-            ],
-          },
-          {
-            key: "/units",
-            icon: <FaWeightScale size={"1.5em"} className="" />,
-            label: "واحد ها",
-          },
-          {
             key: "products",
             icon: <AiFillProduct size={"1.5em"} className="" />,
             label: "کالا و خدمات",
@@ -128,6 +108,28 @@ export default function useSideMenuItems() {
                 icon: <GoDot size={"1em"} className="" />,
                 label: "دسته بندی",
               },
+              {
+                key: "/units",
+                icon: <FaWeightScale size={"1.5em"} className="" />,
+                label: "واحد ها",
+              },
+              {
+                key: "prices",
+                icon: <MdPriceChange size={"1.5em"} className="" />,
+                label: "قیمت ها",
+                children: [
+                  {
+                    key: "/prices",
+                    icon: <GoDot size={"1em"} className="" />,
+                    label: "تیپ های قیمتی",
+                  },
+                  {
+                    key: "/prices/groups",
+                    icon: <GoDot size={"1em"} className="" />,
+                    label: "گروه قیمت گذاری",
+                  },
+                ],
+              },
               // {
               //   key: "/products/creators",
               //   icon: <GoDot size={"1em"} className="" />,
@@ -136,22 +138,22 @@ export default function useSideMenuItems() {
             ],
           },
           {
-            key: "conditions",
-            icon: <FaListCheck size={"1.5em"} className="" />,
-            label: "اضافات و کسورات",
-            children: [
-              {
-                key: "/conditions",
-                icon: <GoDot size={"1em"} className="" />,
-                label: "فهرست",
-              },
-            ],
-          },
-          {
             key: "/factors",
             icon: <MdFactCheck size={"1.5em"} className="" />,
             label: "فاکتور ها",
             children: [
+              {
+                key: "conditions",
+                icon: <FaListCheck size={"1.5em"} className="" />,
+                label: "اضافات و کسورات",
+                // children: [
+                //   {
+                //     key: "/conditions",
+                //     icon: <GoDot size={"1em"} className="" />,
+                //     label: "فهرست",
+                //   },
+                // ],
+              },
               {
                 key: "/factors/preFactors",
                 icon: <GoDot size={"1em"} className="" />,
@@ -258,18 +260,10 @@ export default function useSideMenuItems() {
         if (userAccess?.includes("GetAllCustomers")) {
           let childrens = [];
           if (userAccess?.includes("EditCustomerRole")) {
-            childrens.push({
-              key: "/customers/roles",
-              icon: <GoDot size={"1em"} className="" />,
-              label: "نقش",
-            });
+            childrens.push({ ...customerRoles });
           }
-          if (userAccess?.includes("")) {
-            childrens.push({
-              key: "/customers/groups",
-              icon: <GoDot size={"1em"} className="" />,
-              label: "گروه",
-            });
+          if (true) {
+            childrens.push({ ...customerGroups });
           }
 
           items = [
@@ -284,11 +278,6 @@ export default function useSideMenuItems() {
                   label: "فهرست",
                 },
                 ...childrens,
-                {
-                  key: "/customers/region",
-                  icon: <GoDot size={"1em"} className="" />,
-                  label: "درخت مناطق",
-                },
               ],
             },
             ...items,
